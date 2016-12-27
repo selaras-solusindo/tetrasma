@@ -478,10 +478,6 @@ class ctbl_anggota_view extends ctbl_anggota {
 		$bLoadCurrentRecord = FALSE;
 		$sReturnUrl = "";
 		$bMatchRecord = FALSE;
-
-		// Set up Breadcrumb
-		if ($this->Export == "")
-			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
 			if (@$_GET["anggota_id"] <> "") {
 				$this->anggota_id->setQueryStringValue($_GET["anggota_id"]);
@@ -515,6 +511,10 @@ class ctbl_anggota_view extends ctbl_anggota {
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
+
+		// Set up Breadcrumb
+		if ($this->Export == "")
+			$this->SetupBreadcrumb();
 
 		// Render row
 		$this->RowType = EW_ROWTYPE_VIEW;

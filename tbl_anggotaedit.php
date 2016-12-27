@@ -386,9 +386,6 @@ class ctbl_anggota_edit extends ctbl_anggota {
 			$this->anggota_id->setQueryStringValue($_GET["anggota_id"]);
 		}
 
-		// Set up Breadcrumb
-		$this->SetupBreadcrumb();
-
 		// Process form if post back
 		if (@$_POST["a_edit"] <> "") {
 			$this->CurrentAction = $_POST["a_edit"]; // Get action code
@@ -434,6 +431,9 @@ class ctbl_anggota_edit extends ctbl_anggota {
 					$this->RestoreFormValues(); // Restore form values if update failed
 				}
 		}
+
+		// Set up Breadcrumb
+		$this->SetupBreadcrumb();
 
 		// Render the record
 		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
