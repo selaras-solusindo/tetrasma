@@ -1,12 +1,17 @@
 <?php
 
 // Global variable for table object
-$audittrail = NULL;
+$level3 = NULL;
 
 //
-// Table class for audittrail
+// Table class for level3
 //
-class caudittrail extends cTable {
+class clevel3 extends cTable {
+	var $level3_id;
+	var $level1_id;
+	var $level2_id;
+	var $level3_no;
+	var $level3_nama;
 
 	//
 	// Table class constructor
@@ -16,12 +21,12 @@ class caudittrail extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'audittrail';
-		$this->TableName = 'audittrail';
+		$this->TableVar = 'level3';
+		$this->TableName = 'level3';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`audittrail`";
+		$this->UpdateTable = "`level3`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -37,6 +42,34 @@ class caudittrail extends cTable {
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
+
+		// level3_id
+		$this->level3_id = new cField('level3', 'level3', 'x_level3_id', 'level3_id', '`level3_id`', '`level3_id`', 3, -1, FALSE, '`level3_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->level3_id->Sortable = TRUE; // Allow sort
+		$this->level3_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['level3_id'] = &$this->level3_id;
+
+		// level1_id
+		$this->level1_id = new cField('level3', 'level3', 'x_level1_id', 'level1_id', '`level1_id`', '`level1_id`', 3, -1, FALSE, '`level1_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->level1_id->Sortable = TRUE; // Allow sort
+		$this->level1_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['level1_id'] = &$this->level1_id;
+
+		// level2_id
+		$this->level2_id = new cField('level3', 'level3', 'x_level2_id', 'level2_id', '`level2_id`', '`level2_id`', 3, -1, FALSE, '`EV__level2_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->level2_id->Sortable = TRUE; // Allow sort
+		$this->level2_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['level2_id'] = &$this->level2_id;
+
+		// level3_no
+		$this->level3_no = new cField('level3', 'level3', 'x_level3_no', 'level3_no', '`level3_no`', '`level3_no`', 200, -1, FALSE, '`level3_no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->level3_no->Sortable = TRUE; // Allow sort
+		$this->fields['level3_no'] = &$this->level3_no;
+
+		// level3_nama
+		$this->level3_nama = new cField('level3', 'level3', 'x_level3_nama', 'level3_nama', '`level3_nama`', '`level3_nama`', 200, -1, FALSE, '`level3_nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->level3_nama->Sortable = TRUE; // Allow sort
+		$this->fields['level3_nama'] = &$this->level3_nama;
 	}
 
 	// Set Field Visibility
@@ -57,16 +90,27 @@ class caudittrail extends cTable {
 			}
 			$ofld->setSort($sThisSort);
 			$this->setSessionOrderBy($sSortField . " " . $sThisSort); // Save to Session
+			$sSortFieldList = ($ofld->FldVirtualExpression <> "") ? $ofld->FldVirtualExpression : $sSortField;
+			$this->setSessionOrderByList($sSortFieldList . " " . $sThisSort); // Save to Session
 		} else {
 			$ofld->setSort("");
 		}
+	}
+
+	// Session ORDER BY for List page
+	function getSessionOrderByList() {
+		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST];
+	}
+
+	function setSessionOrderByList($v) {
+		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST] = $v;
 	}
 
 	// Table level SQL
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`audittrail`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`level3`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -88,6 +132,23 @@ class caudittrail extends cTable {
 
 	function setSqlSelect($v) {
 		$this->_SqlSelect = $v;
+	}
+	var $_SqlSelectList = "";
+
+	function getSqlSelectList() { // Select for List page
+		$select = "";
+		$select = "SELECT * FROM (" .
+			"SELECT *, (SELECT `level2_nama` FROM `level2` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level2_id` = `level3`.`level2_id` LIMIT 1) AS `EV__level2_id` FROM `level3`" .
+			") `EW_TMP_TABLE`";
+		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
+	}
+
+	function SqlSelectList() { // For backward compatibility
+		return $this->getSqlSelectList();
+	}
+
+	function setSqlSelectList($v) {
+		$this->_SqlSelectList = $v;
 	}
 	var $_SqlWhere = "";
 
@@ -200,15 +261,38 @@ class caudittrail extends cTable {
 		ew_AddFilter($sFilter, $this->CurrentFilter);
 		$sFilter = $this->ApplyUserIDFilters($sFilter);
 		$this->Recordset_Selecting($sFilter);
-		$sSort = $this->getSessionOrderBy();
-		return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-			$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		if ($this->UseVirtualFields()) {
+			$sSort = $this->getSessionOrderByList();
+			return ew_BuildSelectSql($this->getSqlSelectList(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		} else {
+			$sSort = $this->getSessionOrderBy();
+			return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		}
 	}
 
 	// Get ORDER BY clause
 	function GetOrderBy() {
-		$sSort = $this->getSessionOrderBy();
+		$sSort = ($this->UseVirtualFields()) ? $this->getSessionOrderByList() : $this->getSessionOrderBy();
 		return ew_BuildSelectSql("", "", "", "", $this->getSqlOrderBy(), "", $sSort);
+	}
+
+	// Check if virtual fields is used in SQL
+	function UseVirtualFields() {
+		$sWhere = $this->getSessionWhere();
+		$sOrderBy = $this->getSessionOrderByList();
+		if ($sWhere <> "")
+			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
+		if ($sOrderBy <> "")
+			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
+		if ($this->level2_id->AdvancedSearch->SearchValue <> "" ||
+			$this->level2_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->level2_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->level2_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		return FALSE;
 	}
 
 	// Try to get record count
@@ -319,6 +403,8 @@ class caudittrail extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
+			if (array_key_exists('level3_id', $rs))
+				ew_AddFilter($where, ew_QuotedName('level3_id', $this->DBID) . '=' . ew_QuotedValue($rs['level3_id'], $this->level3_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -337,12 +423,15 @@ class caudittrail extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "";
+		return "`level3_id` = @level3_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
+		if (!is_numeric($this->level3_id->CurrentValue))
+			$sKeyFilter = "0=1"; // Invalid key
+		$sKeyFilter = str_replace("@level3_id@", ew_AdjustSql($this->level3_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -356,7 +445,7 @@ class caudittrail extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "audittraillist.php";
+			return "level3list.php";
 		}
 	}
 
@@ -366,30 +455,30 @@ class caudittrail extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "audittraillist.php";
+		return "level3list.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("audittrailview.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("level3view.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("audittrailview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("level3view.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "audittrailadd.php?" . $this->UrlParm($parm);
+			$url = "level3add.php?" . $this->UrlParm($parm);
 		else
-			$url = "audittrailadd.php";
+			$url = "level3add.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("audittrailedit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("level3edit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -401,7 +490,7 @@ class caudittrail extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("audittrailadd.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("level3add.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -413,7 +502,7 @@ class caudittrail extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("audittraildelete.php", $this->UrlParm());
+		return $this->KeyUrl("level3delete.php", $this->UrlParm());
 	}
 
 	// Add master url
@@ -423,6 +512,7 @@ class caudittrail extends cTable {
 
 	function KeyToJson() {
 		$json = "";
+		$json .= "level3_id:" . ew_VarToJson($this->level3_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -430,6 +520,11 @@ class caudittrail extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
+		if (!is_null($this->level3_id->CurrentValue)) {
+			$sUrl .= "level3_id=" . urlencode($this->level3_id->CurrentValue);
+		} else {
+			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
+		}
 		return $sUrl;
 	}
 
@@ -459,6 +554,12 @@ class caudittrail extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
+			if ($isPost && isset($_POST["level3_id"]))
+				$arKeys[] = ew_StripSlashes($_POST["level3_id"]);
+			elseif (isset($_GET["level3_id"]))
+				$arKeys[] = ew_StripSlashes($_GET["level3_id"]);
+			else
+				$arKeys = NULL; // Do not setup
 
 			//return $arKeys; // Do not return yet, so the values will also be checked by the following code
 		}
@@ -467,6 +568,8 @@ class caudittrail extends cTable {
 		$ar = array();
 		if (is_array($arKeys)) {
 			foreach ($arKeys as $key) {
+				if (!is_numeric($key))
+					continue;
 				$ar[] = $key;
 			}
 		}
@@ -479,6 +582,7 @@ class caudittrail extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
+			$this->level3_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -499,6 +603,11 @@ class caudittrail extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
+		$this->level3_id->setDbValue($rs->fields('level3_id'));
+		$this->level1_id->setDbValue($rs->fields('level1_id'));
+		$this->level2_id->setDbValue($rs->fields('level2_id'));
+		$this->level3_no->setDbValue($rs->fields('level3_no'));
+		$this->level3_nama->setDbValue($rs->fields('level3_nama'));
 	}
 
 	// Render list row values
@@ -509,8 +618,102 @@ class caudittrail extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// Call Row Rendered event
+		// level3_id
+		// level1_id
+		// level2_id
+		// level3_no
+		// level3_nama
+		// level3_id
 
+		$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
+		$this->level3_id->ViewCustomAttributes = "";
+
+		// level1_id
+		$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
+		if (strval($this->level1_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level1_id`, `level1_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
+		$sWhereWrk = "";
+		$this->level1_id->LookupFilters = array("dx1" => "`level1_nama`");
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
+			}
+		} else {
+			$this->level1_id->ViewValue = NULL;
+		}
+		$this->level1_id->ViewCustomAttributes = "";
+
+		// level2_id
+		if ($this->level2_id->VirtualValue <> "") {
+			$this->level2_id->ViewValue = $this->level2_id->VirtualValue;
+		} else {
+			$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
+		if (strval($this->level2_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level2_id`, `level2_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
+		$sWhereWrk = "";
+		$this->level2_id->LookupFilters = array("dx1" => "`level2_nama`");
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->level2_id->ViewValue = $this->level2_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
+			}
+		} else {
+			$this->level2_id->ViewValue = NULL;
+		}
+		}
+		$this->level2_id->ViewCustomAttributes = "";
+
+		// level3_no
+		$this->level3_no->ViewValue = $this->level3_no->CurrentValue;
+		$this->level3_no->ViewCustomAttributes = "";
+
+		// level3_nama
+		$this->level3_nama->ViewValue = $this->level3_nama->CurrentValue;
+		$this->level3_nama->ViewCustomAttributes = "";
+
+		// level3_id
+		$this->level3_id->LinkCustomAttributes = "";
+		$this->level3_id->HrefValue = "";
+		$this->level3_id->TooltipValue = "";
+
+		// level1_id
+		$this->level1_id->LinkCustomAttributes = "";
+		$this->level1_id->HrefValue = "";
+		$this->level1_id->TooltipValue = "";
+
+		// level2_id
+		$this->level2_id->LinkCustomAttributes = "";
+		$this->level2_id->HrefValue = "";
+		$this->level2_id->TooltipValue = "";
+
+		// level3_no
+		$this->level3_no->LinkCustomAttributes = "";
+		$this->level3_no->HrefValue = "";
+		$this->level3_no->TooltipValue = "";
+
+		// level3_nama
+		$this->level3_nama->LinkCustomAttributes = "";
+		$this->level3_nama->HrefValue = "";
+		$this->level3_nama->TooltipValue = "";
+
+		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
 
@@ -520,6 +723,36 @@ class caudittrail extends cTable {
 
 		// Call Row Rendering event
 		$this->Row_Rendering();
+
+		// level3_id
+		$this->level3_id->EditAttrs["class"] = "form-control";
+		$this->level3_id->EditCustomAttributes = "";
+		$this->level3_id->EditValue = $this->level3_id->CurrentValue;
+		$this->level3_id->ViewCustomAttributes = "";
+
+		// level1_id
+		$this->level1_id->EditAttrs["class"] = "form-control";
+		$this->level1_id->EditCustomAttributes = "";
+		$this->level1_id->EditValue = $this->level1_id->CurrentValue;
+		$this->level1_id->PlaceHolder = ew_RemoveHtml($this->level1_id->FldCaption());
+
+		// level2_id
+		$this->level2_id->EditAttrs["class"] = "form-control";
+		$this->level2_id->EditCustomAttributes = "";
+		$this->level2_id->EditValue = $this->level2_id->CurrentValue;
+		$this->level2_id->PlaceHolder = ew_RemoveHtml($this->level2_id->FldCaption());
+
+		// level3_no
+		$this->level3_no->EditAttrs["class"] = "form-control";
+		$this->level3_no->EditCustomAttributes = "";
+		$this->level3_no->EditValue = $this->level3_no->CurrentValue;
+		$this->level3_no->PlaceHolder = ew_RemoveHtml($this->level3_no->FldCaption());
+
+		// level3_nama
+		$this->level3_nama->EditAttrs["class"] = "form-control";
+		$this->level3_nama->EditCustomAttributes = "";
+		$this->level3_nama->EditValue = $this->level3_nama->CurrentValue;
+		$this->level3_nama->PlaceHolder = ew_RemoveHtml($this->level3_nama->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -548,7 +781,15 @@ class caudittrail extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
+					if ($this->level1_id->Exportable) $Doc->ExportCaption($this->level1_id);
+					if ($this->level2_id->Exportable) $Doc->ExportCaption($this->level2_id);
+					if ($this->level3_no->Exportable) $Doc->ExportCaption($this->level3_no);
+					if ($this->level3_nama->Exportable) $Doc->ExportCaption($this->level3_nama);
 				} else {
+					if ($this->level1_id->Exportable) $Doc->ExportCaption($this->level1_id);
+					if ($this->level2_id->Exportable) $Doc->ExportCaption($this->level2_id);
+					if ($this->level3_no->Exportable) $Doc->ExportCaption($this->level3_no);
+					if ($this->level3_nama->Exportable) $Doc->ExportCaption($this->level3_nama);
 				}
 				$Doc->EndExportRow();
 			}
@@ -580,7 +821,15 @@ class caudittrail extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
+						if ($this->level1_id->Exportable) $Doc->ExportField($this->level1_id);
+						if ($this->level2_id->Exportable) $Doc->ExportField($this->level2_id);
+						if ($this->level3_no->Exportable) $Doc->ExportField($this->level3_no);
+						if ($this->level3_nama->Exportable) $Doc->ExportField($this->level3_nama);
 					} else {
+						if ($this->level1_id->Exportable) $Doc->ExportField($this->level1_id);
+						if ($this->level2_id->Exportable) $Doc->ExportField($this->level2_id);
+						if ($this->level3_no->Exportable) $Doc->ExportField($this->level3_no);
+						if ($this->level3_nama->Exportable) $Doc->ExportField($this->level3_nama);
 					}
 					$Doc->EndExportRow();
 				}

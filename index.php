@@ -259,6 +259,22 @@ class cdefault {
 		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
 		if ($Security->IsLoggedIn())
 		$this->Page_Terminate("tbl_anggotalist.php"); // Exit and go to default page
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("tb_akun_lvl1list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("tb_akun_lvl2list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("tb_akun_lvl3list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("tb_akun_lvl4list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("level1list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("level2list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("level3list.php");
+		if ($Security->IsLoggedIn())
+			$this->Page_Terminate("level4list.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

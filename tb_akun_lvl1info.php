@@ -1,12 +1,14 @@
 <?php
 
 // Global variable for table object
-$audittrail = NULL;
+$tb_akun_lvl1 = NULL;
 
 //
-// Table class for audittrail
+// Table class for tb_akun_lvl1
 //
-class caudittrail extends cTable {
+class ctb_akun_lvl1 extends cTable {
+	var $akun_lvl1_id;
+	var $akun_lvl1_nama;
 
 	//
 	// Table class constructor
@@ -16,12 +18,12 @@ class caudittrail extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'audittrail';
-		$this->TableName = 'audittrail';
+		$this->TableVar = 'tb_akun_lvl1';
+		$this->TableName = 'tb_akun_lvl1';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`audittrail`";
+		$this->UpdateTable = "`tb_akun_lvl1`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -37,6 +39,17 @@ class caudittrail extends cTable {
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
+
+		// akun_lvl1_id
+		$this->akun_lvl1_id = new cField('tb_akun_lvl1', 'tb_akun_lvl1', 'x_akun_lvl1_id', 'akun_lvl1_id', '`akun_lvl1_id`', '`akun_lvl1_id`', 3, -1, FALSE, '`akun_lvl1_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->akun_lvl1_id->Sortable = TRUE; // Allow sort
+		$this->akun_lvl1_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['akun_lvl1_id'] = &$this->akun_lvl1_id;
+
+		// akun_lvl1_nama
+		$this->akun_lvl1_nama = new cField('tb_akun_lvl1', 'tb_akun_lvl1', 'x_akun_lvl1_nama', 'akun_lvl1_nama', '`akun_lvl1_nama`', '`akun_lvl1_nama`', 200, -1, FALSE, '`akun_lvl1_nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->akun_lvl1_nama->Sortable = TRUE; // Allow sort
+		$this->fields['akun_lvl1_nama'] = &$this->akun_lvl1_nama;
 	}
 
 	// Set Field Visibility
@@ -66,7 +79,7 @@ class caudittrail extends cTable {
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`audittrail`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`tb_akun_lvl1`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -319,6 +332,8 @@ class caudittrail extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
+			if (array_key_exists('akun_lvl1_id', $rs))
+				ew_AddFilter($where, ew_QuotedName('akun_lvl1_id', $this->DBID) . '=' . ew_QuotedValue($rs['akun_lvl1_id'], $this->akun_lvl1_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -337,12 +352,15 @@ class caudittrail extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "";
+		return "`akun_lvl1_id` = @akun_lvl1_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
+		if (!is_numeric($this->akun_lvl1_id->CurrentValue))
+			$sKeyFilter = "0=1"; // Invalid key
+		$sKeyFilter = str_replace("@akun_lvl1_id@", ew_AdjustSql($this->akun_lvl1_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -356,7 +374,7 @@ class caudittrail extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "audittraillist.php";
+			return "tb_akun_lvl1list.php";
 		}
 	}
 
@@ -366,30 +384,30 @@ class caudittrail extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "audittraillist.php";
+		return "tb_akun_lvl1list.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("audittrailview.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("tb_akun_lvl1view.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("audittrailview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("tb_akun_lvl1view.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "audittrailadd.php?" . $this->UrlParm($parm);
+			$url = "tb_akun_lvl1add.php?" . $this->UrlParm($parm);
 		else
-			$url = "audittrailadd.php";
+			$url = "tb_akun_lvl1add.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("audittrailedit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("tb_akun_lvl1edit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -401,7 +419,7 @@ class caudittrail extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("audittrailadd.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("tb_akun_lvl1add.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -413,7 +431,7 @@ class caudittrail extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("audittraildelete.php", $this->UrlParm());
+		return $this->KeyUrl("tb_akun_lvl1delete.php", $this->UrlParm());
 	}
 
 	// Add master url
@@ -423,6 +441,7 @@ class caudittrail extends cTable {
 
 	function KeyToJson() {
 		$json = "";
+		$json .= "akun_lvl1_id:" . ew_VarToJson($this->akun_lvl1_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -430,6 +449,11 @@ class caudittrail extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
+		if (!is_null($this->akun_lvl1_id->CurrentValue)) {
+			$sUrl .= "akun_lvl1_id=" . urlencode($this->akun_lvl1_id->CurrentValue);
+		} else {
+			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
+		}
 		return $sUrl;
 	}
 
@@ -459,6 +483,12 @@ class caudittrail extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
+			if ($isPost && isset($_POST["akun_lvl1_id"]))
+				$arKeys[] = ew_StripSlashes($_POST["akun_lvl1_id"]);
+			elseif (isset($_GET["akun_lvl1_id"]))
+				$arKeys[] = ew_StripSlashes($_GET["akun_lvl1_id"]);
+			else
+				$arKeys = NULL; // Do not setup
 
 			//return $arKeys; // Do not return yet, so the values will also be checked by the following code
 		}
@@ -467,6 +497,8 @@ class caudittrail extends cTable {
 		$ar = array();
 		if (is_array($arKeys)) {
 			foreach ($arKeys as $key) {
+				if (!is_numeric($key))
+					continue;
 				$ar[] = $key;
 			}
 		}
@@ -479,6 +511,7 @@ class caudittrail extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
+			$this->akun_lvl1_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -499,6 +532,8 @@ class caudittrail extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
+		$this->akun_lvl1_id->setDbValue($rs->fields('akun_lvl1_id'));
+		$this->akun_lvl1_nama->setDbValue($rs->fields('akun_lvl1_nama'));
 	}
 
 	// Render list row values
@@ -509,8 +544,28 @@ class caudittrail extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// Call Row Rendered event
+		// akun_lvl1_id
+		// akun_lvl1_nama
+		// akun_lvl1_id
 
+		$this->akun_lvl1_id->ViewValue = $this->akun_lvl1_id->CurrentValue;
+		$this->akun_lvl1_id->ViewCustomAttributes = "";
+
+		// akun_lvl1_nama
+		$this->akun_lvl1_nama->ViewValue = $this->akun_lvl1_nama->CurrentValue;
+		$this->akun_lvl1_nama->ViewCustomAttributes = "";
+
+		// akun_lvl1_id
+		$this->akun_lvl1_id->LinkCustomAttributes = "";
+		$this->akun_lvl1_id->HrefValue = "";
+		$this->akun_lvl1_id->TooltipValue = "";
+
+		// akun_lvl1_nama
+		$this->akun_lvl1_nama->LinkCustomAttributes = "";
+		$this->akun_lvl1_nama->HrefValue = "";
+		$this->akun_lvl1_nama->TooltipValue = "";
+
+		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
 
@@ -520,6 +575,18 @@ class caudittrail extends cTable {
 
 		// Call Row Rendering event
 		$this->Row_Rendering();
+
+		// akun_lvl1_id
+		$this->akun_lvl1_id->EditAttrs["class"] = "form-control";
+		$this->akun_lvl1_id->EditCustomAttributes = "";
+		$this->akun_lvl1_id->EditValue = $this->akun_lvl1_id->CurrentValue;
+		$this->akun_lvl1_id->ViewCustomAttributes = "";
+
+		// akun_lvl1_nama
+		$this->akun_lvl1_nama->EditAttrs["class"] = "form-control";
+		$this->akun_lvl1_nama->EditCustomAttributes = "";
+		$this->akun_lvl1_nama->EditValue = $this->akun_lvl1_nama->CurrentValue;
+		$this->akun_lvl1_nama->PlaceHolder = ew_RemoveHtml($this->akun_lvl1_nama->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -548,7 +615,11 @@ class caudittrail extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
+					if ($this->akun_lvl1_id->Exportable) $Doc->ExportCaption($this->akun_lvl1_id);
+					if ($this->akun_lvl1_nama->Exportable) $Doc->ExportCaption($this->akun_lvl1_nama);
 				} else {
+					if ($this->akun_lvl1_id->Exportable) $Doc->ExportCaption($this->akun_lvl1_id);
+					if ($this->akun_lvl1_nama->Exportable) $Doc->ExportCaption($this->akun_lvl1_nama);
 				}
 				$Doc->EndExportRow();
 			}
@@ -580,7 +651,11 @@ class caudittrail extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
+						if ($this->akun_lvl1_id->Exportable) $Doc->ExportField($this->akun_lvl1_id);
+						if ($this->akun_lvl1_nama->Exportable) $Doc->ExportField($this->akun_lvl1_nama);
 					} else {
+						if ($this->akun_lvl1_id->Exportable) $Doc->ExportField($this->akun_lvl1_id);
+						if ($this->akun_lvl1_nama->Exportable) $Doc->ExportField($this->akun_lvl1_nama);
 					}
 					$Doc->EndExportRow();
 				}
