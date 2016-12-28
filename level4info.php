@@ -145,7 +145,7 @@ class clevel4 extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `level1_nama` FROM `level1` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level1_id` = `level4`.`level1_id` LIMIT 1) AS `EV__level1_id`, (SELECT `level2_nama` FROM `level2` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level2_id` = `level4`.`level2_id` LIMIT 1) AS `EV__level2_id`, (SELECT `level3_nama` FROM `level3` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level3_id` = `level4`.`level3_id` LIMIT 1) AS `EV__level3_id` FROM `level4`" .
+			"SELECT *, (SELECT CONCAT(`level1_no`,'" . ew_ValueSeparator(1, $this->level1_id) . "',`level1_nama`) FROM `level1` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level1_id` = `level4`.`level1_id` LIMIT 1) AS `EV__level1_id`, (SELECT CONCAT(`level2_no`,'" . ew_ValueSeparator(1, $this->level2_id) . "',`level2_nama`) FROM `level2` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level2_id` = `level4`.`level2_id` LIMIT 1) AS `EV__level2_id`, (SELECT CONCAT(`level3_no`,'" . ew_ValueSeparator(1, $this->level3_id) . "',`level3_nama`) FROM `level3` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level3_id` = `level4`.`level3_id` LIMIT 1) AS `EV__level3_id` FROM `level4`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -656,9 +656,9 @@ class clevel4 extends cTable {
 			$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
 		if (strval($this->level1_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level1_id`, `level1_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
+		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
 		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => "`level1_nama`");
+		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -666,6 +666,7 @@ class clevel4 extends cTable {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
@@ -684,9 +685,9 @@ class clevel4 extends cTable {
 			$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
 		if (strval($this->level2_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level2_id`, `level2_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
+		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
 		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => "`level2_nama`");
+		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -694,6 +695,7 @@ class clevel4 extends cTable {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->level2_id->ViewValue = $this->level2_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
@@ -712,9 +714,9 @@ class clevel4 extends cTable {
 			$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
 		if (strval($this->level3_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level3_id`, `level3_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
+		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
 		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => "`level3_nama`");
+		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -722,6 +724,7 @@ class clevel4 extends cTable {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->level3_id->ViewValue = $this->level3_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {

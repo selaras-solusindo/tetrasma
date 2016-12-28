@@ -606,9 +606,9 @@ class clevel4_edit extends clevel4 {
 			$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
 		if (strval($this->level1_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level1_id`, `level1_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
+		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
 		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => "`level1_nama`");
+		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -616,6 +616,7 @@ class clevel4_edit extends clevel4 {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
@@ -634,9 +635,9 @@ class clevel4_edit extends clevel4 {
 			$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
 		if (strval($this->level2_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level2_id`, `level2_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
+		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
 		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => "`level2_nama`");
+		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -644,6 +645,7 @@ class clevel4_edit extends clevel4 {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->level2_id->ViewValue = $this->level2_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
@@ -662,9 +664,9 @@ class clevel4_edit extends clevel4 {
 			$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
 		if (strval($this->level3_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level3_id`, `level3_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
+		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
 		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => "`level3_nama`");
+		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -672,6 +674,7 @@ class clevel4_edit extends clevel4 {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->level3_id->ViewValue = $this->level3_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
@@ -723,9 +726,9 @@ class clevel4_edit extends clevel4 {
 			$this->level1_id->EditValue = ew_HtmlEncode($this->level1_id->CurrentValue);
 			if (strval($this->level1_id->CurrentValue) <> "") {
 				$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-			$sSqlWrk = "SELECT `level1_id`, `level1_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
+			$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
 			$sWhereWrk = "";
-			$this->level1_id->LookupFilters = array("dx1" => "`level1_nama`");
+			$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -733,6 +736,7 @@ class clevel4_edit extends clevel4 {
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
 					$arwrk = array();
 					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+					$arwrk[2] = ew_HtmlEncode($rswrk->fields('Disp2Fld'));
 					$this->level1_id->EditValue = $this->level1_id->DisplayValue($arwrk);
 					$rswrk->Close();
 				} else {
@@ -749,9 +753,9 @@ class clevel4_edit extends clevel4 {
 			$this->level2_id->EditValue = ew_HtmlEncode($this->level2_id->CurrentValue);
 			if (strval($this->level2_id->CurrentValue) <> "") {
 				$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-			$sSqlWrk = "SELECT `level2_id`, `level2_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
+			$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
 			$sWhereWrk = "";
-			$this->level2_id->LookupFilters = array("dx1" => "`level2_nama`");
+			$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -759,6 +763,7 @@ class clevel4_edit extends clevel4 {
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
 					$arwrk = array();
 					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+					$arwrk[2] = ew_HtmlEncode($rswrk->fields('Disp2Fld'));
 					$this->level2_id->EditValue = $this->level2_id->DisplayValue($arwrk);
 					$rswrk->Close();
 				} else {
@@ -775,9 +780,9 @@ class clevel4_edit extends clevel4 {
 			$this->level3_id->EditValue = ew_HtmlEncode($this->level3_id->CurrentValue);
 			if (strval($this->level3_id->CurrentValue) <> "") {
 				$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-			$sSqlWrk = "SELECT `level3_id`, `level3_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
+			$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
 			$sWhereWrk = "";
-			$this->level3_id->LookupFilters = array("dx1" => "`level3_nama`");
+			$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -785,6 +790,7 @@ class clevel4_edit extends clevel4 {
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
 					$arwrk = array();
 					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+					$arwrk[2] = ew_HtmlEncode($rswrk->fields('Disp2Fld'));
 					$this->level3_id->EditValue = $this->level3_id->DisplayValue($arwrk);
 					$rswrk->Close();
 				} else {
@@ -968,9 +974,9 @@ class clevel4_edit extends clevel4 {
 		switch ($fld->FldVar) {
 		case "x_level1_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level1_id` AS `LinkFld`, `level1_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
+			$sSqlWrk = "SELECT `level1_id` AS `LinkFld`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
 			$sWhereWrk = "{filter}";
-			$this->level1_id->LookupFilters = array("dx1" => "`level1_nama`");
+			$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level1_id` = {filter_value}", "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
@@ -980,9 +986,9 @@ class clevel4_edit extends clevel4 {
 			break;
 		case "x_level2_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level2_id` AS `LinkFld`, `level2_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
+			$sSqlWrk = "SELECT `level2_id` AS `LinkFld`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level2`";
 			$sWhereWrk = "{filter}";
-			$this->level2_id->LookupFilters = array("dx1" => "`level2_nama`");
+			$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level2_id` = {filter_value}", "t0" => "3", "fn0" => "", "f1" => "`level1_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
@@ -992,9 +998,9 @@ class clevel4_edit extends clevel4 {
 			break;
 		case "x_level3_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level3_id` AS `LinkFld`, `level3_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
+			$sSqlWrk = "SELECT `level3_id` AS `LinkFld`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level3`";
 			$sWhereWrk = "{filter}";
-			$this->level3_id->LookupFilters = array("dx1" => "`level3_nama`");
+			$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level3_id` = {filter_value}", "t0" => "3", "fn0" => "", "f1" => "`level2_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
@@ -1012,9 +1018,9 @@ class clevel4_edit extends clevel4 {
 		switch ($fld->FldVar) {
 		case "x_level1_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level1_id`, `level1_nama` AS `DispFld` FROM `level1`";
-			$sWhereWrk = "`level1_nama` LIKE '{query_value}%'";
-			$this->level1_id->LookupFilters = array("dx1" => "`level1_nama`");
+			$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld` FROM `level1`";
+			$sWhereWrk = "`level1_no` LIKE '{query_value}%' OR CONCAT(`level1_no`,'" . ew_ValueSeparator(1, $this->level1_id) . "',`level1_nama`) LIKE '{query_value}%'";
+			$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
@@ -1025,9 +1031,9 @@ class clevel4_edit extends clevel4 {
 			break;
 		case "x_level2_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level2_id`, `level2_nama` AS `DispFld` FROM `level2`";
-			$sWhereWrk = "(`level2_nama` LIKE '{query_value}%') AND ({filter})";
-			$this->level2_id->LookupFilters = array("dx1" => "`level2_nama`");
+			$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld` FROM `level2`";
+			$sWhereWrk = "(`level2_no` LIKE '{query_value}%' OR CONCAT(`level2_no`,'" . ew_ValueSeparator(1, $this->level2_id) . "',`level2_nama`) LIKE '{query_value}%') AND ({filter})";
+			$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f1" => "`level1_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
@@ -1038,9 +1044,9 @@ class clevel4_edit extends clevel4 {
 			break;
 		case "x_level3_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level3_id`, `level3_nama` AS `DispFld` FROM `level3`";
-			$sWhereWrk = "(`level3_nama` LIKE '{query_value}%') AND ({filter})";
-			$this->level3_id->LookupFilters = array("dx1" => "`level3_nama`");
+			$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld` FROM `level3`";
+			$sWhereWrk = "(`level3_no` LIKE '{query_value}%' OR CONCAT(`level3_no`,'" . ew_ValueSeparator(1, $this->level3_id) . "',`level3_nama`) LIKE '{query_value}%') AND ({filter})";
+			$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f1" => "`level2_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
@@ -1262,9 +1268,9 @@ flevel4edit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-flevel4edit.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_nama","","",""],"ParentFields":[],"ChildFields":["x_level2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"level1"};
-flevel4edit.Lists["x_level2_id"] = {"LinkField":"x_level2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level2_nama","","",""],"ParentFields":["x_level1_id"],"ChildFields":["x_level3_id"],"FilterFields":["x_level1_id"],"Options":[],"Template":"","LinkTable":"level2"};
-flevel4edit.Lists["x_level3_id"] = {"LinkField":"x_level3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level3_nama","","",""],"ParentFields":["x_level2_id"],"ChildFields":[],"FilterFields":["x_level2_id"],"Options":[],"Template":"","LinkTable":"level3"};
+flevel4edit.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_no","x_level1_nama","",""],"ParentFields":[],"ChildFields":["x_level2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"level1"};
+flevel4edit.Lists["x_level2_id"] = {"LinkField":"x_level2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level2_no","x_level2_nama","",""],"ParentFields":["x_level1_id"],"ChildFields":["x_level3_id"],"FilterFields":["x_level1_id"],"Options":[],"Template":"","LinkTable":"level2"};
+flevel4edit.Lists["x_level3_id"] = {"LinkField":"x_level3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level3_no","x_level3_nama","",""],"ParentFields":["x_level2_id"],"ChildFields":[],"FilterFields":["x_level2_id"],"Options":[],"Template":"","LinkTable":"level3"};
 
 // Form object for search
 </script>
