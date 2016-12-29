@@ -472,10 +472,6 @@ class clevel2_view extends clevel2 {
 		$bLoadCurrentRecord = FALSE;
 		$sReturnUrl = "";
 		$bMatchRecord = FALSE;
-
-		// Set up Breadcrumb
-		if ($this->Export == "")
-			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
 			if (@$_GET["level2_id"] <> "") {
 				$this->level2_id->setQueryStringValue($_GET["level2_id"]);
@@ -509,6 +505,10 @@ class clevel2_view extends clevel2 {
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
+
+		// Set up Breadcrumb
+		if ($this->Export == "")
+			$this->SetupBreadcrumb();
 
 		// Render row
 		$this->RowType = EW_ROWTYPE_VIEW;
@@ -713,7 +713,11 @@ class clevel2_view extends clevel2 {
 			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
 		$sWhereWrk = "";
+<<<<<<< HEAD
 		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
+=======
+		$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
+>>>>>>> origin/master
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;

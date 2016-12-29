@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<<<<<<< HEAD
 <ew-language date="2016/12/28" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+=======
+<ew-language date="2016/12/27" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+>>>>>>> origin/master
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
