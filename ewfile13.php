@@ -55,7 +55,10 @@ class cfile {
 		// Security
 		$Security = new cAdvancedSecurity();
 		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
-		if (!$Security->IsLoggedIn()) exit(); // No permission
+		$Security->TablePermission_Loading();
+		$Security->LoadCurrentUserLevel(CurrentProjectID() . $table);
+		$Security->TablePermission_Loaded();
+		if (!$Security->CanList()) exit(); // No permission
 
 		// Global Page Loading event (in userfn*.php)
 		//**Page_Loading();

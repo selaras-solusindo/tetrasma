@@ -5,7 +5,6 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "level2info.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -14,9 +13,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$level2_delete = NULL; // Initialize page object first
+$tb_user_delete = NULL; // Initialize page object first
 
-class clevel2_delete extends clevel2 {
+class ctb_user_delete extends ctb_user {
 
 	// Page ID
 	var $PageID = 'delete';
@@ -25,10 +24,10 @@ class clevel2_delete extends clevel2 {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'level2';
+	var $TableName = 'tb_user';
 
 	// Page object name
-	var $PageObjName = 'level2_delete';
+	var $PageObjName = 'tb_user_delete';
 
 	// Page name
 	function PageName() {
@@ -41,12 +40,6 @@ class clevel2_delete extends clevel2 {
 		if ($this->UseTokenInUrl) $PageUrl .= "t=" . $this->TableVar . "&"; // Add page token
 		return $PageUrl;
 	}
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = FALSE;
-	var $AuditTrailOnDelete = TRUE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -232,14 +225,11 @@ class clevel2_delete extends clevel2 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (level2)
-		if (!isset($GLOBALS["level2"]) || get_class($GLOBALS["level2"]) == "clevel2") {
-			$GLOBALS["level2"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["level2"];
-		}
-
 		// Table object (tb_user)
-		if (!isset($GLOBALS['tb_user'])) $GLOBALS['tb_user'] = new ctb_user();
+		if (!isset($GLOBALS["tb_user"]) || get_class($GLOBALS["tb_user"]) == "ctb_user") {
+			$GLOBALS["tb_user"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["tb_user"];
+		}
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -247,7 +237,7 @@ class clevel2_delete extends clevel2 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'level2', TRUE);
+			define("EW_TABLE_NAME", 'tb_user', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -278,14 +268,14 @@ class clevel2_delete extends clevel2 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("level2list.php"));
+				$this->Page_Terminate(ew_GetUrl("tb_userlist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->level1_id->SetVisibility();
-		$this->level2_no->SetVisibility();
-		$this->level2_nama->SetVisibility();
+		$this->username->SetVisibility();
+		$this->password->SetVisibility();
+		$this->userlevel->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -317,13 +307,13 @@ class clevel2_delete extends clevel2 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $level2;
+		global $EW_EXPORT, $tb_user;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($level2);
+				$doc = new $class($tb_user);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -369,10 +359,10 @@ class clevel2_delete extends clevel2 {
 		$this->RecKeys = $this->GetRecordKeys(); // Load record keys
 		$sFilter = $this->GetKeyFilter();
 		if ($sFilter == "")
-			$this->Page_Terminate("level2list.php"); // Prevent SQL injection, return to list
+			$this->Page_Terminate("tb_userlist.php"); // Prevent SQL injection, return to list
 
 		// Set up filter (SQL WHHERE clause) and get return SQL
-		// SQL constructor in level2 class, level2info.php
+		// SQL constructor in tb_user class, tb_userinfo.php
 
 		$this->CurrentFilter = $sFilter;
 
@@ -400,7 +390,7 @@ class clevel2_delete extends clevel2 {
 			if ($this->TotalRecs <= 0) { // No record found, exit
 				if ($this->Recordset)
 					$this->Recordset->Close();
-				$this->Page_Terminate("level2list.php"); // Return to list
+				$this->Page_Terminate("tb_userlist.php"); // Return to list
 			}
 		}
 	}
@@ -417,7 +407,7 @@ class clevel2_delete extends clevel2 {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -460,25 +450,20 @@ class clevel2_delete extends clevel2 {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->level2_id->setDbValue($rs->fields('level2_id'));
-		$this->level1_id->setDbValue($rs->fields('level1_id'));
-		if (array_key_exists('EV__level1_id', $rs->fields)) {
-			$this->level1_id->VirtualValue = $rs->fields('EV__level1_id'); // Set up virtual field value
-		} else {
-			$this->level1_id->VirtualValue = ""; // Clear value
-		}
-		$this->level2_no->setDbValue($rs->fields('level2_no'));
-		$this->level2_nama->setDbValue($rs->fields('level2_nama'));
+		$this->user_id->setDbValue($rs->fields('user_id'));
+		$this->username->setDbValue($rs->fields('username'));
+		$this->password->setDbValue($rs->fields('password'));
+		$this->userlevel->setDbValue($rs->fields('userlevel'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->level2_id->DbValue = $row['level2_id'];
-		$this->level1_id->DbValue = $row['level1_id'];
-		$this->level2_no->DbValue = $row['level2_no'];
-		$this->level2_nama->DbValue = $row['level2_nama'];
+		$this->user_id->DbValue = $row['user_id'];
+		$this->username->DbValue = $row['username'];
+		$this->password->DbValue = $row['password'];
+		$this->userlevel->DbValue = $row['userlevel'];
 	}
 
 	// Render row values based on field settings
@@ -491,64 +476,47 @@ class clevel2_delete extends clevel2 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// level2_id
-		// level1_id
-		// level2_no
-		// level2_nama
+		// user_id
+		// username
+		// password
+		// userlevel
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// level1_id
-		if ($this->level1_id->VirtualValue <> "") {
-			$this->level1_id->ViewValue = $this->level1_id->VirtualValue;
+		// username
+		$this->username->ViewValue = $this->username->CurrentValue;
+		$this->username->ViewCustomAttributes = "";
+
+		// password
+		$this->password->ViewValue = $this->password->CurrentValue;
+		$this->password->ViewCustomAttributes = "";
+
+		// userlevel
+		if ($Security->CanAdmin()) { // System admin
+		if (strval($this->userlevel->CurrentValue) <> "") {
+			$this->userlevel->ViewValue = $this->userlevel->OptionCaption($this->userlevel->CurrentValue);
 		} else {
-			$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-		if (strval($this->level1_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
-		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-			}
+			$this->userlevel->ViewValue = NULL;
+		}
 		} else {
-			$this->level1_id->ViewValue = NULL;
+			$this->userlevel->ViewValue = $Language->Phrase("PasswordMask");
 		}
-		}
-		$this->level1_id->ViewCustomAttributes = "";
+		$this->userlevel->ViewCustomAttributes = "";
 
-		// level2_no
-		$this->level2_no->ViewValue = $this->level2_no->CurrentValue;
-		$this->level2_no->ViewCustomAttributes = "";
+			// username
+			$this->username->LinkCustomAttributes = "";
+			$this->username->HrefValue = "";
+			$this->username->TooltipValue = "";
 
-		// level2_nama
-		$this->level2_nama->ViewValue = $this->level2_nama->CurrentValue;
-		$this->level2_nama->ViewCustomAttributes = "";
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
+			$this->password->TooltipValue = "";
 
-			// level1_id
-			$this->level1_id->LinkCustomAttributes = "";
-			$this->level1_id->HrefValue = "";
-			$this->level1_id->TooltipValue = "";
-
-			// level2_no
-			$this->level2_no->LinkCustomAttributes = "";
-			$this->level2_no->HrefValue = "";
-			$this->level2_no->TooltipValue = "";
-
-			// level2_nama
-			$this->level2_nama->LinkCustomAttributes = "";
-			$this->level2_nama->HrefValue = "";
-			$this->level2_nama->TooltipValue = "";
+			// userlevel
+			$this->userlevel->LinkCustomAttributes = "";
+			$this->userlevel->HrefValue = "";
+			$this->userlevel->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -584,7 +552,6 @@ class clevel2_delete extends clevel2 {
 		}
 		$rows = ($rs) ? $rs->GetRows() : array();
 		$conn->BeginTrans();
-		if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteBegin")); // Batch delete begin
 
 		// Clone old rows
 		$rsold = $rows;
@@ -603,7 +570,7 @@ class clevel2_delete extends clevel2 {
 			foreach ($rsold as $row) {
 				$sThisKey = "";
 				if ($sThisKey <> "") $sThisKey .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-				$sThisKey .= $row['level2_id'];
+				$sThisKey .= $row['user_id'];
 				$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 				$DeleteRows = $this->Delete($row); // Delete
 				$conn->raiseErrorFn = '';
@@ -627,14 +594,8 @@ class clevel2_delete extends clevel2 {
 		}
 		if ($DeleteRows) {
 			$conn->CommitTrans(); // Commit the changes
-			if ($DeleteRows) {
-				foreach ($rsold as $row)
-					$this->WriteAuditTrailOnDelete($row);
-			}
-			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 			$conn->RollbackTrans(); // Rollback changes
-			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteRollback")); // Batch delete rollback
 		}
 
 		// Call Row Deleted event
@@ -651,7 +612,7 @@ class clevel2_delete extends clevel2 {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("level2list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_userlist.php"), "", $this->TableVar, TRUE);
 		$PageId = "delete";
 		$Breadcrumb->Add("delete", $PageId, $url);
 	}
@@ -669,48 +630,6 @@ class clevel2_delete extends clevel2 {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 'level2';
-		$usr = CurrentUserName();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (delete page)
-	function WriteAuditTrailOnDelete(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnDelete) return;
-		$table = 'level2';
-
-		// Get key value
-		$key = "";
-		if ($key <> "")
-			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['level2_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$curUser = CurrentUserName();
-		foreach (array_keys($rs) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$oldvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$oldvalue = $rs[$fldname];
-					else
-						$oldvalue = "[MEMO]"; // Memo field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$oldvalue = "[XML]"; // XML field
-				} else {
-					$oldvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $curUser, "D", $table, $fldname, $key, $oldvalue, "");
-			}
 		}
 	}
 
@@ -779,29 +698,29 @@ class clevel2_delete extends clevel2 {
 <?php
 
 // Create page object
-if (!isset($level2_delete)) $level2_delete = new clevel2_delete();
+if (!isset($tb_user_delete)) $tb_user_delete = new ctb_user_delete();
 
 // Page init
-$level2_delete->Page_Init();
+$tb_user_delete->Page_Init();
 
 // Page main
-$level2_delete->Page_Main();
+$tb_user_delete->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$level2_delete->Page_Render();
+$tb_user_delete->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "delete";
-var CurrentForm = flevel2delete = new ew_Form("flevel2delete", "delete");
+var CurrentForm = ftb_userdelete = new ew_Form("ftb_userdelete", "delete");
 
 // Form_CustomValidate event
-flevel2delete.Form_CustomValidate = 
+ftb_userdelete.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -810,13 +729,14 @@ flevel2delete.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-flevel2delete.ValidateRequired = true;
+ftb_userdelete.ValidateRequired = true;
 <?php } else { ?>
-flevel2delete.ValidateRequired = false; 
+ftb_userdelete.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-flevel2delete.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_no","x_level1_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"level1"};
+ftb_userdelete.Lists["x_userlevel"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_userdelete.Lists["x_userlevel"].Options = <?php echo json_encode($tb_user->userlevel->Options()) ?>;
 
 // Form object for search
 </script>
@@ -829,85 +749,85 @@ flevel2delete.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"Aut
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
-<?php $level2_delete->ShowPageHeader(); ?>
+<?php $tb_user_delete->ShowPageHeader(); ?>
 <?php
-$level2_delete->ShowMessage();
+$tb_user_delete->ShowMessage();
 ?>
-<form name="flevel2delete" id="flevel2delete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($level2_delete->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $level2_delete->Token ?>">
+<form name="ftb_userdelete" id="ftb_userdelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($tb_user_delete->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_user_delete->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="level2">
+<input type="hidden" name="t" value="tb_user">
 <input type="hidden" name="a_delete" id="a_delete" value="D">
-<?php foreach ($level2_delete->RecKeys as $key) { ?>
+<?php foreach ($tb_user_delete->RecKeys as $key) { ?>
 <?php $keyvalue = is_array($key) ? implode($EW_COMPOSITE_KEY_SEPARATOR, $key) : $key; ?>
 <input type="hidden" name="key_m[]" value="<?php echo ew_HtmlEncode($keyvalue) ?>">
 <?php } ?>
 <div class="ewGrid">
 <div class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <table class="table ewTable">
-<?php echo $level2->TableCustomInnerHtml ?>
+<?php echo $tb_user->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($level2->level1_id->Visible) { // level1_id ?>
-		<th><span id="elh_level2_level1_id" class="level2_level1_id"><?php echo $level2->level1_id->FldCaption() ?></span></th>
+<?php if ($tb_user->username->Visible) { // username ?>
+		<th><span id="elh_tb_user_username" class="tb_user_username"><?php echo $tb_user->username->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($level2->level2_no->Visible) { // level2_no ?>
-		<th><span id="elh_level2_level2_no" class="level2_level2_no"><?php echo $level2->level2_no->FldCaption() ?></span></th>
+<?php if ($tb_user->password->Visible) { // password ?>
+		<th><span id="elh_tb_user_password" class="tb_user_password"><?php echo $tb_user->password->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($level2->level2_nama->Visible) { // level2_nama ?>
-		<th><span id="elh_level2_level2_nama" class="level2_level2_nama"><?php echo $level2->level2_nama->FldCaption() ?></span></th>
+<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
+		<th><span id="elh_tb_user_userlevel" class="tb_user_userlevel"><?php echo $tb_user->userlevel->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
 	<tbody>
 <?php
-$level2_delete->RecCnt = 0;
+$tb_user_delete->RecCnt = 0;
 $i = 0;
-while (!$level2_delete->Recordset->EOF) {
-	$level2_delete->RecCnt++;
-	$level2_delete->RowCnt++;
+while (!$tb_user_delete->Recordset->EOF) {
+	$tb_user_delete->RecCnt++;
+	$tb_user_delete->RowCnt++;
 
 	// Set row properties
-	$level2->ResetAttrs();
-	$level2->RowType = EW_ROWTYPE_VIEW; // View
+	$tb_user->ResetAttrs();
+	$tb_user->RowType = EW_ROWTYPE_VIEW; // View
 
 	// Get the field contents
-	$level2_delete->LoadRowValues($level2_delete->Recordset);
+	$tb_user_delete->LoadRowValues($tb_user_delete->Recordset);
 
 	// Render row
-	$level2_delete->RenderRow();
+	$tb_user_delete->RenderRow();
 ?>
-	<tr<?php echo $level2->RowAttributes() ?>>
-<?php if ($level2->level1_id->Visible) { // level1_id ?>
-		<td<?php echo $level2->level1_id->CellAttributes() ?>>
-<span id="el<?php echo $level2_delete->RowCnt ?>_level2_level1_id" class="level2_level1_id">
-<span<?php echo $level2->level1_id->ViewAttributes() ?>>
-<?php echo $level2->level1_id->ListViewValue() ?></span>
+	<tr<?php echo $tb_user->RowAttributes() ?>>
+<?php if ($tb_user->username->Visible) { // username ?>
+		<td<?php echo $tb_user->username->CellAttributes() ?>>
+<span id="el<?php echo $tb_user_delete->RowCnt ?>_tb_user_username" class="tb_user_username">
+<span<?php echo $tb_user->username->ViewAttributes() ?>>
+<?php echo $tb_user->username->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($level2->level2_no->Visible) { // level2_no ?>
-		<td<?php echo $level2->level2_no->CellAttributes() ?>>
-<span id="el<?php echo $level2_delete->RowCnt ?>_level2_level2_no" class="level2_level2_no">
-<span<?php echo $level2->level2_no->ViewAttributes() ?>>
-<?php echo $level2->level2_no->ListViewValue() ?></span>
+<?php if ($tb_user->password->Visible) { // password ?>
+		<td<?php echo $tb_user->password->CellAttributes() ?>>
+<span id="el<?php echo $tb_user_delete->RowCnt ?>_tb_user_password" class="tb_user_password">
+<span<?php echo $tb_user->password->ViewAttributes() ?>>
+<?php echo $tb_user->password->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($level2->level2_nama->Visible) { // level2_nama ?>
-		<td<?php echo $level2->level2_nama->CellAttributes() ?>>
-<span id="el<?php echo $level2_delete->RowCnt ?>_level2_level2_nama" class="level2_level2_nama">
-<span<?php echo $level2->level2_nama->ViewAttributes() ?>>
-<?php echo $level2->level2_nama->ListViewValue() ?></span>
+<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
+		<td<?php echo $tb_user->userlevel->CellAttributes() ?>>
+<span id="el<?php echo $tb_user_delete->RowCnt ?>_tb_user_userlevel" class="tb_user_userlevel">
+<span<?php echo $tb_user->userlevel->ViewAttributes() ?>>
+<?php echo $tb_user->userlevel->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
 	</tr>
 <?php
-	$level2_delete->Recordset->MoveNext();
+	$tb_user_delete->Recordset->MoveNext();
 }
-$level2_delete->Recordset->Close();
+$tb_user_delete->Recordset->Close();
 ?>
 </tbody>
 </table>
@@ -915,14 +835,14 @@ $level2_delete->Recordset->Close();
 </div>
 <div>
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("DeleteBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $level2_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $tb_user_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 </div>
 </form>
 <script type="text/javascript">
-flevel2delete.Init();
+ftb_userdelete.Init();
 </script>
 <?php
-$level2_delete->ShowPageFooter();
+$tb_user_delete->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -934,5 +854,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$level2_delete->Page_Terminate();
+$tb_user_delete->Page_Terminate();
 ?>

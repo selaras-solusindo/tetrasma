@@ -5,6 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
+<?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -177,6 +178,7 @@ class cdefault {
 	//
 	function __construct() {
 		global $conn, $Language;
+		global $UserTable, $UserTableConn;
 		$GLOBALS["Page"] = &$this;
 		$this->TokenTimeout = ew_SessionTimeoutTime();
 
@@ -192,6 +194,12 @@ class cdefault {
 
 		// Open connection
 		if (!isset($conn)) $conn = ew_Connect();
+
+		// User table object (tb_user)
+		if (!isset($UserTable)) {
+			$UserTable = new ctb_user();
+			$UserTableConn = Conn($UserTable->DBID);
+		}
 	}
 
 	//
@@ -257,16 +265,19 @@ class cdefault {
 		if (@$_GET["expired"] == "1")
 			$this->setFailureMessage($Language->Phrase("SessionExpired"));
 		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
-		if ($Security->IsLoggedIn())
-		$this->Page_Terminate("tbl_anggotalist.php"); // Exit and go to default page
-		if ($Security->IsLoggedIn())
+		$Security->LoadUserLevel(); // Load User Level
+		if ($Security->AllowList(CurrentProjectID() . 'tb_anggota'))
+		$this->Page_Terminate("tb_anggotalist.php"); // Exit and go to default page
+		if ($Security->AllowList(CurrentProjectID() . 'level1'))
 			$this->Page_Terminate("level1list.php");
-		if ($Security->IsLoggedIn())
+		if ($Security->AllowList(CurrentProjectID() . 'level2'))
 			$this->Page_Terminate("level2list.php");
-		if ($Security->IsLoggedIn())
+		if ($Security->AllowList(CurrentProjectID() . 'level3'))
 			$this->Page_Terminate("level3list.php");
-		if ($Security->IsLoggedIn())
+		if ($Security->AllowList(CurrentProjectID() . 'level4'))
 			$this->Page_Terminate("level4list.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_user'))
+			$this->Page_Terminate("tb_userlist.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

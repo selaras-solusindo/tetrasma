@@ -5,7 +5,6 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "level1info.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -14,9 +13,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$level1_edit = NULL; // Initialize page object first
+$tb_user_edit = NULL; // Initialize page object first
 
-class clevel1_edit extends clevel1 {
+class ctb_user_edit extends ctb_user {
 
 	// Page ID
 	var $PageID = 'edit';
@@ -25,10 +24,10 @@ class clevel1_edit extends clevel1 {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'level1';
+	var $TableName = 'tb_user';
 
 	// Page object name
-	var $PageObjName = 'level1_edit';
+	var $PageObjName = 'tb_user_edit';
 
 	// Page name
 	function PageName() {
@@ -41,12 +40,6 @@ class clevel1_edit extends clevel1 {
 		if ($this->UseTokenInUrl) $PageUrl .= "t=" . $this->TableVar . "&"; // Add page token
 		return $PageUrl;
 	}
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = TRUE;
-	var $AuditTrailOnDelete = FALSE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -232,14 +225,11 @@ class clevel1_edit extends clevel1 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (level1)
-		if (!isset($GLOBALS["level1"]) || get_class($GLOBALS["level1"]) == "clevel1") {
-			$GLOBALS["level1"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["level1"];
-		}
-
 		// Table object (tb_user)
-		if (!isset($GLOBALS['tb_user'])) $GLOBALS['tb_user'] = new ctb_user();
+		if (!isset($GLOBALS["tb_user"]) || get_class($GLOBALS["tb_user"]) == "ctb_user") {
+			$GLOBALS["tb_user"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["tb_user"];
+		}
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -247,7 +237,7 @@ class clevel1_edit extends clevel1 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'level1', TRUE);
+			define("EW_TABLE_NAME", 'tb_user', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -278,7 +268,7 @@ class clevel1_edit extends clevel1 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("level1list.php"));
+				$this->Page_Terminate(ew_GetUrl("tb_userlist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -286,8 +276,9 @@ class clevel1_edit extends clevel1 {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->level1_no->SetVisibility();
-		$this->level1_nama->SetVisibility();
+		$this->username->SetVisibility();
+		$this->password->SetVisibility();
+		$this->userlevel->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -333,13 +324,13 @@ class clevel1_edit extends clevel1 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $level1;
+		global $EW_EXPORT, $tb_user;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($level1);
+				$doc = new $class($tb_user);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -388,8 +379,8 @@ class clevel1_edit extends clevel1 {
 			$gbSkipHeaderFooter = TRUE;
 
 		// Load key from QueryString
-		if (@$_GET["level1_id"] <> "") {
-			$this->level1_id->setQueryStringValue($_GET["level1_id"]);
+		if (@$_GET["user_id"] <> "") {
+			$this->user_id->setQueryStringValue($_GET["user_id"]);
 		}
 
 		// Set up Breadcrumb
@@ -404,8 +395,8 @@ class clevel1_edit extends clevel1 {
 		}
 
 		// Check if valid key
-		if ($this->level1_id->CurrentValue == "") {
-			$this->Page_Terminate("level1list.php"); // Invalid key, return to list
+		if ($this->user_id->CurrentValue == "") {
+			$this->Page_Terminate("tb_userlist.php"); // Invalid key, return to list
 		}
 
 		// Validate form if post back
@@ -421,12 +412,12 @@ class clevel1_edit extends clevel1 {
 			case "I": // Get a record to display
 				if (!$this->LoadRow()) { // Load record based on key
 					if ($this->getFailureMessage() == "") $this->setFailureMessage($Language->Phrase("NoRecord")); // No record found
-					$this->Page_Terminate("level1list.php"); // No matching record, return to list
+					$this->Page_Terminate("tb_userlist.php"); // No matching record, return to list
 				}
 				break;
 			Case "U": // Update
 				$sReturnUrl = $this->getReturnUrl();
-				if (ew_GetPageName($sReturnUrl) == "level1list.php")
+				if (ew_GetPageName($sReturnUrl) == "tb_userlist.php")
 					$sReturnUrl = $this->AddMasterUrl($sReturnUrl); // List page, return to list page with correct master key if necessary
 				$this->SendEmail = TRUE; // Send email on update success
 				if ($this->EditRow()) { // Update record based on key
@@ -495,23 +486,27 @@ class clevel1_edit extends clevel1 {
 
 		// Load from form
 		global $objForm;
-		if (!$this->level1_no->FldIsDetailKey) {
-			$this->level1_no->setFormValue($objForm->GetValue("x_level1_no"));
+		if (!$this->username->FldIsDetailKey) {
+			$this->username->setFormValue($objForm->GetValue("x_username"));
 		}
-		if (!$this->level1_nama->FldIsDetailKey) {
-			$this->level1_nama->setFormValue($objForm->GetValue("x_level1_nama"));
+		if (!$this->password->FldIsDetailKey) {
+			$this->password->setFormValue($objForm->GetValue("x_password"));
 		}
-		if (!$this->level1_id->FldIsDetailKey)
-			$this->level1_id->setFormValue($objForm->GetValue("x_level1_id"));
+		if (!$this->userlevel->FldIsDetailKey) {
+			$this->userlevel->setFormValue($objForm->GetValue("x_userlevel"));
+		}
+		if (!$this->user_id->FldIsDetailKey)
+			$this->user_id->setFormValue($objForm->GetValue("x_user_id"));
 	}
 
 	// Restore form values
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadRow();
-		$this->level1_id->CurrentValue = $this->level1_id->FormValue;
-		$this->level1_no->CurrentValue = $this->level1_no->FormValue;
-		$this->level1_nama->CurrentValue = $this->level1_nama->FormValue;
+		$this->user_id->CurrentValue = $this->user_id->FormValue;
+		$this->username->CurrentValue = $this->username->FormValue;
+		$this->password->CurrentValue = $this->password->FormValue;
+		$this->userlevel->CurrentValue = $this->userlevel->FormValue;
 	}
 
 	// Load row based on key values
@@ -543,18 +538,20 @@ class clevel1_edit extends clevel1 {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->level1_id->setDbValue($rs->fields('level1_id'));
-		$this->level1_no->setDbValue($rs->fields('level1_no'));
-		$this->level1_nama->setDbValue($rs->fields('level1_nama'));
+		$this->user_id->setDbValue($rs->fields('user_id'));
+		$this->username->setDbValue($rs->fields('username'));
+		$this->password->setDbValue($rs->fields('password'));
+		$this->userlevel->setDbValue($rs->fields('userlevel'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->level1_id->DbValue = $row['level1_id'];
-		$this->level1_no->DbValue = $row['level1_no'];
-		$this->level1_nama->DbValue = $row['level1_nama'];
+		$this->user_id->DbValue = $row['user_id'];
+		$this->username->DbValue = $row['username'];
+		$this->password->DbValue = $row['password'];
+		$this->userlevel->DbValue = $row['userlevel'];
 	}
 
 	// Render row values based on field settings
@@ -567,52 +564,83 @@ class clevel1_edit extends clevel1 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// level1_id
-		// level1_no
-		// level1_nama
+		// user_id
+		// username
+		// password
+		// userlevel
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// level1_no
-		$this->level1_no->ViewValue = $this->level1_no->CurrentValue;
-		$this->level1_no->ViewCustomAttributes = "";
+		// username
+		$this->username->ViewValue = $this->username->CurrentValue;
+		$this->username->ViewCustomAttributes = "";
 
-		// level1_nama
-		$this->level1_nama->ViewValue = $this->level1_nama->CurrentValue;
-		$this->level1_nama->ViewCustomAttributes = "";
+		// password
+		$this->password->ViewValue = $this->password->CurrentValue;
+		$this->password->ViewCustomAttributes = "";
 
-			// level1_no
-			$this->level1_no->LinkCustomAttributes = "";
-			$this->level1_no->HrefValue = "";
-			$this->level1_no->TooltipValue = "";
+		// userlevel
+		if ($Security->CanAdmin()) { // System admin
+		if (strval($this->userlevel->CurrentValue) <> "") {
+			$this->userlevel->ViewValue = $this->userlevel->OptionCaption($this->userlevel->CurrentValue);
+		} else {
+			$this->userlevel->ViewValue = NULL;
+		}
+		} else {
+			$this->userlevel->ViewValue = $Language->Phrase("PasswordMask");
+		}
+		$this->userlevel->ViewCustomAttributes = "";
 
-			// level1_nama
-			$this->level1_nama->LinkCustomAttributes = "";
-			$this->level1_nama->HrefValue = "";
-			$this->level1_nama->TooltipValue = "";
+			// username
+			$this->username->LinkCustomAttributes = "";
+			$this->username->HrefValue = "";
+			$this->username->TooltipValue = "";
+
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
+			$this->password->TooltipValue = "";
+
+			// userlevel
+			$this->userlevel->LinkCustomAttributes = "";
+			$this->userlevel->HrefValue = "";
+			$this->userlevel->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
-			// level1_no
-			$this->level1_no->EditAttrs["class"] = "form-control";
-			$this->level1_no->EditCustomAttributes = "";
-			$this->level1_no->EditValue = ew_HtmlEncode($this->level1_no->CurrentValue);
-			$this->level1_no->PlaceHolder = ew_RemoveHtml($this->level1_no->FldCaption());
+			// username
+			$this->username->EditAttrs["class"] = "form-control";
+			$this->username->EditCustomAttributes = "";
+			$this->username->EditValue = ew_HtmlEncode($this->username->CurrentValue);
+			$this->username->PlaceHolder = ew_RemoveHtml($this->username->FldCaption());
 
-			// level1_nama
-			$this->level1_nama->EditAttrs["class"] = "form-control";
-			$this->level1_nama->EditCustomAttributes = "";
-			$this->level1_nama->EditValue = ew_HtmlEncode($this->level1_nama->CurrentValue);
-			$this->level1_nama->PlaceHolder = ew_RemoveHtml($this->level1_nama->FldCaption());
+			// password
+			$this->password->EditAttrs["class"] = "form-control ewPasswordStrength";
+			$this->password->EditCustomAttributes = "";
+			$this->password->EditValue = ew_HtmlEncode($this->password->CurrentValue);
+			$this->password->PlaceHolder = ew_RemoveHtml($this->password->FldCaption());
+
+			// userlevel
+			$this->userlevel->EditAttrs["class"] = "form-control";
+			$this->userlevel->EditCustomAttributes = "";
+			if (!$Security->CanAdmin()) { // System admin
+				$this->userlevel->EditValue = $Language->Phrase("PasswordMask");
+			} else {
+			$this->userlevel->EditValue = $this->userlevel->Options(TRUE);
+			}
 
 			// Edit refer script
-			// level1_no
+			// username
 
-			$this->level1_no->LinkCustomAttributes = "";
-			$this->level1_no->HrefValue = "";
+			$this->username->LinkCustomAttributes = "";
+			$this->username->HrefValue = "";
 
-			// level1_nama
-			$this->level1_nama->LinkCustomAttributes = "";
-			$this->level1_nama->HrefValue = "";
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
+
+			// userlevel
+			$this->userlevel->LinkCustomAttributes = "";
+			$this->userlevel->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -635,12 +663,6 @@ class clevel1_edit extends clevel1 {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
-		if (!$this->level1_no->FldIsDetailKey && !is_null($this->level1_no->FormValue) && $this->level1_no->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->level1_no->FldCaption(), $this->level1_no->ReqErrMsg));
-		}
-		if (!$this->level1_nama->FldIsDetailKey && !is_null($this->level1_nama->FormValue) && $this->level1_nama->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->level1_nama->FldCaption(), $this->level1_nama->ReqErrMsg));
-		}
 
 		// Return validate result
 		$ValidateForm = ($gsFormError == "");
@@ -677,11 +699,16 @@ class clevel1_edit extends clevel1 {
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
 
-			// level1_no
-			$this->level1_no->SetDbValueDef($rsnew, $this->level1_no->CurrentValue, "", $this->level1_no->ReadOnly);
+			// username
+			$this->username->SetDbValueDef($rsnew, $this->username->CurrentValue, NULL, $this->username->ReadOnly);
 
-			// level1_nama
-			$this->level1_nama->SetDbValueDef($rsnew, $this->level1_nama->CurrentValue, "", $this->level1_nama->ReadOnly);
+			// password
+			$this->password->SetDbValueDef($rsnew, $this->password->CurrentValue, NULL, $this->password->ReadOnly || (EW_ENCRYPTED_PASSWORD && $rs->fields('password') == $this->password->CurrentValue));
+
+			// userlevel
+			if ($Security->CanAdmin()) { // System admin
+			$this->userlevel->SetDbValueDef($rsnew, $this->userlevel->CurrentValue, NULL, $this->userlevel->ReadOnly);
+			}
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -711,9 +738,6 @@ class clevel1_edit extends clevel1 {
 		// Call Row_Updated event
 		if ($EditRow)
 			$this->Row_Updated($rsold, $rsnew);
-		if ($EditRow) {
-			$this->WriteAuditTrailOnEdit($rsold, $rsnew);
-		}
 		$rs->Close();
 		return $EditRow;
 	}
@@ -723,7 +747,7 @@ class clevel1_edit extends clevel1 {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("level1list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_userlist.php"), "", $this->TableVar, TRUE);
 		$PageId = "edit";
 		$Breadcrumb->Add("edit", $PageId, $url);
 	}
@@ -741,60 +765,6 @@ class clevel1_edit extends clevel1 {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 'level1';
-		$usr = CurrentUserName();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (edit page)
-	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
-		global $Language;
-		if (!$this->AuditTrailOnEdit) return;
-		$table = 'level1';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['level1_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserName();
-		foreach (array_keys($rsnew) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldDataType == EW_DATATYPE_DATE) { // DateTime field
-					$modified = (ew_FormatDateTime($rsold[$fldname], 0) <> ew_FormatDateTime($rsnew[$fldname], 0));
-				} else {
-					$modified = !ew_CompareValue($rsold[$fldname], $rsnew[$fldname]);
-				}
-				if ($modified) {
-					if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") { // Password Field
-						$oldvalue = $Language->Phrase("PasswordMask");
-						$newvalue = $Language->Phrase("PasswordMask");
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) { // Memo field
-						if (EW_AUDIT_TRAIL_TO_DATABASE) {
-							$oldvalue = $rsold[$fldname];
-							$newvalue = $rsnew[$fldname];
-						} else {
-							$oldvalue = "[MEMO]";
-							$newvalue = "[MEMO]";
-						}
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) { // XML field
-						$oldvalue = "[XML]";
-						$newvalue = "[XML]";
-					} else {
-						$oldvalue = $rsold[$fldname];
-						$newvalue = $rsnew[$fldname];
-					}
-					ew_WriteAuditTrail("log", $dt, $id, $usr, "U", $table, $fldname, $key, $oldvalue, $newvalue);
-				}
-			}
 		}
 	}
 
@@ -870,29 +840,29 @@ class clevel1_edit extends clevel1 {
 <?php
 
 // Create page object
-if (!isset($level1_edit)) $level1_edit = new clevel1_edit();
+if (!isset($tb_user_edit)) $tb_user_edit = new ctb_user_edit();
 
 // Page init
-$level1_edit->Page_Init();
+$tb_user_edit->Page_Init();
 
 // Page main
-$level1_edit->Page_Main();
+$tb_user_edit->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$level1_edit->Page_Render();
+$tb_user_edit->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "edit";
-var CurrentForm = flevel1edit = new ew_Form("flevel1edit", "edit");
+var CurrentForm = ftb_useredit = new ew_Form("ftb_useredit", "edit");
 
 // Validate form
-flevel1edit.Validate = function() {
+ftb_useredit.Validate = function() {
 	if (!this.ValidateRequired)
 		return true; // Ignore validation
 	var $ = jQuery, fobj = this.GetForm(), $fobj = $(fobj);
@@ -906,12 +876,9 @@ flevel1edit.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
-			elm = this.GetElements("x" + infix + "_level1_no");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $level1->level1_no->FldCaption(), $level1->level1_no->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_level1_nama");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $level1->level1_nama->FldCaption(), $level1->level1_nama->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_password");
+			if (elm && $(elm).hasClass("ewPasswordStrength") && !$(elm).data("validated"))
+				return this.OnError(elm, ewLanguage.Phrase("PasswordTooSimple"));
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -930,7 +897,7 @@ flevel1edit.Validate = function() {
 }
 
 // Form_CustomValidate event
-flevel1edit.Form_CustomValidate = 
+ftb_useredit.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -939,76 +906,108 @@ flevel1edit.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-flevel1edit.ValidateRequired = true;
+ftb_useredit.ValidateRequired = true;
 <?php } else { ?>
-flevel1edit.ValidateRequired = false; 
+ftb_useredit.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ftb_useredit.Lists["x_userlevel"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_useredit.Lists["x_userlevel"].Options = <?php echo json_encode($tb_user->userlevel->Options()) ?>;
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
 // Write your client script here, no need to add script tags.
 </script>
-<?php if (!$level1_edit->IsModal) { ?>
+<?php if (!$tb_user_edit->IsModal) { ?>
 <div class="ewToolbar">
 <?php $Breadcrumb->Render(); ?>
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $level1_edit->ShowPageHeader(); ?>
+<?php $tb_user_edit->ShowPageHeader(); ?>
 <?php
-$level1_edit->ShowMessage();
+$tb_user_edit->ShowMessage();
 ?>
-<form name="flevel1edit" id="flevel1edit" class="<?php echo $level1_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($level1_edit->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $level1_edit->Token ?>">
+<form name="ftb_useredit" id="ftb_useredit" class="<?php echo $tb_user_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($tb_user_edit->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_user_edit->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="level1">
+<input type="hidden" name="t" value="tb_user">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
-<?php if ($level1_edit->IsModal) { ?>
+<?php if ($tb_user_edit->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
+<!-- Fields to prevent google autofill -->
+<input class="hidden" type="text" name="<?php echo ew_Encrypt(ew_Random()) ?>">
+<input class="hidden" type="password" name="<?php echo ew_Encrypt(ew_Random()) ?>">
 <div>
-<?php if ($level1->level1_no->Visible) { // level1_no ?>
-	<div id="r_level1_no" class="form-group">
-		<label id="elh_level1_level1_no" for="x_level1_no" class="col-sm-2 control-label ewLabel"><?php echo $level1->level1_no->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $level1->level1_no->CellAttributes() ?>>
-<span id="el_level1_level1_no">
-<input type="text" data-table="level1" data-field="x_level1_no" name="x_level1_no" id="x_level1_no" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($level1->level1_no->getPlaceHolder()) ?>" value="<?php echo $level1->level1_no->EditValue ?>"<?php echo $level1->level1_no->EditAttributes() ?>>
+<?php if ($tb_user->username->Visible) { // username ?>
+	<div id="r_username" class="form-group">
+		<label id="elh_tb_user_username" for="x_username" class="col-sm-2 control-label ewLabel"><?php echo $tb_user->username->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_user->username->CellAttributes() ?>>
+<span id="el_tb_user_username">
+<input type="text" data-table="tb_user" data-field="x_username" name="x_username" id="x_username" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($tb_user->username->getPlaceHolder()) ?>" value="<?php echo $tb_user->username->EditValue ?>"<?php echo $tb_user->username->EditAttributes() ?>>
 </span>
-<?php echo $level1->level1_no->CustomMsg ?></div></div>
+<?php echo $tb_user->username->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($level1->level1_nama->Visible) { // level1_nama ?>
-	<div id="r_level1_nama" class="form-group">
-		<label id="elh_level1_level1_nama" for="x_level1_nama" class="col-sm-2 control-label ewLabel"><?php echo $level1->level1_nama->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $level1->level1_nama->CellAttributes() ?>>
-<span id="el_level1_level1_nama">
-<input type="text" data-table="level1" data-field="x_level1_nama" name="x_level1_nama" id="x_level1_nama" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($level1->level1_nama->getPlaceHolder()) ?>" value="<?php echo $level1->level1_nama->EditValue ?>"<?php echo $level1->level1_nama->EditAttributes() ?>>
+<?php if ($tb_user->password->Visible) { // password ?>
+	<div id="r_password" class="form-group">
+		<label id="elh_tb_user_password" for="x_password" class="col-sm-2 control-label ewLabel"><?php echo $tb_user->password->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_user->password->CellAttributes() ?>>
+<span id="el_tb_user_password">
+<div class="input-group" id="ig_password">
+<input type="text" data-password-strength="pst_password" data-password-generated="pgt_password" data-table="tb_user" data-field="x_password" name="x_password" id="x_password" value="<?php echo $tb_user->password->EditValue ?>" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($tb_user->password->getPlaceHolder()) ?>"<?php echo $tb_user->password->EditAttributes() ?>>
+<span class="input-group-btn">
+	<button type="button" class="btn btn-default ewPasswordGenerator" title="<?php echo ew_HtmlTitle($Language->Phrase("GeneratePassword")) ?>" data-password-field="x_password" data-password-confirm="c_password" data-password-strength="pst_password" data-password-generated="pgt_password"><?php echo $Language->Phrase("GeneratePassword") ?></button>
 </span>
-<?php echo $level1->level1_nama->CustomMsg ?></div></div>
+</div>
+<span class="help-block" id="pgt_password" style="display: none;"></span>
+<div class="progress ewPasswordStrengthBar" id="pst_password" style="display: none;">
+	<div class="progress-bar" role="progressbar"></div>
+</div>
+</span>
+<?php echo $tb_user->password->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
+	<div id="r_userlevel" class="form-group">
+		<label id="elh_tb_user_userlevel" for="x_userlevel" class="col-sm-2 control-label ewLabel"><?php echo $tb_user->userlevel->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_user->userlevel->CellAttributes() ?>>
+<?php if (!$Security->IsAdmin() && $Security->IsLoggedIn()) { // Non system admin ?>
+<span id="el_tb_user_userlevel">
+<p class="form-control-static"><?php echo $tb_user->userlevel->EditValue ?></p>
+</span>
+<?php } else { ?>
+<span id="el_tb_user_userlevel">
+<select data-table="tb_user" data-field="x_userlevel" data-value-separator="<?php echo $tb_user->userlevel->DisplayValueSeparatorAttribute() ?>" id="x_userlevel" name="x_userlevel"<?php echo $tb_user->userlevel->EditAttributes() ?>>
+<?php echo $tb_user->userlevel->SelectOptionListHtml("x_userlevel") ?>
+</select>
+</span>
+<?php } ?>
+<?php echo $tb_user->userlevel->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
-<input type="hidden" data-table="level1" data-field="x_level1_id" name="x_level1_id" id="x_level1_id" value="<?php echo ew_HtmlEncode($level1->level1_id->CurrentValue) ?>">
-<?php if (!$level1_edit->IsModal) { ?>
+<input type="hidden" data-table="tb_user" data-field="x_user_id" name="x_user_id" id="x_user_id" value="<?php echo ew_HtmlEncode($tb_user->user_id->CurrentValue) ?>">
+<?php if (!$tb_user_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $level1_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $tb_user_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 	</div>
 </div>
 <?php } ?>
 </form>
 <script type="text/javascript">
-flevel1edit.Init();
+ftb_useredit.Init();
 </script>
 <?php
-$level1_edit->ShowPageFooter();
+$tb_user_edit->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -1020,5 +1019,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$level1_edit->Page_Terminate();
+$tb_user_edit->Page_Terminate();
 ?>

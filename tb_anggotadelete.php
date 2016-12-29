@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "level2info.php" ?>
+<?php include_once "tb_anggotainfo.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -14,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$level2_delete = NULL; // Initialize page object first
+$tb_anggota_delete = NULL; // Initialize page object first
 
-class clevel2_delete extends clevel2 {
+class ctb_anggota_delete extends ctb_anggota {
 
 	// Page ID
 	var $PageID = 'delete';
@@ -25,10 +25,10 @@ class clevel2_delete extends clevel2 {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'level2';
+	var $TableName = 'tb_anggota';
 
 	// Page object name
-	var $PageObjName = 'level2_delete';
+	var $PageObjName = 'tb_anggota_delete';
 
 	// Page name
 	function PageName() {
@@ -232,10 +232,10 @@ class clevel2_delete extends clevel2 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (level2)
-		if (!isset($GLOBALS["level2"]) || get_class($GLOBALS["level2"]) == "clevel2") {
-			$GLOBALS["level2"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["level2"];
+		// Table object (tb_anggota)
+		if (!isset($GLOBALS["tb_anggota"]) || get_class($GLOBALS["tb_anggota"]) == "ctb_anggota") {
+			$GLOBALS["tb_anggota"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["tb_anggota"];
 		}
 
 		// Table object (tb_user)
@@ -247,7 +247,7 @@ class clevel2_delete extends clevel2 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'level2', TRUE);
+			define("EW_TABLE_NAME", 'tb_anggota', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -278,14 +278,20 @@ class clevel2_delete extends clevel2 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("level2list.php"));
+				$this->Page_Terminate(ew_GetUrl("tb_anggotalist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->level1_id->SetVisibility();
-		$this->level2_no->SetVisibility();
-		$this->level2_nama->SetVisibility();
+		$this->no_anggota->SetVisibility();
+		$this->nama->SetVisibility();
+		$this->tgl_masuk->SetVisibility();
+		$this->alamat->SetVisibility();
+		$this->kota->SetVisibility();
+		$this->no_telp->SetVisibility();
+		$this->pekerjaan->SetVisibility();
+		$this->jns_pengenal->SetVisibility();
+		$this->no_pengenal->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -317,13 +323,13 @@ class clevel2_delete extends clevel2 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $level2;
+		global $EW_EXPORT, $tb_anggota;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($level2);
+				$doc = new $class($tb_anggota);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -369,10 +375,10 @@ class clevel2_delete extends clevel2 {
 		$this->RecKeys = $this->GetRecordKeys(); // Load record keys
 		$sFilter = $this->GetKeyFilter();
 		if ($sFilter == "")
-			$this->Page_Terminate("level2list.php"); // Prevent SQL injection, return to list
+			$this->Page_Terminate("tb_anggotalist.php"); // Prevent SQL injection, return to list
 
 		// Set up filter (SQL WHHERE clause) and get return SQL
-		// SQL constructor in level2 class, level2info.php
+		// SQL constructor in tb_anggota class, tb_anggotainfo.php
 
 		$this->CurrentFilter = $sFilter;
 
@@ -400,7 +406,7 @@ class clevel2_delete extends clevel2 {
 			if ($this->TotalRecs <= 0) { // No record found, exit
 				if ($this->Recordset)
 					$this->Recordset->Close();
-				$this->Page_Terminate("level2list.php"); // Return to list
+				$this->Page_Terminate("tb_anggotalist.php"); // Return to list
 			}
 		}
 	}
@@ -417,7 +423,7 @@ class clevel2_delete extends clevel2 {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -460,25 +466,32 @@ class clevel2_delete extends clevel2 {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->level2_id->setDbValue($rs->fields('level2_id'));
-		$this->level1_id->setDbValue($rs->fields('level1_id'));
-		if (array_key_exists('EV__level1_id', $rs->fields)) {
-			$this->level1_id->VirtualValue = $rs->fields('EV__level1_id'); // Set up virtual field value
-		} else {
-			$this->level1_id->VirtualValue = ""; // Clear value
-		}
-		$this->level2_no->setDbValue($rs->fields('level2_no'));
-		$this->level2_nama->setDbValue($rs->fields('level2_nama'));
+		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
+		$this->no_anggota->setDbValue($rs->fields('no_anggota'));
+		$this->nama->setDbValue($rs->fields('nama'));
+		$this->tgl_masuk->setDbValue($rs->fields('tgl_masuk'));
+		$this->alamat->setDbValue($rs->fields('alamat'));
+		$this->kota->setDbValue($rs->fields('kota'));
+		$this->no_telp->setDbValue($rs->fields('no_telp'));
+		$this->pekerjaan->setDbValue($rs->fields('pekerjaan'));
+		$this->jns_pengenal->setDbValue($rs->fields('jns_pengenal'));
+		$this->no_pengenal->setDbValue($rs->fields('no_pengenal'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->level2_id->DbValue = $row['level2_id'];
-		$this->level1_id->DbValue = $row['level1_id'];
-		$this->level2_no->DbValue = $row['level2_no'];
-		$this->level2_nama->DbValue = $row['level2_nama'];
+		$this->anggota_id->DbValue = $row['anggota_id'];
+		$this->no_anggota->DbValue = $row['no_anggota'];
+		$this->nama->DbValue = $row['nama'];
+		$this->tgl_masuk->DbValue = $row['tgl_masuk'];
+		$this->alamat->DbValue = $row['alamat'];
+		$this->kota->DbValue = $row['kota'];
+		$this->no_telp->DbValue = $row['no_telp'];
+		$this->pekerjaan->DbValue = $row['pekerjaan'];
+		$this->jns_pengenal->DbValue = $row['jns_pengenal'];
+		$this->no_pengenal->DbValue = $row['no_pengenal'];
 	}
 
 	// Render row values based on field settings
@@ -491,64 +504,100 @@ class clevel2_delete extends clevel2 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// level2_id
-		// level1_id
-		// level2_no
-		// level2_nama
+		// anggota_id
+		// no_anggota
+		// nama
+		// tgl_masuk
+		// alamat
+		// kota
+		// no_telp
+		// pekerjaan
+		// jns_pengenal
+		// no_pengenal
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// level1_id
-		if ($this->level1_id->VirtualValue <> "") {
-			$this->level1_id->ViewValue = $this->level1_id->VirtualValue;
-		} else {
-			$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-		if (strval($this->level1_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `level1`";
-		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-			}
-		} else {
-			$this->level1_id->ViewValue = NULL;
-		}
-		}
-		$this->level1_id->ViewCustomAttributes = "";
+		// no_anggota
+		$this->no_anggota->ViewValue = $this->no_anggota->CurrentValue;
+		$this->no_anggota->ViewCustomAttributes = "";
 
-		// level2_no
-		$this->level2_no->ViewValue = $this->level2_no->CurrentValue;
-		$this->level2_no->ViewCustomAttributes = "";
+		// nama
+		$this->nama->ViewValue = $this->nama->CurrentValue;
+		$this->nama->ViewCustomAttributes = "";
 
-		// level2_nama
-		$this->level2_nama->ViewValue = $this->level2_nama->CurrentValue;
-		$this->level2_nama->ViewCustomAttributes = "";
+		// tgl_masuk
+		$this->tgl_masuk->ViewValue = $this->tgl_masuk->CurrentValue;
+		$this->tgl_masuk->ViewValue = ew_FormatDateTime($this->tgl_masuk->ViewValue, 0);
+		$this->tgl_masuk->ViewCustomAttributes = "";
 
-			// level1_id
-			$this->level1_id->LinkCustomAttributes = "";
-			$this->level1_id->HrefValue = "";
-			$this->level1_id->TooltipValue = "";
+		// alamat
+		$this->alamat->ViewValue = $this->alamat->CurrentValue;
+		$this->alamat->ViewCustomAttributes = "";
 
-			// level2_no
-			$this->level2_no->LinkCustomAttributes = "";
-			$this->level2_no->HrefValue = "";
-			$this->level2_no->TooltipValue = "";
+		// kota
+		$this->kota->ViewValue = $this->kota->CurrentValue;
+		$this->kota->ViewCustomAttributes = "";
 
-			// level2_nama
-			$this->level2_nama->LinkCustomAttributes = "";
-			$this->level2_nama->HrefValue = "";
-			$this->level2_nama->TooltipValue = "";
+		// no_telp
+		$this->no_telp->ViewValue = $this->no_telp->CurrentValue;
+		$this->no_telp->ViewCustomAttributes = "";
+
+		// pekerjaan
+		$this->pekerjaan->ViewValue = $this->pekerjaan->CurrentValue;
+		$this->pekerjaan->ViewCustomAttributes = "";
+
+		// jns_pengenal
+		$this->jns_pengenal->ViewValue = $this->jns_pengenal->CurrentValue;
+		$this->jns_pengenal->ViewCustomAttributes = "";
+
+		// no_pengenal
+		$this->no_pengenal->ViewValue = $this->no_pengenal->CurrentValue;
+		$this->no_pengenal->ViewCustomAttributes = "";
+
+			// no_anggota
+			$this->no_anggota->LinkCustomAttributes = "";
+			$this->no_anggota->HrefValue = "";
+			$this->no_anggota->TooltipValue = "";
+
+			// nama
+			$this->nama->LinkCustomAttributes = "";
+			$this->nama->HrefValue = "";
+			$this->nama->TooltipValue = "";
+
+			// tgl_masuk
+			$this->tgl_masuk->LinkCustomAttributes = "";
+			$this->tgl_masuk->HrefValue = "";
+			$this->tgl_masuk->TooltipValue = "";
+
+			// alamat
+			$this->alamat->LinkCustomAttributes = "";
+			$this->alamat->HrefValue = "";
+			$this->alamat->TooltipValue = "";
+
+			// kota
+			$this->kota->LinkCustomAttributes = "";
+			$this->kota->HrefValue = "";
+			$this->kota->TooltipValue = "";
+
+			// no_telp
+			$this->no_telp->LinkCustomAttributes = "";
+			$this->no_telp->HrefValue = "";
+			$this->no_telp->TooltipValue = "";
+
+			// pekerjaan
+			$this->pekerjaan->LinkCustomAttributes = "";
+			$this->pekerjaan->HrefValue = "";
+			$this->pekerjaan->TooltipValue = "";
+
+			// jns_pengenal
+			$this->jns_pengenal->LinkCustomAttributes = "";
+			$this->jns_pengenal->HrefValue = "";
+			$this->jns_pengenal->TooltipValue = "";
+
+			// no_pengenal
+			$this->no_pengenal->LinkCustomAttributes = "";
+			$this->no_pengenal->HrefValue = "";
+			$this->no_pengenal->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -603,7 +652,7 @@ class clevel2_delete extends clevel2 {
 			foreach ($rsold as $row) {
 				$sThisKey = "";
 				if ($sThisKey <> "") $sThisKey .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-				$sThisKey .= $row['level2_id'];
+				$sThisKey .= $row['anggota_id'];
 				$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 				$DeleteRows = $this->Delete($row); // Delete
 				$conn->raiseErrorFn = '';
@@ -651,7 +700,7 @@ class clevel2_delete extends clevel2 {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("level2list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_anggotalist.php"), "", $this->TableVar, TRUE);
 		$PageId = "delete";
 		$Breadcrumb->Add("delete", $PageId, $url);
 	}
@@ -674,7 +723,7 @@ class clevel2_delete extends clevel2 {
 
 	// Write Audit Trail start/end for grid update
 	function WriteAuditTrailDummy($typ) {
-		$table = 'level2';
+		$table = 'tb_anggota';
 		$usr = CurrentUserName();
 		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
@@ -683,13 +732,13 @@ class clevel2_delete extends clevel2 {
 	function WriteAuditTrailOnDelete(&$rs) {
 		global $Language;
 		if (!$this->AuditTrailOnDelete) return;
-		$table = 'level2';
+		$table = 'tb_anggota';
 
 		// Get key value
 		$key = "";
 		if ($key <> "")
 			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['level2_id'];
+		$key .= $rs['anggota_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();
@@ -779,29 +828,29 @@ class clevel2_delete extends clevel2 {
 <?php
 
 // Create page object
-if (!isset($level2_delete)) $level2_delete = new clevel2_delete();
+if (!isset($tb_anggota_delete)) $tb_anggota_delete = new ctb_anggota_delete();
 
 // Page init
-$level2_delete->Page_Init();
+$tb_anggota_delete->Page_Init();
 
 // Page main
-$level2_delete->Page_Main();
+$tb_anggota_delete->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$level2_delete->Page_Render();
+$tb_anggota_delete->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "delete";
-var CurrentForm = flevel2delete = new ew_Form("flevel2delete", "delete");
+var CurrentForm = ftb_anggotadelete = new ew_Form("ftb_anggotadelete", "delete");
 
 // Form_CustomValidate event
-flevel2delete.Form_CustomValidate = 
+ftb_anggotadelete.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -810,15 +859,14 @@ flevel2delete.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-flevel2delete.ValidateRequired = true;
+ftb_anggotadelete.ValidateRequired = true;
 <?php } else { ?>
-flevel2delete.ValidateRequired = false; 
+ftb_anggotadelete.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-flevel2delete.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_no","x_level1_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"level1"};
-
 // Form object for search
+
 </script>
 <script type="text/javascript">
 
@@ -829,85 +877,151 @@ flevel2delete.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"Aut
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
-<?php $level2_delete->ShowPageHeader(); ?>
+<?php $tb_anggota_delete->ShowPageHeader(); ?>
 <?php
-$level2_delete->ShowMessage();
+$tb_anggota_delete->ShowMessage();
 ?>
-<form name="flevel2delete" id="flevel2delete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($level2_delete->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $level2_delete->Token ?>">
+<form name="ftb_anggotadelete" id="ftb_anggotadelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($tb_anggota_delete->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_anggota_delete->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="level2">
+<input type="hidden" name="t" value="tb_anggota">
 <input type="hidden" name="a_delete" id="a_delete" value="D">
-<?php foreach ($level2_delete->RecKeys as $key) { ?>
+<?php foreach ($tb_anggota_delete->RecKeys as $key) { ?>
 <?php $keyvalue = is_array($key) ? implode($EW_COMPOSITE_KEY_SEPARATOR, $key) : $key; ?>
 <input type="hidden" name="key_m[]" value="<?php echo ew_HtmlEncode($keyvalue) ?>">
 <?php } ?>
 <div class="ewGrid">
 <div class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <table class="table ewTable">
-<?php echo $level2->TableCustomInnerHtml ?>
+<?php echo $tb_anggota->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($level2->level1_id->Visible) { // level1_id ?>
-		<th><span id="elh_level2_level1_id" class="level2_level1_id"><?php echo $level2->level1_id->FldCaption() ?></span></th>
+<?php if ($tb_anggota->no_anggota->Visible) { // no_anggota ?>
+		<th><span id="elh_tb_anggota_no_anggota" class="tb_anggota_no_anggota"><?php echo $tb_anggota->no_anggota->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($level2->level2_no->Visible) { // level2_no ?>
-		<th><span id="elh_level2_level2_no" class="level2_level2_no"><?php echo $level2->level2_no->FldCaption() ?></span></th>
+<?php if ($tb_anggota->nama->Visible) { // nama ?>
+		<th><span id="elh_tb_anggota_nama" class="tb_anggota_nama"><?php echo $tb_anggota->nama->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($level2->level2_nama->Visible) { // level2_nama ?>
-		<th><span id="elh_level2_level2_nama" class="level2_level2_nama"><?php echo $level2->level2_nama->FldCaption() ?></span></th>
+<?php if ($tb_anggota->tgl_masuk->Visible) { // tgl_masuk ?>
+		<th><span id="elh_tb_anggota_tgl_masuk" class="tb_anggota_tgl_masuk"><?php echo $tb_anggota->tgl_masuk->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($tb_anggota->alamat->Visible) { // alamat ?>
+		<th><span id="elh_tb_anggota_alamat" class="tb_anggota_alamat"><?php echo $tb_anggota->alamat->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($tb_anggota->kota->Visible) { // kota ?>
+		<th><span id="elh_tb_anggota_kota" class="tb_anggota_kota"><?php echo $tb_anggota->kota->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($tb_anggota->no_telp->Visible) { // no_telp ?>
+		<th><span id="elh_tb_anggota_no_telp" class="tb_anggota_no_telp"><?php echo $tb_anggota->no_telp->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($tb_anggota->pekerjaan->Visible) { // pekerjaan ?>
+		<th><span id="elh_tb_anggota_pekerjaan" class="tb_anggota_pekerjaan"><?php echo $tb_anggota->pekerjaan->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($tb_anggota->jns_pengenal->Visible) { // jns_pengenal ?>
+		<th><span id="elh_tb_anggota_jns_pengenal" class="tb_anggota_jns_pengenal"><?php echo $tb_anggota->jns_pengenal->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($tb_anggota->no_pengenal->Visible) { // no_pengenal ?>
+		<th><span id="elh_tb_anggota_no_pengenal" class="tb_anggota_no_pengenal"><?php echo $tb_anggota->no_pengenal->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
 	<tbody>
 <?php
-$level2_delete->RecCnt = 0;
+$tb_anggota_delete->RecCnt = 0;
 $i = 0;
-while (!$level2_delete->Recordset->EOF) {
-	$level2_delete->RecCnt++;
-	$level2_delete->RowCnt++;
+while (!$tb_anggota_delete->Recordset->EOF) {
+	$tb_anggota_delete->RecCnt++;
+	$tb_anggota_delete->RowCnt++;
 
 	// Set row properties
-	$level2->ResetAttrs();
-	$level2->RowType = EW_ROWTYPE_VIEW; // View
+	$tb_anggota->ResetAttrs();
+	$tb_anggota->RowType = EW_ROWTYPE_VIEW; // View
 
 	// Get the field contents
-	$level2_delete->LoadRowValues($level2_delete->Recordset);
+	$tb_anggota_delete->LoadRowValues($tb_anggota_delete->Recordset);
 
 	// Render row
-	$level2_delete->RenderRow();
+	$tb_anggota_delete->RenderRow();
 ?>
-	<tr<?php echo $level2->RowAttributes() ?>>
-<?php if ($level2->level1_id->Visible) { // level1_id ?>
-		<td<?php echo $level2->level1_id->CellAttributes() ?>>
-<span id="el<?php echo $level2_delete->RowCnt ?>_level2_level1_id" class="level2_level1_id">
-<span<?php echo $level2->level1_id->ViewAttributes() ?>>
-<?php echo $level2->level1_id->ListViewValue() ?></span>
+	<tr<?php echo $tb_anggota->RowAttributes() ?>>
+<?php if ($tb_anggota->no_anggota->Visible) { // no_anggota ?>
+		<td<?php echo $tb_anggota->no_anggota->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_no_anggota" class="tb_anggota_no_anggota">
+<span<?php echo $tb_anggota->no_anggota->ViewAttributes() ?>>
+<?php echo $tb_anggota->no_anggota->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($level2->level2_no->Visible) { // level2_no ?>
-		<td<?php echo $level2->level2_no->CellAttributes() ?>>
-<span id="el<?php echo $level2_delete->RowCnt ?>_level2_level2_no" class="level2_level2_no">
-<span<?php echo $level2->level2_no->ViewAttributes() ?>>
-<?php echo $level2->level2_no->ListViewValue() ?></span>
+<?php if ($tb_anggota->nama->Visible) { // nama ?>
+		<td<?php echo $tb_anggota->nama->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_nama" class="tb_anggota_nama">
+<span<?php echo $tb_anggota->nama->ViewAttributes() ?>>
+<?php echo $tb_anggota->nama->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($level2->level2_nama->Visible) { // level2_nama ?>
-		<td<?php echo $level2->level2_nama->CellAttributes() ?>>
-<span id="el<?php echo $level2_delete->RowCnt ?>_level2_level2_nama" class="level2_level2_nama">
-<span<?php echo $level2->level2_nama->ViewAttributes() ?>>
-<?php echo $level2->level2_nama->ListViewValue() ?></span>
+<?php if ($tb_anggota->tgl_masuk->Visible) { // tgl_masuk ?>
+		<td<?php echo $tb_anggota->tgl_masuk->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_tgl_masuk" class="tb_anggota_tgl_masuk">
+<span<?php echo $tb_anggota->tgl_masuk->ViewAttributes() ?>>
+<?php echo $tb_anggota->tgl_masuk->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_anggota->alamat->Visible) { // alamat ?>
+		<td<?php echo $tb_anggota->alamat->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_alamat" class="tb_anggota_alamat">
+<span<?php echo $tb_anggota->alamat->ViewAttributes() ?>>
+<?php echo $tb_anggota->alamat->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_anggota->kota->Visible) { // kota ?>
+		<td<?php echo $tb_anggota->kota->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_kota" class="tb_anggota_kota">
+<span<?php echo $tb_anggota->kota->ViewAttributes() ?>>
+<?php echo $tb_anggota->kota->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_anggota->no_telp->Visible) { // no_telp ?>
+		<td<?php echo $tb_anggota->no_telp->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_no_telp" class="tb_anggota_no_telp">
+<span<?php echo $tb_anggota->no_telp->ViewAttributes() ?>>
+<?php echo $tb_anggota->no_telp->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_anggota->pekerjaan->Visible) { // pekerjaan ?>
+		<td<?php echo $tb_anggota->pekerjaan->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_pekerjaan" class="tb_anggota_pekerjaan">
+<span<?php echo $tb_anggota->pekerjaan->ViewAttributes() ?>>
+<?php echo $tb_anggota->pekerjaan->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_anggota->jns_pengenal->Visible) { // jns_pengenal ?>
+		<td<?php echo $tb_anggota->jns_pengenal->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_jns_pengenal" class="tb_anggota_jns_pengenal">
+<span<?php echo $tb_anggota->jns_pengenal->ViewAttributes() ?>>
+<?php echo $tb_anggota->jns_pengenal->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_anggota->no_pengenal->Visible) { // no_pengenal ?>
+		<td<?php echo $tb_anggota->no_pengenal->CellAttributes() ?>>
+<span id="el<?php echo $tb_anggota_delete->RowCnt ?>_tb_anggota_no_pengenal" class="tb_anggota_no_pengenal">
+<span<?php echo $tb_anggota->no_pengenal->ViewAttributes() ?>>
+<?php echo $tb_anggota->no_pengenal->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
 	</tr>
 <?php
-	$level2_delete->Recordset->MoveNext();
+	$tb_anggota_delete->Recordset->MoveNext();
 }
-$level2_delete->Recordset->Close();
+$tb_anggota_delete->Recordset->Close();
 ?>
 </tbody>
 </table>
@@ -915,14 +1029,14 @@ $level2_delete->Recordset->Close();
 </div>
 <div>
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("DeleteBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $level2_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $tb_anggota_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 </div>
 </form>
 <script type="text/javascript">
-flevel2delete.Init();
+ftb_anggotadelete.Init();
 </script>
 <?php
-$level2_delete->ShowPageFooter();
+$tb_anggota_delete->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -934,5 +1048,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$level2_delete->Page_Terminate();
+$tb_anggota_delete->Page_Terminate();
 ?>

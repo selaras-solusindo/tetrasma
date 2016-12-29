@@ -3826,6 +3826,7 @@ class cAdvancedSecurity {
 	// Validate user
 	function ValidateUser(&$usr, &$pwd, $autologin, $encrypted = FALSE) {
 		global $Language;
+		global $UserTable, $UserTableConn;
 		$validateUser = FALSE;
 		$customValidateUser = FALSE;
 
@@ -3839,25 +3840,40 @@ class cAdvancedSecurity {
 			}
 		}
 
-		// Check hard coded admin first
+		// Check other users
 		if (!$validateUser) {
-			if (EW_CASE_SENSITIVE_PASSWORD) {
-				$validateUser = (!$customValidateUser && EW_ADMIN_USER_NAME == $usr && EW_ADMIN_PASSWORD == $pwd) ||
-								($customValidateUser && EW_ADMIN_USER_NAME == $usr);
-			} else {
-				$validateUser = (!$customValidateUser && strtolower(EW_ADMIN_USER_NAME) == strtolower($usr)
-								&& strtolower(EW_ADMIN_PASSWORD) == strtolower($pwd)) ||
-								($customValidateUser && strtolower(EW_ADMIN_USER_NAME) == strtolower($usr));
+			$sFilter = str_replace("%u", ew_AdjustSql($usr, EW_USER_TABLE_DBID), EW_USER_NAME_FILTER);
+
+			// Set up filter (SQL WHERE clause) and get return SQL
+			// SQL constructor in <UserTable> class, <UserTable>info.php
+
+			$sSql = $UserTable->GetSQL($sFilter, "");
+			if ($rs = $UserTableConn->Execute($sSql)) {
+				if (!$rs->EOF) {
+					$validateUser = $customValidateUser || ew_ComparePassword($rs->fields('password'), $pwd, $encrypted);
+					if ($validateUser) {
+						$_SESSION[EW_SESSION_STATUS] = "login";
+						$_SESSION[EW_SESSION_SYS_ADMIN] = 0; // Non System Administrator
+						$this->setCurrentUserName($rs->fields('username')); // Load user name
+						if (is_null($rs->fields('userlevel'))) {
+							$this->setSessionUserLevelID(0);
+						} else {
+							$this->setSessionUserLevelID(intval($rs->fields('userlevel'))); // Load User Level
+						}
+						$this->SetUpUserLevel();
+
+						// Call User Validated event
+						$row = $rs->fields;
+						$validateUser = $this->User_Validated($row) !== FALSE; // For backward compatibility
+					}
+				} else { // User not found in user table
+					if ($customValidateUser) { // Grant default permissions
+						$this->setSessionUserLevelID(-2); // Anonymous User Level
+						$this->SetUpUserLevel();
+					}
+				}
+				$rs->Close();
 			}
-			if ($validateUser) {
-				$_SESSION[EW_SESSION_STATUS] = "login";
-				$_SESSION[EW_SESSION_SYS_ADMIN] = 1; // System Administrator
-				$this->setCurrentUserName($Language->Phrase("UserAdministrator")); // Load user name
-			}
-		}
-		if ($customValidateUser) {
-			$rs = NULL;
-			$customValidateUser = $this->User_Validated($rs) !== FALSE;
 		}
 		if ($customValidateUser)
 			return $customValidateUser;
@@ -3964,12 +3980,23 @@ class cAdvancedSecurity {
 		}
 	}
 
-	// User Level security (Anonymous)
+	// Static User Level security
 	function SetUpUserLevel() {
 
-		// Load user level from config file (Anonymous)
+		// Load user level from config file
 		$arTable = array();
 		$this->LoadUserLevelFromConfigFile($this->UserLevel, $this->UserLevelPriv, $arTable);
+
+		// User Level loaded event
+		$this->UserLevel_Loaded();
+
+		// Save the User Level to Session variable
+		$this->SaveUserLevel();
+	}
+
+	// Get all User Level settings from database
+	function SetUpUserLevelEx() {
+		return FALSE;
 	}
 
 	// Add user permission
@@ -4038,7 +4065,10 @@ class cAdvancedSecurity {
 	// Get current user privilege
 	function CurrentUserLevelPriv($TableName) {
 		if ($this->IsLoggedIn()) {
-			return 127;
+			$Priv = 0;
+			foreach ($this->UserLevelID as $UserLevelID)
+				$Priv |= $this->GetUserLevelPrivEx($TableName, $UserLevelID);
+			return $Priv;
 		} else { // Anonymous
 			return $this->GetUserLevelPrivEx($TableName, -2);
 		}
@@ -4238,6 +4268,8 @@ class cAdvancedSecurity {
 	// Check if user is administrator
 	function IsAdmin() {
 		$IsAdmin = $this->IsSysAdmin();
+		if (!$IsAdmin)
+			$IsAdmin = $this->CurrentUserLevelID == -1 || in_array(-1, $this->UserLevelID);
 		return $IsAdmin;
 	}
 

@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "level1info.php" ?>
+<?php include_once "tb_anggotainfo.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -14,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$level1_edit = NULL; // Initialize page object first
+$tb_anggota_edit = NULL; // Initialize page object first
 
-class clevel1_edit extends clevel1 {
+class ctb_anggota_edit extends ctb_anggota {
 
 	// Page ID
 	var $PageID = 'edit';
@@ -25,10 +25,10 @@ class clevel1_edit extends clevel1 {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'level1';
+	var $TableName = 'tb_anggota';
 
 	// Page object name
-	var $PageObjName = 'level1_edit';
+	var $PageObjName = 'tb_anggota_edit';
 
 	// Page name
 	function PageName() {
@@ -232,10 +232,10 @@ class clevel1_edit extends clevel1 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (level1)
-		if (!isset($GLOBALS["level1"]) || get_class($GLOBALS["level1"]) == "clevel1") {
-			$GLOBALS["level1"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["level1"];
+		// Table object (tb_anggota)
+		if (!isset($GLOBALS["tb_anggota"]) || get_class($GLOBALS["tb_anggota"]) == "ctb_anggota") {
+			$GLOBALS["tb_anggota"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["tb_anggota"];
 		}
 
 		// Table object (tb_user)
@@ -247,7 +247,7 @@ class clevel1_edit extends clevel1 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'level1', TRUE);
+			define("EW_TABLE_NAME", 'tb_anggota', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -278,7 +278,7 @@ class clevel1_edit extends clevel1 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("level1list.php"));
+				$this->Page_Terminate(ew_GetUrl("tb_anggotalist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -286,8 +286,15 @@ class clevel1_edit extends clevel1 {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->level1_no->SetVisibility();
-		$this->level1_nama->SetVisibility();
+		$this->no_anggota->SetVisibility();
+		$this->nama->SetVisibility();
+		$this->tgl_masuk->SetVisibility();
+		$this->alamat->SetVisibility();
+		$this->kota->SetVisibility();
+		$this->no_telp->SetVisibility();
+		$this->pekerjaan->SetVisibility();
+		$this->jns_pengenal->SetVisibility();
+		$this->no_pengenal->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -333,13 +340,13 @@ class clevel1_edit extends clevel1 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $level1;
+		global $EW_EXPORT, $tb_anggota;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($level1);
+				$doc = new $class($tb_anggota);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -388,8 +395,8 @@ class clevel1_edit extends clevel1 {
 			$gbSkipHeaderFooter = TRUE;
 
 		// Load key from QueryString
-		if (@$_GET["level1_id"] <> "") {
-			$this->level1_id->setQueryStringValue($_GET["level1_id"]);
+		if (@$_GET["anggota_id"] <> "") {
+			$this->anggota_id->setQueryStringValue($_GET["anggota_id"]);
 		}
 
 		// Set up Breadcrumb
@@ -404,8 +411,8 @@ class clevel1_edit extends clevel1 {
 		}
 
 		// Check if valid key
-		if ($this->level1_id->CurrentValue == "") {
-			$this->Page_Terminate("level1list.php"); // Invalid key, return to list
+		if ($this->anggota_id->CurrentValue == "") {
+			$this->Page_Terminate("tb_anggotalist.php"); // Invalid key, return to list
 		}
 
 		// Validate form if post back
@@ -421,12 +428,12 @@ class clevel1_edit extends clevel1 {
 			case "I": // Get a record to display
 				if (!$this->LoadRow()) { // Load record based on key
 					if ($this->getFailureMessage() == "") $this->setFailureMessage($Language->Phrase("NoRecord")); // No record found
-					$this->Page_Terminate("level1list.php"); // No matching record, return to list
+					$this->Page_Terminate("tb_anggotalist.php"); // No matching record, return to list
 				}
 				break;
 			Case "U": // Update
 				$sReturnUrl = $this->getReturnUrl();
-				if (ew_GetPageName($sReturnUrl) == "level1list.php")
+				if (ew_GetPageName($sReturnUrl) == "tb_anggotalist.php")
 					$sReturnUrl = $this->AddMasterUrl($sReturnUrl); // List page, return to list page with correct master key if necessary
 				$this->SendEmail = TRUE; // Send email on update success
 				if ($this->EditRow()) { // Update record based on key
@@ -495,23 +502,53 @@ class clevel1_edit extends clevel1 {
 
 		// Load from form
 		global $objForm;
-		if (!$this->level1_no->FldIsDetailKey) {
-			$this->level1_no->setFormValue($objForm->GetValue("x_level1_no"));
+		if (!$this->no_anggota->FldIsDetailKey) {
+			$this->no_anggota->setFormValue($objForm->GetValue("x_no_anggota"));
 		}
-		if (!$this->level1_nama->FldIsDetailKey) {
-			$this->level1_nama->setFormValue($objForm->GetValue("x_level1_nama"));
+		if (!$this->nama->FldIsDetailKey) {
+			$this->nama->setFormValue($objForm->GetValue("x_nama"));
 		}
-		if (!$this->level1_id->FldIsDetailKey)
-			$this->level1_id->setFormValue($objForm->GetValue("x_level1_id"));
+		if (!$this->tgl_masuk->FldIsDetailKey) {
+			$this->tgl_masuk->setFormValue($objForm->GetValue("x_tgl_masuk"));
+			$this->tgl_masuk->CurrentValue = ew_UnFormatDateTime($this->tgl_masuk->CurrentValue, 0);
+		}
+		if (!$this->alamat->FldIsDetailKey) {
+			$this->alamat->setFormValue($objForm->GetValue("x_alamat"));
+		}
+		if (!$this->kota->FldIsDetailKey) {
+			$this->kota->setFormValue($objForm->GetValue("x_kota"));
+		}
+		if (!$this->no_telp->FldIsDetailKey) {
+			$this->no_telp->setFormValue($objForm->GetValue("x_no_telp"));
+		}
+		if (!$this->pekerjaan->FldIsDetailKey) {
+			$this->pekerjaan->setFormValue($objForm->GetValue("x_pekerjaan"));
+		}
+		if (!$this->jns_pengenal->FldIsDetailKey) {
+			$this->jns_pengenal->setFormValue($objForm->GetValue("x_jns_pengenal"));
+		}
+		if (!$this->no_pengenal->FldIsDetailKey) {
+			$this->no_pengenal->setFormValue($objForm->GetValue("x_no_pengenal"));
+		}
+		if (!$this->anggota_id->FldIsDetailKey)
+			$this->anggota_id->setFormValue($objForm->GetValue("x_anggota_id"));
 	}
 
 	// Restore form values
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadRow();
-		$this->level1_id->CurrentValue = $this->level1_id->FormValue;
-		$this->level1_no->CurrentValue = $this->level1_no->FormValue;
-		$this->level1_nama->CurrentValue = $this->level1_nama->FormValue;
+		$this->anggota_id->CurrentValue = $this->anggota_id->FormValue;
+		$this->no_anggota->CurrentValue = $this->no_anggota->FormValue;
+		$this->nama->CurrentValue = $this->nama->FormValue;
+		$this->tgl_masuk->CurrentValue = $this->tgl_masuk->FormValue;
+		$this->tgl_masuk->CurrentValue = ew_UnFormatDateTime($this->tgl_masuk->CurrentValue, 0);
+		$this->alamat->CurrentValue = $this->alamat->FormValue;
+		$this->kota->CurrentValue = $this->kota->FormValue;
+		$this->no_telp->CurrentValue = $this->no_telp->FormValue;
+		$this->pekerjaan->CurrentValue = $this->pekerjaan->FormValue;
+		$this->jns_pengenal->CurrentValue = $this->jns_pengenal->FormValue;
+		$this->no_pengenal->CurrentValue = $this->no_pengenal->FormValue;
 	}
 
 	// Load row based on key values
@@ -543,18 +580,32 @@ class clevel1_edit extends clevel1 {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->level1_id->setDbValue($rs->fields('level1_id'));
-		$this->level1_no->setDbValue($rs->fields('level1_no'));
-		$this->level1_nama->setDbValue($rs->fields('level1_nama'));
+		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
+		$this->no_anggota->setDbValue($rs->fields('no_anggota'));
+		$this->nama->setDbValue($rs->fields('nama'));
+		$this->tgl_masuk->setDbValue($rs->fields('tgl_masuk'));
+		$this->alamat->setDbValue($rs->fields('alamat'));
+		$this->kota->setDbValue($rs->fields('kota'));
+		$this->no_telp->setDbValue($rs->fields('no_telp'));
+		$this->pekerjaan->setDbValue($rs->fields('pekerjaan'));
+		$this->jns_pengenal->setDbValue($rs->fields('jns_pengenal'));
+		$this->no_pengenal->setDbValue($rs->fields('no_pengenal'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->level1_id->DbValue = $row['level1_id'];
-		$this->level1_no->DbValue = $row['level1_no'];
-		$this->level1_nama->DbValue = $row['level1_nama'];
+		$this->anggota_id->DbValue = $row['anggota_id'];
+		$this->no_anggota->DbValue = $row['no_anggota'];
+		$this->nama->DbValue = $row['nama'];
+		$this->tgl_masuk->DbValue = $row['tgl_masuk'];
+		$this->alamat->DbValue = $row['alamat'];
+		$this->kota->DbValue = $row['kota'];
+		$this->no_telp->DbValue = $row['no_telp'];
+		$this->pekerjaan->DbValue = $row['pekerjaan'];
+		$this->jns_pengenal->DbValue = $row['jns_pengenal'];
+		$this->no_pengenal->DbValue = $row['no_pengenal'];
 	}
 
 	// Render row values based on field settings
@@ -567,52 +618,193 @@ class clevel1_edit extends clevel1 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// level1_id
-		// level1_no
-		// level1_nama
+		// anggota_id
+		// no_anggota
+		// nama
+		// tgl_masuk
+		// alamat
+		// kota
+		// no_telp
+		// pekerjaan
+		// jns_pengenal
+		// no_pengenal
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// level1_no
-		$this->level1_no->ViewValue = $this->level1_no->CurrentValue;
-		$this->level1_no->ViewCustomAttributes = "";
+		// no_anggota
+		$this->no_anggota->ViewValue = $this->no_anggota->CurrentValue;
+		$this->no_anggota->ViewCustomAttributes = "";
 
-		// level1_nama
-		$this->level1_nama->ViewValue = $this->level1_nama->CurrentValue;
-		$this->level1_nama->ViewCustomAttributes = "";
+		// nama
+		$this->nama->ViewValue = $this->nama->CurrentValue;
+		$this->nama->ViewCustomAttributes = "";
 
-			// level1_no
-			$this->level1_no->LinkCustomAttributes = "";
-			$this->level1_no->HrefValue = "";
-			$this->level1_no->TooltipValue = "";
+		// tgl_masuk
+		$this->tgl_masuk->ViewValue = $this->tgl_masuk->CurrentValue;
+		$this->tgl_masuk->ViewValue = ew_FormatDateTime($this->tgl_masuk->ViewValue, 0);
+		$this->tgl_masuk->ViewCustomAttributes = "";
 
-			// level1_nama
-			$this->level1_nama->LinkCustomAttributes = "";
-			$this->level1_nama->HrefValue = "";
-			$this->level1_nama->TooltipValue = "";
+		// alamat
+		$this->alamat->ViewValue = $this->alamat->CurrentValue;
+		$this->alamat->ViewCustomAttributes = "";
+
+		// kota
+		$this->kota->ViewValue = $this->kota->CurrentValue;
+		$this->kota->ViewCustomAttributes = "";
+
+		// no_telp
+		$this->no_telp->ViewValue = $this->no_telp->CurrentValue;
+		$this->no_telp->ViewCustomAttributes = "";
+
+		// pekerjaan
+		$this->pekerjaan->ViewValue = $this->pekerjaan->CurrentValue;
+		$this->pekerjaan->ViewCustomAttributes = "";
+
+		// jns_pengenal
+		$this->jns_pengenal->ViewValue = $this->jns_pengenal->CurrentValue;
+		$this->jns_pengenal->ViewCustomAttributes = "";
+
+		// no_pengenal
+		$this->no_pengenal->ViewValue = $this->no_pengenal->CurrentValue;
+		$this->no_pengenal->ViewCustomAttributes = "";
+
+			// no_anggota
+			$this->no_anggota->LinkCustomAttributes = "";
+			$this->no_anggota->HrefValue = "";
+			$this->no_anggota->TooltipValue = "";
+
+			// nama
+			$this->nama->LinkCustomAttributes = "";
+			$this->nama->HrefValue = "";
+			$this->nama->TooltipValue = "";
+
+			// tgl_masuk
+			$this->tgl_masuk->LinkCustomAttributes = "";
+			$this->tgl_masuk->HrefValue = "";
+			$this->tgl_masuk->TooltipValue = "";
+
+			// alamat
+			$this->alamat->LinkCustomAttributes = "";
+			$this->alamat->HrefValue = "";
+			$this->alamat->TooltipValue = "";
+
+			// kota
+			$this->kota->LinkCustomAttributes = "";
+			$this->kota->HrefValue = "";
+			$this->kota->TooltipValue = "";
+
+			// no_telp
+			$this->no_telp->LinkCustomAttributes = "";
+			$this->no_telp->HrefValue = "";
+			$this->no_telp->TooltipValue = "";
+
+			// pekerjaan
+			$this->pekerjaan->LinkCustomAttributes = "";
+			$this->pekerjaan->HrefValue = "";
+			$this->pekerjaan->TooltipValue = "";
+
+			// jns_pengenal
+			$this->jns_pengenal->LinkCustomAttributes = "";
+			$this->jns_pengenal->HrefValue = "";
+			$this->jns_pengenal->TooltipValue = "";
+
+			// no_pengenal
+			$this->no_pengenal->LinkCustomAttributes = "";
+			$this->no_pengenal->HrefValue = "";
+			$this->no_pengenal->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
-			// level1_no
-			$this->level1_no->EditAttrs["class"] = "form-control";
-			$this->level1_no->EditCustomAttributes = "";
-			$this->level1_no->EditValue = ew_HtmlEncode($this->level1_no->CurrentValue);
-			$this->level1_no->PlaceHolder = ew_RemoveHtml($this->level1_no->FldCaption());
+			// no_anggota
+			$this->no_anggota->EditAttrs["class"] = "form-control";
+			$this->no_anggota->EditCustomAttributes = "";
+			$this->no_anggota->EditValue = ew_HtmlEncode($this->no_anggota->CurrentValue);
+			$this->no_anggota->PlaceHolder = ew_RemoveHtml($this->no_anggota->FldCaption());
 
-			// level1_nama
-			$this->level1_nama->EditAttrs["class"] = "form-control";
-			$this->level1_nama->EditCustomAttributes = "";
-			$this->level1_nama->EditValue = ew_HtmlEncode($this->level1_nama->CurrentValue);
-			$this->level1_nama->PlaceHolder = ew_RemoveHtml($this->level1_nama->FldCaption());
+			// nama
+			$this->nama->EditAttrs["class"] = "form-control";
+			$this->nama->EditCustomAttributes = "";
+			$this->nama->EditValue = ew_HtmlEncode($this->nama->CurrentValue);
+			$this->nama->PlaceHolder = ew_RemoveHtml($this->nama->FldCaption());
+
+			// tgl_masuk
+			$this->tgl_masuk->EditAttrs["class"] = "form-control";
+			$this->tgl_masuk->EditCustomAttributes = "";
+			$this->tgl_masuk->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl_masuk->CurrentValue, 8));
+			$this->tgl_masuk->PlaceHolder = ew_RemoveHtml($this->tgl_masuk->FldCaption());
+
+			// alamat
+			$this->alamat->EditAttrs["class"] = "form-control";
+			$this->alamat->EditCustomAttributes = "";
+			$this->alamat->EditValue = ew_HtmlEncode($this->alamat->CurrentValue);
+			$this->alamat->PlaceHolder = ew_RemoveHtml($this->alamat->FldCaption());
+
+			// kota
+			$this->kota->EditAttrs["class"] = "form-control";
+			$this->kota->EditCustomAttributes = "";
+			$this->kota->EditValue = ew_HtmlEncode($this->kota->CurrentValue);
+			$this->kota->PlaceHolder = ew_RemoveHtml($this->kota->FldCaption());
+
+			// no_telp
+			$this->no_telp->EditAttrs["class"] = "form-control";
+			$this->no_telp->EditCustomAttributes = "";
+			$this->no_telp->EditValue = ew_HtmlEncode($this->no_telp->CurrentValue);
+			$this->no_telp->PlaceHolder = ew_RemoveHtml($this->no_telp->FldCaption());
+
+			// pekerjaan
+			$this->pekerjaan->EditAttrs["class"] = "form-control";
+			$this->pekerjaan->EditCustomAttributes = "";
+			$this->pekerjaan->EditValue = ew_HtmlEncode($this->pekerjaan->CurrentValue);
+			$this->pekerjaan->PlaceHolder = ew_RemoveHtml($this->pekerjaan->FldCaption());
+
+			// jns_pengenal
+			$this->jns_pengenal->EditAttrs["class"] = "form-control";
+			$this->jns_pengenal->EditCustomAttributes = "";
+			$this->jns_pengenal->EditValue = ew_HtmlEncode($this->jns_pengenal->CurrentValue);
+			$this->jns_pengenal->PlaceHolder = ew_RemoveHtml($this->jns_pengenal->FldCaption());
+
+			// no_pengenal
+			$this->no_pengenal->EditAttrs["class"] = "form-control";
+			$this->no_pengenal->EditCustomAttributes = "";
+			$this->no_pengenal->EditValue = ew_HtmlEncode($this->no_pengenal->CurrentValue);
+			$this->no_pengenal->PlaceHolder = ew_RemoveHtml($this->no_pengenal->FldCaption());
 
 			// Edit refer script
-			// level1_no
+			// no_anggota
 
-			$this->level1_no->LinkCustomAttributes = "";
-			$this->level1_no->HrefValue = "";
+			$this->no_anggota->LinkCustomAttributes = "";
+			$this->no_anggota->HrefValue = "";
 
-			// level1_nama
-			$this->level1_nama->LinkCustomAttributes = "";
-			$this->level1_nama->HrefValue = "";
+			// nama
+			$this->nama->LinkCustomAttributes = "";
+			$this->nama->HrefValue = "";
+
+			// tgl_masuk
+			$this->tgl_masuk->LinkCustomAttributes = "";
+			$this->tgl_masuk->HrefValue = "";
+
+			// alamat
+			$this->alamat->LinkCustomAttributes = "";
+			$this->alamat->HrefValue = "";
+
+			// kota
+			$this->kota->LinkCustomAttributes = "";
+			$this->kota->HrefValue = "";
+
+			// no_telp
+			$this->no_telp->LinkCustomAttributes = "";
+			$this->no_telp->HrefValue = "";
+
+			// pekerjaan
+			$this->pekerjaan->LinkCustomAttributes = "";
+			$this->pekerjaan->HrefValue = "";
+
+			// jns_pengenal
+			$this->jns_pengenal->LinkCustomAttributes = "";
+			$this->jns_pengenal->HrefValue = "";
+
+			// no_pengenal
+			$this->no_pengenal->LinkCustomAttributes = "";
+			$this->no_pengenal->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -635,11 +827,8 @@ class clevel1_edit extends clevel1 {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
-		if (!$this->level1_no->FldIsDetailKey && !is_null($this->level1_no->FormValue) && $this->level1_no->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->level1_no->FldCaption(), $this->level1_no->ReqErrMsg));
-		}
-		if (!$this->level1_nama->FldIsDetailKey && !is_null($this->level1_nama->FormValue) && $this->level1_nama->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->level1_nama->FldCaption(), $this->level1_nama->ReqErrMsg));
+		if (!ew_CheckDateDef($this->tgl_masuk->FormValue)) {
+			ew_AddMessage($gsFormError, $this->tgl_masuk->FldErrMsg());
 		}
 
 		// Return validate result
@@ -677,11 +866,32 @@ class clevel1_edit extends clevel1 {
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
 
-			// level1_no
-			$this->level1_no->SetDbValueDef($rsnew, $this->level1_no->CurrentValue, "", $this->level1_no->ReadOnly);
+			// no_anggota
+			$this->no_anggota->SetDbValueDef($rsnew, $this->no_anggota->CurrentValue, NULL, $this->no_anggota->ReadOnly);
 
-			// level1_nama
-			$this->level1_nama->SetDbValueDef($rsnew, $this->level1_nama->CurrentValue, "", $this->level1_nama->ReadOnly);
+			// nama
+			$this->nama->SetDbValueDef($rsnew, $this->nama->CurrentValue, NULL, $this->nama->ReadOnly);
+
+			// tgl_masuk
+			$this->tgl_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl_masuk->CurrentValue, 0), NULL, $this->tgl_masuk->ReadOnly);
+
+			// alamat
+			$this->alamat->SetDbValueDef($rsnew, $this->alamat->CurrentValue, NULL, $this->alamat->ReadOnly);
+
+			// kota
+			$this->kota->SetDbValueDef($rsnew, $this->kota->CurrentValue, NULL, $this->kota->ReadOnly);
+
+			// no_telp
+			$this->no_telp->SetDbValueDef($rsnew, $this->no_telp->CurrentValue, NULL, $this->no_telp->ReadOnly);
+
+			// pekerjaan
+			$this->pekerjaan->SetDbValueDef($rsnew, $this->pekerjaan->CurrentValue, NULL, $this->pekerjaan->ReadOnly);
+
+			// jns_pengenal
+			$this->jns_pengenal->SetDbValueDef($rsnew, $this->jns_pengenal->CurrentValue, NULL, $this->jns_pengenal->ReadOnly);
+
+			// no_pengenal
+			$this->no_pengenal->SetDbValueDef($rsnew, $this->no_pengenal->CurrentValue, NULL, $this->no_pengenal->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -723,7 +933,7 @@ class clevel1_edit extends clevel1 {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("level1list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_anggotalist.php"), "", $this->TableVar, TRUE);
 		$PageId = "edit";
 		$Breadcrumb->Add("edit", $PageId, $url);
 	}
@@ -746,7 +956,7 @@ class clevel1_edit extends clevel1 {
 
 	// Write Audit Trail start/end for grid update
 	function WriteAuditTrailDummy($typ) {
-		$table = 'level1';
+		$table = 'tb_anggota';
 		$usr = CurrentUserName();
 		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
@@ -755,12 +965,12 @@ class clevel1_edit extends clevel1 {
 	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
 		global $Language;
 		if (!$this->AuditTrailOnEdit) return;
-		$table = 'level1';
+		$table = 'tb_anggota';
 
 		// Get key value
 		$key = "";
 		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['level1_id'];
+		$key .= $rsold['anggota_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();
@@ -870,29 +1080,29 @@ class clevel1_edit extends clevel1 {
 <?php
 
 // Create page object
-if (!isset($level1_edit)) $level1_edit = new clevel1_edit();
+if (!isset($tb_anggota_edit)) $tb_anggota_edit = new ctb_anggota_edit();
 
 // Page init
-$level1_edit->Page_Init();
+$tb_anggota_edit->Page_Init();
 
 // Page main
-$level1_edit->Page_Main();
+$tb_anggota_edit->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$level1_edit->Page_Render();
+$tb_anggota_edit->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "edit";
-var CurrentForm = flevel1edit = new ew_Form("flevel1edit", "edit");
+var CurrentForm = ftb_anggotaedit = new ew_Form("ftb_anggotaedit", "edit");
 
 // Validate form
-flevel1edit.Validate = function() {
+ftb_anggotaedit.Validate = function() {
 	if (!this.ValidateRequired)
 		return true; // Ignore validation
 	var $ = jQuery, fobj = this.GetForm(), $fobj = $(fobj);
@@ -906,12 +1116,9 @@ flevel1edit.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
-			elm = this.GetElements("x" + infix + "_level1_no");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $level1->level1_no->FldCaption(), $level1->level1_no->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_level1_nama");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $level1->level1_nama->FldCaption(), $level1->level1_nama->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl_masuk");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_anggota->tgl_masuk->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -930,7 +1137,7 @@ flevel1edit.Validate = function() {
 }
 
 // Form_CustomValidate event
-flevel1edit.Form_CustomValidate = 
+ftb_anggotaedit.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -939,9 +1146,9 @@ flevel1edit.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-flevel1edit.ValidateRequired = true;
+ftb_anggotaedit.ValidateRequired = true;
 <?php } else { ?>
-flevel1edit.ValidateRequired = false; 
+ftb_anggotaedit.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
@@ -952,63 +1159,133 @@ flevel1edit.ValidateRequired = false;
 
 // Write your client script here, no need to add script tags.
 </script>
-<?php if (!$level1_edit->IsModal) { ?>
+<?php if (!$tb_anggota_edit->IsModal) { ?>
 <div class="ewToolbar">
 <?php $Breadcrumb->Render(); ?>
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $level1_edit->ShowPageHeader(); ?>
+<?php $tb_anggota_edit->ShowPageHeader(); ?>
 <?php
-$level1_edit->ShowMessage();
+$tb_anggota_edit->ShowMessage();
 ?>
-<form name="flevel1edit" id="flevel1edit" class="<?php echo $level1_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($level1_edit->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $level1_edit->Token ?>">
+<form name="ftb_anggotaedit" id="ftb_anggotaedit" class="<?php echo $tb_anggota_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($tb_anggota_edit->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_anggota_edit->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="level1">
+<input type="hidden" name="t" value="tb_anggota">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
-<?php if ($level1_edit->IsModal) { ?>
+<?php if ($tb_anggota_edit->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <div>
-<?php if ($level1->level1_no->Visible) { // level1_no ?>
-	<div id="r_level1_no" class="form-group">
-		<label id="elh_level1_level1_no" for="x_level1_no" class="col-sm-2 control-label ewLabel"><?php echo $level1->level1_no->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $level1->level1_no->CellAttributes() ?>>
-<span id="el_level1_level1_no">
-<input type="text" data-table="level1" data-field="x_level1_no" name="x_level1_no" id="x_level1_no" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($level1->level1_no->getPlaceHolder()) ?>" value="<?php echo $level1->level1_no->EditValue ?>"<?php echo $level1->level1_no->EditAttributes() ?>>
+<?php if ($tb_anggota->no_anggota->Visible) { // no_anggota ?>
+	<div id="r_no_anggota" class="form-group">
+		<label id="elh_tb_anggota_no_anggota" for="x_no_anggota" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->no_anggota->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->no_anggota->CellAttributes() ?>>
+<span id="el_tb_anggota_no_anggota">
+<input type="text" data-table="tb_anggota" data-field="x_no_anggota" name="x_no_anggota" id="x_no_anggota" size="30" maxlength="25" placeholder="<?php echo ew_HtmlEncode($tb_anggota->no_anggota->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->no_anggota->EditValue ?>"<?php echo $tb_anggota->no_anggota->EditAttributes() ?>>
 </span>
-<?php echo $level1->level1_no->CustomMsg ?></div></div>
+<?php echo $tb_anggota->no_anggota->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($level1->level1_nama->Visible) { // level1_nama ?>
-	<div id="r_level1_nama" class="form-group">
-		<label id="elh_level1_level1_nama" for="x_level1_nama" class="col-sm-2 control-label ewLabel"><?php echo $level1->level1_nama->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $level1->level1_nama->CellAttributes() ?>>
-<span id="el_level1_level1_nama">
-<input type="text" data-table="level1" data-field="x_level1_nama" name="x_level1_nama" id="x_level1_nama" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($level1->level1_nama->getPlaceHolder()) ?>" value="<?php echo $level1->level1_nama->EditValue ?>"<?php echo $level1->level1_nama->EditAttributes() ?>>
+<?php if ($tb_anggota->nama->Visible) { // nama ?>
+	<div id="r_nama" class="form-group">
+		<label id="elh_tb_anggota_nama" for="x_nama" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->nama->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->nama->CellAttributes() ?>>
+<span id="el_tb_anggota_nama">
+<input type="text" data-table="tb_anggota" data-field="x_nama" name="x_nama" id="x_nama" size="30" maxlength="25" placeholder="<?php echo ew_HtmlEncode($tb_anggota->nama->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->nama->EditValue ?>"<?php echo $tb_anggota->nama->EditAttributes() ?>>
 </span>
-<?php echo $level1->level1_nama->CustomMsg ?></div></div>
+<?php echo $tb_anggota->nama->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->tgl_masuk->Visible) { // tgl_masuk ?>
+	<div id="r_tgl_masuk" class="form-group">
+		<label id="elh_tb_anggota_tgl_masuk" for="x_tgl_masuk" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->tgl_masuk->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->tgl_masuk->CellAttributes() ?>>
+<span id="el_tb_anggota_tgl_masuk">
+<input type="text" data-table="tb_anggota" data-field="x_tgl_masuk" name="x_tgl_masuk" id="x_tgl_masuk" placeholder="<?php echo ew_HtmlEncode($tb_anggota->tgl_masuk->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->tgl_masuk->EditValue ?>"<?php echo $tb_anggota->tgl_masuk->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->tgl_masuk->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->alamat->Visible) { // alamat ?>
+	<div id="r_alamat" class="form-group">
+		<label id="elh_tb_anggota_alamat" for="x_alamat" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->alamat->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->alamat->CellAttributes() ?>>
+<span id="el_tb_anggota_alamat">
+<input type="text" data-table="tb_anggota" data-field="x_alamat" name="x_alamat" id="x_alamat" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($tb_anggota->alamat->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->alamat->EditValue ?>"<?php echo $tb_anggota->alamat->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->alamat->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->kota->Visible) { // kota ?>
+	<div id="r_kota" class="form-group">
+		<label id="elh_tb_anggota_kota" for="x_kota" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->kota->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->kota->CellAttributes() ?>>
+<span id="el_tb_anggota_kota">
+<input type="text" data-table="tb_anggota" data-field="x_kota" name="x_kota" id="x_kota" size="30" maxlength="25" placeholder="<?php echo ew_HtmlEncode($tb_anggota->kota->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->kota->EditValue ?>"<?php echo $tb_anggota->kota->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->kota->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->no_telp->Visible) { // no_telp ?>
+	<div id="r_no_telp" class="form-group">
+		<label id="elh_tb_anggota_no_telp" for="x_no_telp" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->no_telp->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->no_telp->CellAttributes() ?>>
+<span id="el_tb_anggota_no_telp">
+<input type="text" data-table="tb_anggota" data-field="x_no_telp" name="x_no_telp" id="x_no_telp" size="30" maxlength="25" placeholder="<?php echo ew_HtmlEncode($tb_anggota->no_telp->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->no_telp->EditValue ?>"<?php echo $tb_anggota->no_telp->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->no_telp->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->pekerjaan->Visible) { // pekerjaan ?>
+	<div id="r_pekerjaan" class="form-group">
+		<label id="elh_tb_anggota_pekerjaan" for="x_pekerjaan" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->pekerjaan->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->pekerjaan->CellAttributes() ?>>
+<span id="el_tb_anggota_pekerjaan">
+<input type="text" data-table="tb_anggota" data-field="x_pekerjaan" name="x_pekerjaan" id="x_pekerjaan" size="30" maxlength="25" placeholder="<?php echo ew_HtmlEncode($tb_anggota->pekerjaan->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->pekerjaan->EditValue ?>"<?php echo $tb_anggota->pekerjaan->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->pekerjaan->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->jns_pengenal->Visible) { // jns_pengenal ?>
+	<div id="r_jns_pengenal" class="form-group">
+		<label id="elh_tb_anggota_jns_pengenal" for="x_jns_pengenal" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->jns_pengenal->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->jns_pengenal->CellAttributes() ?>>
+<span id="el_tb_anggota_jns_pengenal">
+<input type="text" data-table="tb_anggota" data-field="x_jns_pengenal" name="x_jns_pengenal" id="x_jns_pengenal" size="30" maxlength="5" placeholder="<?php echo ew_HtmlEncode($tb_anggota->jns_pengenal->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->jns_pengenal->EditValue ?>"<?php echo $tb_anggota->jns_pengenal->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->jns_pengenal->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_anggota->no_pengenal->Visible) { // no_pengenal ?>
+	<div id="r_no_pengenal" class="form-group">
+		<label id="elh_tb_anggota_no_pengenal" for="x_no_pengenal" class="col-sm-2 control-label ewLabel"><?php echo $tb_anggota->no_pengenal->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_anggota->no_pengenal->CellAttributes() ?>>
+<span id="el_tb_anggota_no_pengenal">
+<input type="text" data-table="tb_anggota" data-field="x_no_pengenal" name="x_no_pengenal" id="x_no_pengenal" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($tb_anggota->no_pengenal->getPlaceHolder()) ?>" value="<?php echo $tb_anggota->no_pengenal->EditValue ?>"<?php echo $tb_anggota->no_pengenal->EditAttributes() ?>>
+</span>
+<?php echo $tb_anggota->no_pengenal->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
-<input type="hidden" data-table="level1" data-field="x_level1_id" name="x_level1_id" id="x_level1_id" value="<?php echo ew_HtmlEncode($level1->level1_id->CurrentValue) ?>">
-<?php if (!$level1_edit->IsModal) { ?>
+<input type="hidden" data-table="tb_anggota" data-field="x_anggota_id" name="x_anggota_id" id="x_anggota_id" value="<?php echo ew_HtmlEncode($tb_anggota->anggota_id->CurrentValue) ?>">
+<?php if (!$tb_anggota_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $level1_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $tb_anggota_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 	</div>
 </div>
 <?php } ?>
 </form>
 <script type="text/javascript">
-flevel1edit.Init();
+ftb_anggotaedit.Init();
 </script>
 <?php
-$level1_edit->ShowPageFooter();
+$tb_anggota_edit->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -1020,5 +1297,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$level1_edit->Page_Terminate();
+$tb_anggota_edit->Page_Terminate();
 ?>
