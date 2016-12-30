@@ -268,14 +268,16 @@ class cdefault {
 		$Security->LoadUserLevel(); // Load User Level
 		if ($Security->AllowList(CurrentProjectID() . 'tb_anggota'))
 		$this->Page_Terminate("tb_anggotalist.php"); // Exit and go to default page
-		if ($Security->AllowList(CurrentProjectID() . 'level1'))
-			$this->Page_Terminate("level1list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'level2'))
-			$this->Page_Terminate("level2list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'level3'))
-			$this->Page_Terminate("level3list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'level4'))
-			$this->Page_Terminate("level4list.php");
+		if ($Security->AllowList(CurrentProjectID() . 'audittrail'))
+			$this->Page_Terminate("audittraillist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_level1'))
+			$this->Page_Terminate("tb_level1list.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_level2'))
+			$this->Page_Terminate("tb_level2list.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_level3'))
+			$this->Page_Terminate("tb_level3list.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_level4'))
+			$this->Page_Terminate("tb_level4list.php");
 		if ($Security->AllowList(CurrentProjectID() . 'tb_user'))
 			$this->Page_Terminate("tb_userlist.php");
 		if ($Security->IsLoggedIn()) {

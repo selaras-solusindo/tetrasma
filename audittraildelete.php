@@ -5,6 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
+<?php include_once "audittrailinfo.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -13,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$tb_user_delete = NULL; // Initialize page object first
+$audittrail_delete = NULL; // Initialize page object first
 
-class ctb_user_delete extends ctb_user {
+class caudittrail_delete extends caudittrail {
 
 	// Page ID
 	var $PageID = 'delete';
@@ -24,10 +25,10 @@ class ctb_user_delete extends ctb_user {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'tb_user';
+	var $TableName = 'audittrail';
 
 	// Page object name
-	var $PageObjName = 'tb_user_delete';
+	var $PageObjName = 'audittrail_delete';
 
 	// Page name
 	function PageName() {
@@ -40,12 +41,6 @@ class ctb_user_delete extends ctb_user {
 		if ($this->UseTokenInUrl) $PageUrl .= "t=" . $this->TableVar . "&"; // Add page token
 		return $PageUrl;
 	}
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = FALSE;
-	var $AuditTrailOnDelete = TRUE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -231,11 +226,14 @@ class ctb_user_delete extends ctb_user {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (tb_user)
-		if (!isset($GLOBALS["tb_user"]) || get_class($GLOBALS["tb_user"]) == "ctb_user") {
-			$GLOBALS["tb_user"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["tb_user"];
+		// Table object (audittrail)
+		if (!isset($GLOBALS["audittrail"]) || get_class($GLOBALS["audittrail"]) == "caudittrail") {
+			$GLOBALS["audittrail"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["audittrail"];
 		}
+
+		// Table object (tb_user)
+		if (!isset($GLOBALS['tb_user'])) $GLOBALS['tb_user'] = new ctb_user();
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -243,7 +241,7 @@ class ctb_user_delete extends ctb_user {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'tb_user', TRUE);
+			define("EW_TABLE_NAME", 'audittrail', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -274,14 +272,19 @@ class ctb_user_delete extends ctb_user {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("tb_userlist.php"));
+				$this->Page_Terminate(ew_GetUrl("audittraillist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->username->SetVisibility();
-		$this->password->SetVisibility();
-		$this->userlevel->SetVisibility();
+		$this->id->SetVisibility();
+		$this->id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
+		$this->datetime->SetVisibility();
+		$this->script->SetVisibility();
+		$this->user->SetVisibility();
+		$this->action->SetVisibility();
+		$this->_table->SetVisibility();
+		$this->_field->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -313,13 +316,13 @@ class ctb_user_delete extends ctb_user {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $tb_user;
+		global $EW_EXPORT, $audittrail;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($tb_user);
+				$doc = new $class($audittrail);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -365,10 +368,10 @@ class ctb_user_delete extends ctb_user {
 		$this->RecKeys = $this->GetRecordKeys(); // Load record keys
 		$sFilter = $this->GetKeyFilter();
 		if ($sFilter == "")
-			$this->Page_Terminate("tb_userlist.php"); // Prevent SQL injection, return to list
+			$this->Page_Terminate("audittraillist.php"); // Prevent SQL injection, return to list
 
 		// Set up filter (SQL WHHERE clause) and get return SQL
-		// SQL constructor in tb_user class, tb_userinfo.php
+		// SQL constructor in audittrail class, audittrailinfo.php
 
 		$this->CurrentFilter = $sFilter;
 
@@ -396,7 +399,7 @@ class ctb_user_delete extends ctb_user {
 			if ($this->TotalRecs <= 0) { // No record found, exit
 				if ($this->Recordset)
 					$this->Recordset->Close();
-				$this->Page_Terminate("tb_userlist.php"); // Return to list
+				$this->Page_Terminate("audittraillist.php"); // Return to list
 			}
 		}
 	}
@@ -456,20 +459,32 @@ class ctb_user_delete extends ctb_user {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->user_id->setDbValue($rs->fields('user_id'));
-		$this->username->setDbValue($rs->fields('username'));
-		$this->password->setDbValue($rs->fields('password'));
-		$this->userlevel->setDbValue($rs->fields('userlevel'));
+		$this->id->setDbValue($rs->fields('id'));
+		$this->datetime->setDbValue($rs->fields('datetime'));
+		$this->script->setDbValue($rs->fields('script'));
+		$this->user->setDbValue($rs->fields('user'));
+		$this->action->setDbValue($rs->fields('action'));
+		$this->_table->setDbValue($rs->fields('table'));
+		$this->_field->setDbValue($rs->fields('field'));
+		$this->keyvalue->setDbValue($rs->fields('keyvalue'));
+		$this->oldvalue->setDbValue($rs->fields('oldvalue'));
+		$this->newvalue->setDbValue($rs->fields('newvalue'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->user_id->DbValue = $row['user_id'];
-		$this->username->DbValue = $row['username'];
-		$this->password->DbValue = $row['password'];
-		$this->userlevel->DbValue = $row['userlevel'];
+		$this->id->DbValue = $row['id'];
+		$this->datetime->DbValue = $row['datetime'];
+		$this->script->DbValue = $row['script'];
+		$this->user->DbValue = $row['user'];
+		$this->action->DbValue = $row['action'];
+		$this->_table->DbValue = $row['table'];
+		$this->_field->DbValue = $row['field'];
+		$this->keyvalue->DbValue = $row['keyvalue'];
+		$this->oldvalue->DbValue = $row['oldvalue'];
+		$this->newvalue->DbValue = $row['newvalue'];
 	}
 
 	// Render row values based on field settings
@@ -482,47 +497,82 @@ class ctb_user_delete extends ctb_user {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// user_id
-		// username
-		// password
-		// userlevel
+		// id
+		// datetime
+		// script
+		// user
+		// action
+		// table
+		// field
+		// keyvalue
+		// oldvalue
+		// newvalue
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// username
-		$this->username->ViewValue = $this->username->CurrentValue;
-		$this->username->ViewCustomAttributes = "";
+		// id
+		$this->id->ViewValue = $this->id->CurrentValue;
+		$this->id->ViewCustomAttributes = "";
 
-		// password
-		$this->password->ViewValue = $this->password->CurrentValue;
-		$this->password->ViewCustomAttributes = "";
+		// datetime
+		$this->datetime->ViewValue = $this->datetime->CurrentValue;
+		$this->datetime->ViewValue = ew_FormatDateTime($this->datetime->ViewValue, 0);
+		$this->datetime->ViewCustomAttributes = "";
 
-		// userlevel
-		if ($Security->CanAdmin()) { // System admin
-		if (strval($this->userlevel->CurrentValue) <> "") {
-			$this->userlevel->ViewValue = $this->userlevel->OptionCaption($this->userlevel->CurrentValue);
-		} else {
-			$this->userlevel->ViewValue = NULL;
-		}
-		} else {
-			$this->userlevel->ViewValue = $Language->Phrase("PasswordMask");
-		}
-		$this->userlevel->ViewCustomAttributes = "";
+		// script
+		$this->script->ViewValue = $this->script->CurrentValue;
+		$this->script->ViewCustomAttributes = "";
 
-			// username
-			$this->username->LinkCustomAttributes = "";
-			$this->username->HrefValue = "";
-			$this->username->TooltipValue = "";
+		// user
+		$this->user->ViewValue = $this->user->CurrentValue;
+		$this->user->ViewCustomAttributes = "";
 
-			// password
-			$this->password->LinkCustomAttributes = "";
-			$this->password->HrefValue = "";
-			$this->password->TooltipValue = "";
+		// action
+		$this->action->ViewValue = $this->action->CurrentValue;
+		$this->action->ViewCustomAttributes = "";
 
-			// userlevel
-			$this->userlevel->LinkCustomAttributes = "";
-			$this->userlevel->HrefValue = "";
-			$this->userlevel->TooltipValue = "";
+		// table
+		$this->_table->ViewValue = $this->_table->CurrentValue;
+		$this->_table->ViewCustomAttributes = "";
+
+		// field
+		$this->_field->ViewValue = $this->_field->CurrentValue;
+		$this->_field->ViewCustomAttributes = "";
+
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
+
+			// datetime
+			$this->datetime->LinkCustomAttributes = "";
+			$this->datetime->HrefValue = "";
+			$this->datetime->TooltipValue = "";
+
+			// script
+			$this->script->LinkCustomAttributes = "";
+			$this->script->HrefValue = "";
+			$this->script->TooltipValue = "";
+
+			// user
+			$this->user->LinkCustomAttributes = "";
+			$this->user->HrefValue = "";
+			$this->user->TooltipValue = "";
+
+			// action
+			$this->action->LinkCustomAttributes = "";
+			$this->action->HrefValue = "";
+			$this->action->TooltipValue = "";
+
+			// table
+			$this->_table->LinkCustomAttributes = "";
+			$this->_table->HrefValue = "";
+			$this->_table->TooltipValue = "";
+
+			// field
+			$this->_field->LinkCustomAttributes = "";
+			$this->_field->HrefValue = "";
+			$this->_field->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -558,7 +608,6 @@ class ctb_user_delete extends ctb_user {
 		}
 		$rows = ($rs) ? $rs->GetRows() : array();
 		$conn->BeginTrans();
-		if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteBegin")); // Batch delete begin
 
 		// Clone old rows
 		$rsold = $rows;
@@ -577,7 +626,7 @@ class ctb_user_delete extends ctb_user {
 			foreach ($rsold as $row) {
 				$sThisKey = "";
 				if ($sThisKey <> "") $sThisKey .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-				$sThisKey .= $row['user_id'];
+				$sThisKey .= $row['id'];
 				$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 				$DeleteRows = $this->Delete($row); // Delete
 				$conn->raiseErrorFn = '';
@@ -601,14 +650,8 @@ class ctb_user_delete extends ctb_user {
 		}
 		if ($DeleteRows) {
 			$conn->CommitTrans(); // Commit the changes
-			if ($DeleteRows) {
-				foreach ($rsold as $row)
-					$this->WriteAuditTrailOnDelete($row);
-			}
-			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 			$conn->RollbackTrans(); // Rollback changes
-			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteRollback")); // Batch delete rollback
 		}
 
 		// Call Row Deleted event
@@ -625,7 +668,7 @@ class ctb_user_delete extends ctb_user {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_userlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("audittraillist.php"), "", $this->TableVar, TRUE);
 		$PageId = "delete";
 		$Breadcrumb->Add("delete", $PageId, $url);
 	}
@@ -643,50 +686,6 @@ class ctb_user_delete extends ctb_user {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 'tb_user';
-		$usr = CurrentUserName();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (delete page)
-	function WriteAuditTrailOnDelete(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnDelete) return;
-		$table = 'tb_user';
-
-		// Get key value
-		$key = "";
-		if ($key <> "")
-			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['user_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$curUser = CurrentUserName();
-		foreach (array_keys($rs) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$oldvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$oldvalue = $rs[$fldname];
-					else
-						$oldvalue = "[MEMO]"; // Memo field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$oldvalue = "[XML]"; // XML field
-				} else {
-					$oldvalue = $rs[$fldname];
-				}
-				if ($fldname == 'password')
-					$oldvalue = $Language->Phrase("PasswordMask");
-				ew_WriteAuditTrail("log", $dt, $id, $curUser, "D", $table, $fldname, $key, $oldvalue, "");
-			}
 		}
 	}
 
@@ -755,29 +754,29 @@ class ctb_user_delete extends ctb_user {
 <?php
 
 // Create page object
-if (!isset($tb_user_delete)) $tb_user_delete = new ctb_user_delete();
+if (!isset($audittrail_delete)) $audittrail_delete = new caudittrail_delete();
 
 // Page init
-$tb_user_delete->Page_Init();
+$audittrail_delete->Page_Init();
 
 // Page main
-$tb_user_delete->Page_Main();
+$audittrail_delete->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$tb_user_delete->Page_Render();
+$audittrail_delete->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "delete";
-var CurrentForm = ftb_userdelete = new ew_Form("ftb_userdelete", "delete");
+var CurrentForm = faudittraildelete = new ew_Form("faudittraildelete", "delete");
 
 // Form_CustomValidate event
-ftb_userdelete.Form_CustomValidate = 
+faudittraildelete.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -786,16 +785,14 @@ ftb_userdelete.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ftb_userdelete.ValidateRequired = true;
+faudittraildelete.ValidateRequired = true;
 <?php } else { ?>
-ftb_userdelete.ValidateRequired = false; 
+faudittraildelete.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ftb_userdelete.Lists["x_userlevel"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
-ftb_userdelete.Lists["x_userlevel"].Options = <?php echo json_encode($tb_user->userlevel->Options()) ?>;
-
 // Form object for search
+
 </script>
 <script type="text/javascript">
 
@@ -806,85 +803,129 @@ ftb_userdelete.Lists["x_userlevel"].Options = <?php echo json_encode($tb_user->u
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
-<?php $tb_user_delete->ShowPageHeader(); ?>
+<?php $audittrail_delete->ShowPageHeader(); ?>
 <?php
-$tb_user_delete->ShowMessage();
+$audittrail_delete->ShowMessage();
 ?>
-<form name="ftb_userdelete" id="ftb_userdelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($tb_user_delete->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_user_delete->Token ?>">
+<form name="faudittraildelete" id="faudittraildelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($audittrail_delete->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $audittrail_delete->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="tb_user">
+<input type="hidden" name="t" value="audittrail">
 <input type="hidden" name="a_delete" id="a_delete" value="D">
-<?php foreach ($tb_user_delete->RecKeys as $key) { ?>
+<?php foreach ($audittrail_delete->RecKeys as $key) { ?>
 <?php $keyvalue = is_array($key) ? implode($EW_COMPOSITE_KEY_SEPARATOR, $key) : $key; ?>
 <input type="hidden" name="key_m[]" value="<?php echo ew_HtmlEncode($keyvalue) ?>">
 <?php } ?>
 <div class="ewGrid">
 <div class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <table class="table ewTable">
-<?php echo $tb_user->TableCustomInnerHtml ?>
+<?php echo $audittrail->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($tb_user->username->Visible) { // username ?>
-		<th><span id="elh_tb_user_username" class="tb_user_username"><?php echo $tb_user->username->FldCaption() ?></span></th>
+<?php if ($audittrail->id->Visible) { // id ?>
+		<th><span id="elh_audittrail_id" class="audittrail_id"><?php echo $audittrail->id->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($tb_user->password->Visible) { // password ?>
-		<th><span id="elh_tb_user_password" class="tb_user_password"><?php echo $tb_user->password->FldCaption() ?></span></th>
+<?php if ($audittrail->datetime->Visible) { // datetime ?>
+		<th><span id="elh_audittrail_datetime" class="audittrail_datetime"><?php echo $audittrail->datetime->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
-		<th><span id="elh_tb_user_userlevel" class="tb_user_userlevel"><?php echo $tb_user->userlevel->FldCaption() ?></span></th>
+<?php if ($audittrail->script->Visible) { // script ?>
+		<th><span id="elh_audittrail_script" class="audittrail_script"><?php echo $audittrail->script->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($audittrail->user->Visible) { // user ?>
+		<th><span id="elh_audittrail_user" class="audittrail_user"><?php echo $audittrail->user->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($audittrail->action->Visible) { // action ?>
+		<th><span id="elh_audittrail_action" class="audittrail_action"><?php echo $audittrail->action->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($audittrail->_table->Visible) { // table ?>
+		<th><span id="elh_audittrail__table" class="audittrail__table"><?php echo $audittrail->_table->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($audittrail->_field->Visible) { // field ?>
+		<th><span id="elh_audittrail__field" class="audittrail__field"><?php echo $audittrail->_field->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
 	<tbody>
 <?php
-$tb_user_delete->RecCnt = 0;
+$audittrail_delete->RecCnt = 0;
 $i = 0;
-while (!$tb_user_delete->Recordset->EOF) {
-	$tb_user_delete->RecCnt++;
-	$tb_user_delete->RowCnt++;
+while (!$audittrail_delete->Recordset->EOF) {
+	$audittrail_delete->RecCnt++;
+	$audittrail_delete->RowCnt++;
 
 	// Set row properties
-	$tb_user->ResetAttrs();
-	$tb_user->RowType = EW_ROWTYPE_VIEW; // View
+	$audittrail->ResetAttrs();
+	$audittrail->RowType = EW_ROWTYPE_VIEW; // View
 
 	// Get the field contents
-	$tb_user_delete->LoadRowValues($tb_user_delete->Recordset);
+	$audittrail_delete->LoadRowValues($audittrail_delete->Recordset);
 
 	// Render row
-	$tb_user_delete->RenderRow();
+	$audittrail_delete->RenderRow();
 ?>
-	<tr<?php echo $tb_user->RowAttributes() ?>>
-<?php if ($tb_user->username->Visible) { // username ?>
-		<td<?php echo $tb_user->username->CellAttributes() ?>>
-<span id="el<?php echo $tb_user_delete->RowCnt ?>_tb_user_username" class="tb_user_username">
-<span<?php echo $tb_user->username->ViewAttributes() ?>>
-<?php echo $tb_user->username->ListViewValue() ?></span>
+	<tr<?php echo $audittrail->RowAttributes() ?>>
+<?php if ($audittrail->id->Visible) { // id ?>
+		<td<?php echo $audittrail->id->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail_id" class="audittrail_id">
+<span<?php echo $audittrail->id->ViewAttributes() ?>>
+<?php echo $audittrail->id->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($tb_user->password->Visible) { // password ?>
-		<td<?php echo $tb_user->password->CellAttributes() ?>>
-<span id="el<?php echo $tb_user_delete->RowCnt ?>_tb_user_password" class="tb_user_password">
-<span<?php echo $tb_user->password->ViewAttributes() ?>>
-<?php echo $tb_user->password->ListViewValue() ?></span>
+<?php if ($audittrail->datetime->Visible) { // datetime ?>
+		<td<?php echo $audittrail->datetime->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail_datetime" class="audittrail_datetime">
+<span<?php echo $audittrail->datetime->ViewAttributes() ?>>
+<?php echo $audittrail->datetime->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
-		<td<?php echo $tb_user->userlevel->CellAttributes() ?>>
-<span id="el<?php echo $tb_user_delete->RowCnt ?>_tb_user_userlevel" class="tb_user_userlevel">
-<span<?php echo $tb_user->userlevel->ViewAttributes() ?>>
-<?php echo $tb_user->userlevel->ListViewValue() ?></span>
+<?php if ($audittrail->script->Visible) { // script ?>
+		<td<?php echo $audittrail->script->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail_script" class="audittrail_script">
+<span<?php echo $audittrail->script->ViewAttributes() ?>>
+<?php echo $audittrail->script->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($audittrail->user->Visible) { // user ?>
+		<td<?php echo $audittrail->user->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail_user" class="audittrail_user">
+<span<?php echo $audittrail->user->ViewAttributes() ?>>
+<?php echo $audittrail->user->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($audittrail->action->Visible) { // action ?>
+		<td<?php echo $audittrail->action->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail_action" class="audittrail_action">
+<span<?php echo $audittrail->action->ViewAttributes() ?>>
+<?php echo $audittrail->action->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($audittrail->_table->Visible) { // table ?>
+		<td<?php echo $audittrail->_table->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail__table" class="audittrail__table">
+<span<?php echo $audittrail->_table->ViewAttributes() ?>>
+<?php echo $audittrail->_table->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($audittrail->_field->Visible) { // field ?>
+		<td<?php echo $audittrail->_field->CellAttributes() ?>>
+<span id="el<?php echo $audittrail_delete->RowCnt ?>_audittrail__field" class="audittrail__field">
+<span<?php echo $audittrail->_field->ViewAttributes() ?>>
+<?php echo $audittrail->_field->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
 	</tr>
 <?php
-	$tb_user_delete->Recordset->MoveNext();
+	$audittrail_delete->Recordset->MoveNext();
 }
-$tb_user_delete->Recordset->Close();
+$audittrail_delete->Recordset->Close();
 ?>
 </tbody>
 </table>
@@ -892,14 +933,14 @@ $tb_user_delete->Recordset->Close();
 </div>
 <div>
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("DeleteBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $tb_user_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $audittrail_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 </div>
 </form>
 <script type="text/javascript">
-ftb_userdelete.Init();
+faudittraildelete.Init();
 </script>
 <?php
-$tb_user_delete->ShowPageFooter();
+$audittrail_delete->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -911,5 +952,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$tb_user_delete->Page_Terminate();
+$audittrail_delete->Page_Terminate();
 ?>

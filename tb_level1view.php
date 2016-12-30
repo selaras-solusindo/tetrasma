@@ -5,6 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
+<?php include_once "tb_level1info.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -13,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$tb_user_view = NULL; // Initialize page object first
+$tb_level1_view = NULL; // Initialize page object first
 
-class ctb_user_view extends ctb_user {
+class ctb_level1_view extends ctb_level1 {
 
 	// Page ID
 	var $PageID = 'view';
@@ -24,10 +25,10 @@ class ctb_user_view extends ctb_user {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'tb_user';
+	var $TableName = 'tb_level1';
 
 	// Page object name
-	var $PageObjName = 'tb_user_view';
+	var $PageObjName = 'tb_level1_view';
 
 	// Page name
 	function PageName() {
@@ -263,15 +264,15 @@ class ctb_user_view extends ctb_user {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (tb_user)
-		if (!isset($GLOBALS["tb_user"]) || get_class($GLOBALS["tb_user"]) == "ctb_user") {
-			$GLOBALS["tb_user"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["tb_user"];
+		// Table object (tb_level1)
+		if (!isset($GLOBALS["tb_level1"]) || get_class($GLOBALS["tb_level1"]) == "ctb_level1") {
+			$GLOBALS["tb_level1"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["tb_level1"];
 		}
 		$KeyUrl = "";
-		if (@$_GET["user_id"] <> "") {
-			$this->RecKey["user_id"] = $_GET["user_id"];
-			$KeyUrl .= "&amp;user_id=" . urlencode($this->RecKey["user_id"]);
+		if (@$_GET["level1_id"] <> "") {
+			$this->RecKey["level1_id"] = $_GET["level1_id"];
+			$KeyUrl .= "&amp;level1_id=" . urlencode($this->RecKey["level1_id"]);
 		}
 		$this->ExportPrintUrl = $this->PageUrl() . "export=print" . $KeyUrl;
 		$this->ExportHtmlUrl = $this->PageUrl() . "export=html" . $KeyUrl;
@@ -281,13 +282,16 @@ class ctb_user_view extends ctb_user {
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv" . $KeyUrl;
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf" . $KeyUrl;
 
+		// Table object (tb_user)
+		if (!isset($GLOBALS['tb_user'])) $GLOBALS['tb_user'] = new ctb_user();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'view', TRUE);
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'tb_user', TRUE);
+			define("EW_TABLE_NAME", 'tb_level1', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -331,7 +335,7 @@ class ctb_user_view extends ctb_user {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("tb_userlist.php"));
+				$this->Page_Terminate(ew_GetUrl("tb_level1list.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -352,9 +356,9 @@ class ctb_user_view extends ctb_user {
 			$this->setExportReturnUrl(ew_CurrentUrl());
 		}
 		$gsExportFile = $this->TableVar; // Get export file, used in header
-		if (@$_GET["user_id"] <> "") {
+		if (@$_GET["level1_id"] <> "") {
 			if ($gsExportFile <> "") $gsExportFile .= "_";
-			$gsExportFile .= ew_StripSlashes($_GET["user_id"]);
+			$gsExportFile .= ew_StripSlashes($_GET["level1_id"]);
 		}
 
 		// Get custom export parameters
@@ -380,9 +384,8 @@ class ctb_user_view extends ctb_user {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->username->SetVisibility();
-		$this->password->SetVisibility();
-		$this->userlevel->SetVisibility();
+		$this->level1_no->SetVisibility();
+		$this->level1_nama->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -414,13 +417,13 @@ class ctb_user_view extends ctb_user {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $tb_user;
+		global $EW_EXPORT, $tb_level1;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($tb_user);
+				$doc = new $class($tb_level1);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -486,14 +489,14 @@ class ctb_user_view extends ctb_user {
 		if ($this->Export == "")
 			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
-			if (@$_GET["user_id"] <> "") {
-				$this->user_id->setQueryStringValue($_GET["user_id"]);
-				$this->RecKey["user_id"] = $this->user_id->QueryStringValue;
-			} elseif (@$_POST["user_id"] <> "") {
-				$this->user_id->setFormValue($_POST["user_id"]);
-				$this->RecKey["user_id"] = $this->user_id->FormValue;
+			if (@$_GET["level1_id"] <> "") {
+				$this->level1_id->setQueryStringValue($_GET["level1_id"]);
+				$this->RecKey["level1_id"] = $this->level1_id->QueryStringValue;
+			} elseif (@$_POST["level1_id"] <> "") {
+				$this->level1_id->setFormValue($_POST["level1_id"]);
+				$this->RecKey["level1_id"] = $this->level1_id->FormValue;
 			} else {
-				$sReturnUrl = "tb_userlist.php"; // Return to list
+				$sReturnUrl = "tb_level1list.php"; // Return to list
 			}
 
 			// Get action
@@ -503,7 +506,7 @@ class ctb_user_view extends ctb_user {
 					if (!$this->LoadRow()) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-						$sReturnUrl = "tb_userlist.php"; // No matching record, return to list
+						$sReturnUrl = "tb_level1list.php"; // No matching record, return to list
 					}
 			}
 
@@ -514,7 +517,7 @@ class ctb_user_view extends ctb_user {
 				exit();
 			}
 		} else {
-			$sReturnUrl = "tb_userlist.php"; // Not page request, return to list
+			$sReturnUrl = "tb_level1list.php"; // Not page request, return to list
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
@@ -669,20 +672,18 @@ class ctb_user_view extends ctb_user {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		if ($this->AuditTrailOnView) $this->WriteAuditTrailOnView($row);
-		$this->user_id->setDbValue($rs->fields('user_id'));
-		$this->username->setDbValue($rs->fields('username'));
-		$this->password->setDbValue($rs->fields('password'));
-		$this->userlevel->setDbValue($rs->fields('userlevel'));
+		$this->level1_id->setDbValue($rs->fields('level1_id'));
+		$this->level1_no->setDbValue($rs->fields('level1_no'));
+		$this->level1_nama->setDbValue($rs->fields('level1_nama'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->user_id->DbValue = $row['user_id'];
-		$this->username->DbValue = $row['username'];
-		$this->password->DbValue = $row['password'];
-		$this->userlevel->DbValue = $row['userlevel'];
+		$this->level1_id->DbValue = $row['level1_id'];
+		$this->level1_no->DbValue = $row['level1_no'];
+		$this->level1_nama->DbValue = $row['level1_nama'];
 	}
 
 	// Render row values based on field settings
@@ -701,47 +702,29 @@ class ctb_user_view extends ctb_user {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// user_id
-		// username
-		// password
-		// userlevel
+		// level1_id
+		// level1_no
+		// level1_nama
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// username
-		$this->username->ViewValue = $this->username->CurrentValue;
-		$this->username->ViewCustomAttributes = "";
+		// level1_no
+		$this->level1_no->ViewValue = $this->level1_no->CurrentValue;
+		$this->level1_no->ViewCustomAttributes = "";
 
-		// password
-		$this->password->ViewValue = $this->password->CurrentValue;
-		$this->password->ViewCustomAttributes = "";
+		// level1_nama
+		$this->level1_nama->ViewValue = $this->level1_nama->CurrentValue;
+		$this->level1_nama->ViewCustomAttributes = "";
 
-		// userlevel
-		if ($Security->CanAdmin()) { // System admin
-		if (strval($this->userlevel->CurrentValue) <> "") {
-			$this->userlevel->ViewValue = $this->userlevel->OptionCaption($this->userlevel->CurrentValue);
-		} else {
-			$this->userlevel->ViewValue = NULL;
-		}
-		} else {
-			$this->userlevel->ViewValue = $Language->Phrase("PasswordMask");
-		}
-		$this->userlevel->ViewCustomAttributes = "";
+			// level1_no
+			$this->level1_no->LinkCustomAttributes = "";
+			$this->level1_no->HrefValue = "";
+			$this->level1_no->TooltipValue = "";
 
-			// username
-			$this->username->LinkCustomAttributes = "";
-			$this->username->HrefValue = "";
-			$this->username->TooltipValue = "";
-
-			// password
-			$this->password->LinkCustomAttributes = "";
-			$this->password->HrefValue = "";
-			$this->password->TooltipValue = "";
-
-			// userlevel
-			$this->userlevel->LinkCustomAttributes = "";
-			$this->userlevel->HrefValue = "";
-			$this->userlevel->TooltipValue = "";
+			// level1_nama
+			$this->level1_nama->LinkCustomAttributes = "";
+			$this->level1_nama->HrefValue = "";
+			$this->level1_nama->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -791,7 +774,7 @@ class ctb_user_view extends ctb_user {
 		// Export to Email
 		$item = &$this->ExportOptions->Add("email");
 		$url = "";
-		$item->Body = "<button id=\"emf_tb_user\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_tb_user',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.ftb_userview,key:" . ew_ArrayToJsonAttr($this->RecKey) . ",sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
+		$item->Body = "<button id=\"emf_tb_level1\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_tb_level1',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.ftb_level1view,key:" . ew_ArrayToJsonAttr($this->RecKey) . ",sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
 		$item->Visible = TRUE;
 
 		// Drop down button for export
@@ -1001,7 +984,7 @@ class ctb_user_view extends ctb_user {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_userlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_level1list.php"), "", $this->TableVar, TRUE);
 		$PageId = "view";
 		$Breadcrumb->Add("view", $PageId, $url);
 	}
@@ -1024,7 +1007,7 @@ class ctb_user_view extends ctb_user {
 
 	// Write Audit Trail start/end for grid update
 	function WriteAuditTrailDummy($typ) {
-		$table = 'tb_user';
+		$table = 'tb_level1';
 		$usr = CurrentUserName();
 		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
@@ -1120,30 +1103,30 @@ class ctb_user_view extends ctb_user {
 <?php
 
 // Create page object
-if (!isset($tb_user_view)) $tb_user_view = new ctb_user_view();
+if (!isset($tb_level1_view)) $tb_level1_view = new ctb_level1_view();
 
 // Page init
-$tb_user_view->Page_Init();
+$tb_level1_view->Page_Init();
 
 // Page main
-$tb_user_view->Page_Main();
+$tb_level1_view->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$tb_user_view->Page_Render();
+$tb_level1_view->Page_Render();
 ?>
 <?php include_once "header.php" ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($tb_level1->Export == "") { ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "view";
-var CurrentForm = ftb_userview = new ew_Form("ftb_userview", "view");
+var CurrentForm = ftb_level1view = new ew_Form("ftb_level1view", "view");
 
 // Form_CustomValidate event
-ftb_userview.Form_CustomValidate = 
+ftb_level1view.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1152,101 +1135,88 @@ ftb_userview.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ftb_userview.ValidateRequired = true;
+ftb_level1view.ValidateRequired = true;
 <?php } else { ?>
-ftb_userview.ValidateRequired = false; 
+ftb_level1view.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ftb_userview.Lists["x_userlevel"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
-ftb_userview.Lists["x_userlevel"].Options = <?php echo json_encode($tb_user->userlevel->Options()) ?>;
-
 // Form object for search
+
 </script>
 <script type="text/javascript">
 
 // Write your client script here, no need to add script tags.
 </script>
 <?php } ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($tb_level1->Export == "") { ?>
 <div class="ewToolbar">
-<?php if (!$tb_user_view->IsModal) { ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if (!$tb_level1_view->IsModal) { ?>
+<?php if ($tb_level1->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php } ?>
-<?php $tb_user_view->ExportOptions->Render("body") ?>
+<?php $tb_level1_view->ExportOptions->Render("body") ?>
 <?php
-	foreach ($tb_user_view->OtherOptions as &$option)
+	foreach ($tb_level1_view->OtherOptions as &$option)
 		$option->Render("body");
 ?>
-<?php if (!$tb_user_view->IsModal) { ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if (!$tb_level1_view->IsModal) { ?>
+<?php if ($tb_level1->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $tb_user_view->ShowPageHeader(); ?>
+<?php $tb_level1_view->ShowPageHeader(); ?>
 <?php
-$tb_user_view->ShowMessage();
+$tb_level1_view->ShowMessage();
 ?>
-<form name="ftb_userview" id="ftb_userview" class="form-inline ewForm ewViewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($tb_user_view->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_user_view->Token ?>">
+<form name="ftb_level1view" id="ftb_level1view" class="form-inline ewForm ewViewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($tb_level1_view->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_level1_view->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="tb_user">
-<?php if ($tb_user_view->IsModal) { ?>
+<input type="hidden" name="t" value="tb_level1">
+<?php if ($tb_level1_view->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <table class="table table-bordered table-striped ewViewTable">
-<?php if ($tb_user->username->Visible) { // username ?>
-	<tr id="r_username">
-		<td><span id="elh_tb_user_username"><?php echo $tb_user->username->FldCaption() ?></span></td>
-		<td data-name="username"<?php echo $tb_user->username->CellAttributes() ?>>
-<span id="el_tb_user_username">
-<span<?php echo $tb_user->username->ViewAttributes() ?>>
-<?php echo $tb_user->username->ViewValue ?></span>
+<?php if ($tb_level1->level1_no->Visible) { // level1_no ?>
+	<tr id="r_level1_no">
+		<td><span id="elh_tb_level1_level1_no"><?php echo $tb_level1->level1_no->FldCaption() ?></span></td>
+		<td data-name="level1_no"<?php echo $tb_level1->level1_no->CellAttributes() ?>>
+<span id="el_tb_level1_level1_no">
+<span<?php echo $tb_level1->level1_no->ViewAttributes() ?>>
+<?php echo $tb_level1->level1_no->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_user->password->Visible) { // password ?>
-	<tr id="r_password">
-		<td><span id="elh_tb_user_password"><?php echo $tb_user->password->FldCaption() ?></span></td>
-		<td data-name="password"<?php echo $tb_user->password->CellAttributes() ?>>
-<span id="el_tb_user_password">
-<span<?php echo $tb_user->password->ViewAttributes() ?>>
-<?php echo $tb_user->password->ViewValue ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
-<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
-	<tr id="r_userlevel">
-		<td><span id="elh_tb_user_userlevel"><?php echo $tb_user->userlevel->FldCaption() ?></span></td>
-		<td data-name="userlevel"<?php echo $tb_user->userlevel->CellAttributes() ?>>
-<span id="el_tb_user_userlevel">
-<span<?php echo $tb_user->userlevel->ViewAttributes() ?>>
-<?php echo $tb_user->userlevel->ViewValue ?></span>
+<?php if ($tb_level1->level1_nama->Visible) { // level1_nama ?>
+	<tr id="r_level1_nama">
+		<td><span id="elh_tb_level1_level1_nama"><?php echo $tb_level1->level1_nama->FldCaption() ?></span></td>
+		<td data-name="level1_nama"<?php echo $tb_level1->level1_nama->CellAttributes() ?>>
+<span id="el_tb_level1_level1_nama">
+<span<?php echo $tb_level1->level1_nama->ViewAttributes() ?>>
+<?php echo $tb_level1->level1_nama->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
 </table>
 </form>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($tb_level1->Export == "") { ?>
 <script type="text/javascript">
-ftb_userview.Init();
+ftb_level1view.Init();
 </script>
 <?php } ?>
 <?php
-$tb_user_view->ShowPageFooter();
+$tb_level1_view->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($tb_level1->Export == "") { ?>
 <script type="text/javascript">
 
 // Write your table-specific startup script here
@@ -1256,5 +1226,5 @@ if (EW_DEBUG_ENABLED)
 <?php } ?>
 <?php include_once "footer.php" ?>
 <?php
-$tb_user_view->Page_Terminate();
+$tb_level1_view->Page_Terminate();
 ?>

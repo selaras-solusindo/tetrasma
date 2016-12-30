@@ -583,6 +583,9 @@
   <project>
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
+    <menu id="17">
+      <phrase id="menutext" value="audittrail" />
+    </menu>
     <menu id="1">
       <phrase id="menutext" value="Manajemen Anggota" />
     </menu>
@@ -599,18 +602,6 @@
       <phrase id="menutext" value="Level 3" />
     </menu>
     <menu id="10">
-      <phrase id="menutext" value="Level 4" />
-    </menu>
-    <menu id="2">
-      <phrase id="menutext" value="Level 1" />
-    </menu>
-    <menu id="3">
-      <phrase id="menutext" value="Level 2" />
-    </menu>
-    <menu id="4">
-      <phrase id="menutext" value="Level 3" />
-    </menu>
-    <menu id="5">
       <phrase id="menutext" value="Level 4" />
     </menu>
     <menu id="16">
@@ -649,62 +640,41 @@
         <phrase id="fldcaption" value="No. Pengenal" />
       </field>
     </table>
-    <table id="tb_akun_lvl1">
+    <table id="audittrail">
+      <phrase id="tblcaption" value="audittrail" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="datetime">
+        <phrase id="fldcaption" value="datetime" />
+      </field>
+      <field id="script">
+        <phrase id="fldcaption" value="script" />
+      </field>
+      <field id="user">
+        <phrase id="fldcaption" value="user" />
+      </field>
+      <field id="action">
+        <phrase id="fldcaption" value="action" />
+      </field>
+      <field id="_table">
+        <phrase id="fldcaption" value="table" />
+      </field>
+      <field id="_field">
+        <phrase id="fldcaption" value="field" />
+      </field>
+      <field id="keyvalue">
+        <phrase id="fldcaption" value="keyvalue" />
+      </field>
+      <field id="oldvalue">
+        <phrase id="fldcaption" value="oldvalue" />
+      </field>
+      <field id="newvalue">
+        <phrase id="fldcaption" value="newvalue" />
+      </field>
+    </table>
+    <table id="tb_level1">
       <phrase id="tblcaption" value="Level 1" />
-      <field id="akun_lvl1_id">
-        <phrase id="fldcaption" value="ID Lvl. 1" />
-      </field>
-      <field id="akun_lvl1_nama">
-        <phrase id="fldcaption" value="Nama Lvl. 1" />
-      </field>
-    </table>
-    <table id="tb_akun_lvl2">
-      <phrase id="tblcaption" value="Level 2" />
-      <field id="akun_lvl2_id">
-        <phrase id="fldcaption" value="ID Lvl. 2" />
-      </field>
-      <field id="akun_lvl1_id">
-        <phrase id="fldcaption" value="Akun Lvl. 1" />
-      </field>
-      <field id="akun_lvl2_nama">
-        <phrase id="fldcaption" value="Nama Lvl. 2" />
-      </field>
-    </table>
-    <table id="tb_akun_lvl3">
-      <phrase id="tblcaption" value="Level 3" />
-      <field id="akun_lvl3_id">
-        <phrase id="fldcaption" value="ID Lvl. 3" />
-      </field>
-      <field id="akun_lvl1_id">
-        <phrase id="fldcaption" value="Akun Lvl. 1" />
-      </field>
-      <field id="akun_lvl2_id">
-        <phrase id="fldcaption" value="Akun Lvl. 2" />
-      </field>
-      <field id="akun_lvl3_nama">
-        <phrase id="fldcaption" value="Nama Lvl. 3" />
-      </field>
-    </table>
-    <table id="tb_akun_lvl4">
-      <phrase id="tblcaption" value="Level 4" />
-      <field id="akun_lvl4_id">
-        <phrase id="fldcaption" value="ID Lvl. 4" />
-      </field>
-      <field id="akun_lvl1_id">
-        <phrase id="fldcaption" value="Akun Lvl. 1" />
-      </field>
-      <field id="akun_lvl2_id">
-        <phrase id="fldcaption" value="Akun Lvl. 2" />
-      </field>
-      <field id="akun_lvl3_id">
-        <phrase id="fldcaption" value="Akun Lvl. 3" />
-      </field>
-      <field id="akun_lvl4_nama">
-        <phrase id="fldcaption" value="Nama Lvl. 4" />
-      </field>
-    </table>
-    <table id="level1">
-      <phrase id="tblcaption" value="level 1" />
       <field id="level1_id">
         <phrase id="fldcaption" value="level 1 id" />
       </field>
@@ -715,8 +685,8 @@
         <phrase id="fldcaption" value="Nama Akun Level 1" />
       </field>
     </table>
-    <table id="level2">
-      <phrase id="tblcaption" value="level 2" />
+    <table id="tb_level2">
+      <phrase id="tblcaption" value="Level 2" />
       <field id="level2_id">
         <phrase id="fldcaption" value="level 2 id" />
       </field>
@@ -730,8 +700,8 @@
         <phrase id="fldcaption" value="Nama Akun Level 2" />
       </field>
     </table>
-    <table id="level3">
-      <phrase id="tblcaption" value="level 3" />
+    <table id="tb_level3">
+      <phrase id="tblcaption" value="Level 3" />
       <field id="level3_id">
         <phrase id="fldcaption" value="level 3 id" />
       </field>
@@ -748,8 +718,8 @@
         <phrase id="fldcaption" value="Nama Akun Level 3" />
       </field>
     </table>
-    <table id="level4">
-      <phrase id="tblcaption" value="level 4" />
+    <table id="tb_level4">
+      <phrase id="tblcaption" value="Level 4" />
       <field id="level4_id">
         <phrase id="fldcaption" value="level 4 id" />
       </field>
@@ -770,7 +740,7 @@
       </field>
     </table>
     <table id="tb_user">
-      <phrase id="tblcaption" value="tb user" />
+      <phrase id="tblcaption" value="Manajemen User" />
       <field id="user_id">
         <phrase id="fldcaption" value="user id" />
       </field>

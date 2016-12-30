@@ -1,0 +1,8 @@
+12:42 AM 12/30/2016
+- sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
+- tampilan awal :: tabel jurnal
+- ada edit, add, delete
+- desain tabel jurnal seperti apa ya ?
+
+- coba mencontoh tabel jurnal dari keuangan guyub
+

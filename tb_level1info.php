@@ -1,22 +1,15 @@
 <?php
 
 // Global variable for table object
-$audittrail = NULL;
+$tb_level1 = NULL;
 
 //
-// Table class for audittrail
+// Table class for tb_level1
 //
-class caudittrail extends cTable {
-	var $id;
-	var $datetime;
-	var $script;
-	var $user;
-	var $action;
-	var $_table;
-	var $_field;
-	var $keyvalue;
-	var $oldvalue;
-	var $newvalue;
+class ctb_level1 extends cTable {
+	var $level1_id;
+	var $level1_no;
+	var $level1_nama;
 
 	//
 	// Table class constructor
@@ -26,12 +19,12 @@ class caudittrail extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'audittrail';
-		$this->TableName = 'audittrail';
+		$this->TableVar = 'tb_level1';
+		$this->TableName = 'tb_level1';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`audittrail`";
+		$this->UpdateTable = "`tb_level1`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -48,57 +41,21 @@ class caudittrail extends cTable {
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// id
-		$this->id = new cField('audittrail', 'audittrail', 'x_id', 'id', '`id`', '`id`', 3, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
-		$this->id->Sortable = TRUE; // Allow sort
-		$this->id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['id'] = &$this->id;
+		// level1_id
+		$this->level1_id = new cField('tb_level1', 'tb_level1', 'x_level1_id', 'level1_id', '`level1_id`', '`level1_id`', 3, -1, FALSE, '`level1_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->level1_id->Sortable = TRUE; // Allow sort
+		$this->level1_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['level1_id'] = &$this->level1_id;
 
-		// datetime
-		$this->datetime = new cField('audittrail', 'audittrail', 'x_datetime', 'datetime', '`datetime`', 'DATE_FORMAT(`datetime`, \'%Y/%m/%d\')', 135, 0, FALSE, '`datetime`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->datetime->Sortable = TRUE; // Allow sort
-		$this->datetime->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['datetime'] = &$this->datetime;
+		// level1_no
+		$this->level1_no = new cField('tb_level1', 'tb_level1', 'x_level1_no', 'level1_no', '`level1_no`', '`level1_no`', 200, -1, FALSE, '`level1_no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->level1_no->Sortable = TRUE; // Allow sort
+		$this->fields['level1_no'] = &$this->level1_no;
 
-		// script
-		$this->script = new cField('audittrail', 'audittrail', 'x_script', 'script', '`script`', '`script`', 200, -1, FALSE, '`script`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->script->Sortable = TRUE; // Allow sort
-		$this->fields['script'] = &$this->script;
-
-		// user
-		$this->user = new cField('audittrail', 'audittrail', 'x_user', 'user', '`user`', '`user`', 200, -1, FALSE, '`user`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->user->Sortable = TRUE; // Allow sort
-		$this->fields['user'] = &$this->user;
-
-		// action
-		$this->action = new cField('audittrail', 'audittrail', 'x_action', 'action', '`action`', '`action`', 200, -1, FALSE, '`action`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->action->Sortable = TRUE; // Allow sort
-		$this->fields['action'] = &$this->action;
-
-		// table
-		$this->_table = new cField('audittrail', 'audittrail', 'x__table', 'table', '`table`', '`table`', 200, -1, FALSE, '`table`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->_table->Sortable = TRUE; // Allow sort
-		$this->fields['table'] = &$this->_table;
-
-		// field
-		$this->_field = new cField('audittrail', 'audittrail', 'x__field', 'field', '`field`', '`field`', 200, -1, FALSE, '`field`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->_field->Sortable = TRUE; // Allow sort
-		$this->fields['field'] = &$this->_field;
-
-		// keyvalue
-		$this->keyvalue = new cField('audittrail', 'audittrail', 'x_keyvalue', 'keyvalue', '`keyvalue`', '`keyvalue`', 201, -1, FALSE, '`keyvalue`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
-		$this->keyvalue->Sortable = TRUE; // Allow sort
-		$this->fields['keyvalue'] = &$this->keyvalue;
-
-		// oldvalue
-		$this->oldvalue = new cField('audittrail', 'audittrail', 'x_oldvalue', 'oldvalue', '`oldvalue`', '`oldvalue`', 201, -1, FALSE, '`oldvalue`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
-		$this->oldvalue->Sortable = TRUE; // Allow sort
-		$this->fields['oldvalue'] = &$this->oldvalue;
-
-		// newvalue
-		$this->newvalue = new cField('audittrail', 'audittrail', 'x_newvalue', 'newvalue', '`newvalue`', '`newvalue`', 201, -1, FALSE, '`newvalue`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
-		$this->newvalue->Sortable = TRUE; // Allow sort
-		$this->fields['newvalue'] = &$this->newvalue;
+		// level1_nama
+		$this->level1_nama = new cField('tb_level1', 'tb_level1', 'x_level1_nama', 'level1_nama', '`level1_nama`', '`level1_nama`', 200, -1, FALSE, '`level1_nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->level1_nama->Sortable = TRUE; // Allow sort
+		$this->fields['level1_nama'] = &$this->level1_nama;
 	}
 
 	// Set Field Visibility
@@ -128,7 +85,7 @@ class caudittrail extends cTable {
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`audittrail`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`tb_level1`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -381,8 +338,8 @@ class caudittrail extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
-			if (array_key_exists('id', $rs))
-				ew_AddFilter($where, ew_QuotedName('id', $this->DBID) . '=' . ew_QuotedValue($rs['id'], $this->id->FldDataType, $this->DBID));
+			if (array_key_exists('level1_id', $rs))
+				ew_AddFilter($where, ew_QuotedName('level1_id', $this->DBID) . '=' . ew_QuotedValue($rs['level1_id'], $this->level1_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -401,15 +358,15 @@ class caudittrail extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`id` = @id@";
+		return "`level1_id` = @level1_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->id->CurrentValue))
+		if (!is_numeric($this->level1_id->CurrentValue))
 			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@id@", ew_AdjustSql($this->id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
+		$sKeyFilter = str_replace("@level1_id@", ew_AdjustSql($this->level1_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -423,7 +380,7 @@ class caudittrail extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "audittraillist.php";
+			return "tb_level1list.php";
 		}
 	}
 
@@ -433,30 +390,30 @@ class caudittrail extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "audittraillist.php";
+		return "tb_level1list.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("audittrailview.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("tb_level1view.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("audittrailview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("tb_level1view.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "audittrailadd.php?" . $this->UrlParm($parm);
+			$url = "tb_level1add.php?" . $this->UrlParm($parm);
 		else
-			$url = "audittrailadd.php";
+			$url = "tb_level1add.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("audittrailedit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("tb_level1edit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -468,7 +425,7 @@ class caudittrail extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("audittrailadd.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("tb_level1add.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -480,7 +437,7 @@ class caudittrail extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("audittraildelete.php", $this->UrlParm());
+		return $this->KeyUrl("tb_level1delete.php", $this->UrlParm());
 	}
 
 	// Add master url
@@ -490,7 +447,7 @@ class caudittrail extends cTable {
 
 	function KeyToJson() {
 		$json = "";
-		$json .= "id:" . ew_VarToJson($this->id->CurrentValue, "number", "'");
+		$json .= "level1_id:" . ew_VarToJson($this->level1_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -498,8 +455,8 @@ class caudittrail extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->id->CurrentValue)) {
-			$sUrl .= "id=" . urlencode($this->id->CurrentValue);
+		if (!is_null($this->level1_id->CurrentValue)) {
+			$sUrl .= "level1_id=" . urlencode($this->level1_id->CurrentValue);
 		} else {
 			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
 		}
@@ -532,10 +489,10 @@ class caudittrail extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
-			if ($isPost && isset($_POST["id"]))
-				$arKeys[] = ew_StripSlashes($_POST["id"]);
-			elseif (isset($_GET["id"]))
-				$arKeys[] = ew_StripSlashes($_GET["id"]);
+			if ($isPost && isset($_POST["level1_id"]))
+				$arKeys[] = ew_StripSlashes($_POST["level1_id"]);
+			elseif (isset($_GET["level1_id"]))
+				$arKeys[] = ew_StripSlashes($_GET["level1_id"]);
 			else
 				$arKeys = NULL; // Do not setup
 
@@ -560,7 +517,7 @@ class caudittrail extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->id->CurrentValue = $key;
+			$this->level1_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -581,16 +538,9 @@ class caudittrail extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->id->setDbValue($rs->fields('id'));
-		$this->datetime->setDbValue($rs->fields('datetime'));
-		$this->script->setDbValue($rs->fields('script'));
-		$this->user->setDbValue($rs->fields('user'));
-		$this->action->setDbValue($rs->fields('action'));
-		$this->_table->setDbValue($rs->fields('table'));
-		$this->_field->setDbValue($rs->fields('field'));
-		$this->keyvalue->setDbValue($rs->fields('keyvalue'));
-		$this->oldvalue->setDbValue($rs->fields('oldvalue'));
-		$this->newvalue->setDbValue($rs->fields('newvalue'));
+		$this->level1_id->setDbValue($rs->fields('level1_id'));
+		$this->level1_no->setDbValue($rs->fields('level1_no'));
+		$this->level1_nama->setDbValue($rs->fields('level1_nama'));
 	}
 
 	// Render list row values
@@ -601,107 +551,36 @@ class caudittrail extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// id
-		// datetime
-		// script
-		// user
-		// action
-		// table
-		// field
-		// keyvalue
-		// oldvalue
-		// newvalue
-		// id
+		// level1_id
+		// level1_no
+		// level1_nama
+		// level1_id
 
-		$this->id->ViewValue = $this->id->CurrentValue;
-		$this->id->ViewCustomAttributes = "";
+		$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
+		$this->level1_id->ViewCustomAttributes = "";
 
-		// datetime
-		$this->datetime->ViewValue = $this->datetime->CurrentValue;
-		$this->datetime->ViewValue = ew_FormatDateTime($this->datetime->ViewValue, 0);
-		$this->datetime->ViewCustomAttributes = "";
+		// level1_no
+		$this->level1_no->ViewValue = $this->level1_no->CurrentValue;
+		$this->level1_no->ViewCustomAttributes = "";
 
-		// script
-		$this->script->ViewValue = $this->script->CurrentValue;
-		$this->script->ViewCustomAttributes = "";
+		// level1_nama
+		$this->level1_nama->ViewValue = $this->level1_nama->CurrentValue;
+		$this->level1_nama->ViewCustomAttributes = "";
 
-		// user
-		$this->user->ViewValue = $this->user->CurrentValue;
-		$this->user->ViewCustomAttributes = "";
+		// level1_id
+		$this->level1_id->LinkCustomAttributes = "";
+		$this->level1_id->HrefValue = "";
+		$this->level1_id->TooltipValue = "";
 
-		// action
-		$this->action->ViewValue = $this->action->CurrentValue;
-		$this->action->ViewCustomAttributes = "";
+		// level1_no
+		$this->level1_no->LinkCustomAttributes = "";
+		$this->level1_no->HrefValue = "";
+		$this->level1_no->TooltipValue = "";
 
-		// table
-		$this->_table->ViewValue = $this->_table->CurrentValue;
-		$this->_table->ViewCustomAttributes = "";
-
-		// field
-		$this->_field->ViewValue = $this->_field->CurrentValue;
-		$this->_field->ViewCustomAttributes = "";
-
-		// keyvalue
-		$this->keyvalue->ViewValue = $this->keyvalue->CurrentValue;
-		$this->keyvalue->ViewCustomAttributes = "";
-
-		// oldvalue
-		$this->oldvalue->ViewValue = $this->oldvalue->CurrentValue;
-		$this->oldvalue->ViewCustomAttributes = "";
-
-		// newvalue
-		$this->newvalue->ViewValue = $this->newvalue->CurrentValue;
-		$this->newvalue->ViewCustomAttributes = "";
-
-		// id
-		$this->id->LinkCustomAttributes = "";
-		$this->id->HrefValue = "";
-		$this->id->TooltipValue = "";
-
-		// datetime
-		$this->datetime->LinkCustomAttributes = "";
-		$this->datetime->HrefValue = "";
-		$this->datetime->TooltipValue = "";
-
-		// script
-		$this->script->LinkCustomAttributes = "";
-		$this->script->HrefValue = "";
-		$this->script->TooltipValue = "";
-
-		// user
-		$this->user->LinkCustomAttributes = "";
-		$this->user->HrefValue = "";
-		$this->user->TooltipValue = "";
-
-		// action
-		$this->action->LinkCustomAttributes = "";
-		$this->action->HrefValue = "";
-		$this->action->TooltipValue = "";
-
-		// table
-		$this->_table->LinkCustomAttributes = "";
-		$this->_table->HrefValue = "";
-		$this->_table->TooltipValue = "";
-
-		// field
-		$this->_field->LinkCustomAttributes = "";
-		$this->_field->HrefValue = "";
-		$this->_field->TooltipValue = "";
-
-		// keyvalue
-		$this->keyvalue->LinkCustomAttributes = "";
-		$this->keyvalue->HrefValue = "";
-		$this->keyvalue->TooltipValue = "";
-
-		// oldvalue
-		$this->oldvalue->LinkCustomAttributes = "";
-		$this->oldvalue->HrefValue = "";
-		$this->oldvalue->TooltipValue = "";
-
-		// newvalue
-		$this->newvalue->LinkCustomAttributes = "";
-		$this->newvalue->HrefValue = "";
-		$this->newvalue->TooltipValue = "";
+		// level1_nama
+		$this->level1_nama->LinkCustomAttributes = "";
+		$this->level1_nama->HrefValue = "";
+		$this->level1_nama->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -714,65 +593,23 @@ class caudittrail extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
-		// id
-		$this->id->EditAttrs["class"] = "form-control";
-		$this->id->EditCustomAttributes = "";
-		$this->id->EditValue = $this->id->CurrentValue;
-		$this->id->ViewCustomAttributes = "";
+		// level1_id
+		$this->level1_id->EditAttrs["class"] = "form-control";
+		$this->level1_id->EditCustomAttributes = "";
+		$this->level1_id->EditValue = $this->level1_id->CurrentValue;
+		$this->level1_id->ViewCustomAttributes = "";
 
-		// datetime
-		$this->datetime->EditAttrs["class"] = "form-control";
-		$this->datetime->EditCustomAttributes = "";
-		$this->datetime->EditValue = ew_FormatDateTime($this->datetime->CurrentValue, 8);
-		$this->datetime->PlaceHolder = ew_RemoveHtml($this->datetime->FldCaption());
+		// level1_no
+		$this->level1_no->EditAttrs["class"] = "form-control";
+		$this->level1_no->EditCustomAttributes = "";
+		$this->level1_no->EditValue = $this->level1_no->CurrentValue;
+		$this->level1_no->PlaceHolder = ew_RemoveHtml($this->level1_no->FldCaption());
 
-		// script
-		$this->script->EditAttrs["class"] = "form-control";
-		$this->script->EditCustomAttributes = "";
-		$this->script->EditValue = $this->script->CurrentValue;
-		$this->script->PlaceHolder = ew_RemoveHtml($this->script->FldCaption());
-
-		// user
-		$this->user->EditAttrs["class"] = "form-control";
-		$this->user->EditCustomAttributes = "";
-		$this->user->EditValue = $this->user->CurrentValue;
-		$this->user->PlaceHolder = ew_RemoveHtml($this->user->FldCaption());
-
-		// action
-		$this->action->EditAttrs["class"] = "form-control";
-		$this->action->EditCustomAttributes = "";
-		$this->action->EditValue = $this->action->CurrentValue;
-		$this->action->PlaceHolder = ew_RemoveHtml($this->action->FldCaption());
-
-		// table
-		$this->_table->EditAttrs["class"] = "form-control";
-		$this->_table->EditCustomAttributes = "";
-		$this->_table->EditValue = $this->_table->CurrentValue;
-		$this->_table->PlaceHolder = ew_RemoveHtml($this->_table->FldCaption());
-
-		// field
-		$this->_field->EditAttrs["class"] = "form-control";
-		$this->_field->EditCustomAttributes = "";
-		$this->_field->EditValue = $this->_field->CurrentValue;
-		$this->_field->PlaceHolder = ew_RemoveHtml($this->_field->FldCaption());
-
-		// keyvalue
-		$this->keyvalue->EditAttrs["class"] = "form-control";
-		$this->keyvalue->EditCustomAttributes = "";
-		$this->keyvalue->EditValue = $this->keyvalue->CurrentValue;
-		$this->keyvalue->PlaceHolder = ew_RemoveHtml($this->keyvalue->FldCaption());
-
-		// oldvalue
-		$this->oldvalue->EditAttrs["class"] = "form-control";
-		$this->oldvalue->EditCustomAttributes = "";
-		$this->oldvalue->EditValue = $this->oldvalue->CurrentValue;
-		$this->oldvalue->PlaceHolder = ew_RemoveHtml($this->oldvalue->FldCaption());
-
-		// newvalue
-		$this->newvalue->EditAttrs["class"] = "form-control";
-		$this->newvalue->EditCustomAttributes = "";
-		$this->newvalue->EditValue = $this->newvalue->CurrentValue;
-		$this->newvalue->PlaceHolder = ew_RemoveHtml($this->newvalue->FldCaption());
+		// level1_nama
+		$this->level1_nama->EditAttrs["class"] = "form-control";
+		$this->level1_nama->EditCustomAttributes = "";
+		$this->level1_nama->EditValue = $this->level1_nama->CurrentValue;
+		$this->level1_nama->PlaceHolder = ew_RemoveHtml($this->level1_nama->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -801,24 +638,11 @@ class caudittrail extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->id->Exportable) $Doc->ExportCaption($this->id);
-					if ($this->datetime->Exportable) $Doc->ExportCaption($this->datetime);
-					if ($this->script->Exportable) $Doc->ExportCaption($this->script);
-					if ($this->user->Exportable) $Doc->ExportCaption($this->user);
-					if ($this->action->Exportable) $Doc->ExportCaption($this->action);
-					if ($this->_table->Exportable) $Doc->ExportCaption($this->_table);
-					if ($this->_field->Exportable) $Doc->ExportCaption($this->_field);
-					if ($this->keyvalue->Exportable) $Doc->ExportCaption($this->keyvalue);
-					if ($this->oldvalue->Exportable) $Doc->ExportCaption($this->oldvalue);
-					if ($this->newvalue->Exportable) $Doc->ExportCaption($this->newvalue);
+					if ($this->level1_no->Exportable) $Doc->ExportCaption($this->level1_no);
+					if ($this->level1_nama->Exportable) $Doc->ExportCaption($this->level1_nama);
 				} else {
-					if ($this->id->Exportable) $Doc->ExportCaption($this->id);
-					if ($this->datetime->Exportable) $Doc->ExportCaption($this->datetime);
-					if ($this->script->Exportable) $Doc->ExportCaption($this->script);
-					if ($this->user->Exportable) $Doc->ExportCaption($this->user);
-					if ($this->action->Exportable) $Doc->ExportCaption($this->action);
-					if ($this->_table->Exportable) $Doc->ExportCaption($this->_table);
-					if ($this->_field->Exportable) $Doc->ExportCaption($this->_field);
+					if ($this->level1_no->Exportable) $Doc->ExportCaption($this->level1_no);
+					if ($this->level1_nama->Exportable) $Doc->ExportCaption($this->level1_nama);
 				}
 				$Doc->EndExportRow();
 			}
@@ -850,24 +674,11 @@ class caudittrail extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->id->Exportable) $Doc->ExportField($this->id);
-						if ($this->datetime->Exportable) $Doc->ExportField($this->datetime);
-						if ($this->script->Exportable) $Doc->ExportField($this->script);
-						if ($this->user->Exportable) $Doc->ExportField($this->user);
-						if ($this->action->Exportable) $Doc->ExportField($this->action);
-						if ($this->_table->Exportable) $Doc->ExportField($this->_table);
-						if ($this->_field->Exportable) $Doc->ExportField($this->_field);
-						if ($this->keyvalue->Exportable) $Doc->ExportField($this->keyvalue);
-						if ($this->oldvalue->Exportable) $Doc->ExportField($this->oldvalue);
-						if ($this->newvalue->Exportable) $Doc->ExportField($this->newvalue);
+						if ($this->level1_no->Exportable) $Doc->ExportField($this->level1_no);
+						if ($this->level1_nama->Exportable) $Doc->ExportField($this->level1_nama);
 					} else {
-						if ($this->id->Exportable) $Doc->ExportField($this->id);
-						if ($this->datetime->Exportable) $Doc->ExportField($this->datetime);
-						if ($this->script->Exportable) $Doc->ExportField($this->script);
-						if ($this->user->Exportable) $Doc->ExportField($this->user);
-						if ($this->action->Exportable) $Doc->ExportField($this->action);
-						if ($this->_table->Exportable) $Doc->ExportField($this->_table);
-						if ($this->_field->Exportable) $Doc->ExportField($this->_field);
+						if ($this->level1_no->Exportable) $Doc->ExportField($this->level1_no);
+						if ($this->level1_nama->Exportable) $Doc->ExportField($this->level1_nama);
 					}
 					$Doc->EndExportRow();
 				}

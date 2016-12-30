@@ -5,6 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
+<?php include_once "audittrailinfo.php" ?>
 <?php include_once "tb_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -13,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$tb_user_view = NULL; // Initialize page object first
+$audittrail_view = NULL; // Initialize page object first
 
-class ctb_user_view extends ctb_user {
+class caudittrail_view extends caudittrail {
 
 	// Page ID
 	var $PageID = 'view';
@@ -24,10 +25,10 @@ class ctb_user_view extends ctb_user {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'tb_user';
+	var $TableName = 'audittrail';
 
 	// Page object name
-	var $PageObjName = 'tb_user_view';
+	var $PageObjName = 'audittrail_view';
 
 	// Page name
 	function PageName() {
@@ -72,12 +73,6 @@ class ctb_user_view extends ctb_user {
 	var $GridEditUrl;
 	var $MultiDeleteUrl;
 	var $MultiUpdateUrl;
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = FALSE;
-	var $AuditTrailOnDelete = FALSE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -263,15 +258,15 @@ class ctb_user_view extends ctb_user {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (tb_user)
-		if (!isset($GLOBALS["tb_user"]) || get_class($GLOBALS["tb_user"]) == "ctb_user") {
-			$GLOBALS["tb_user"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["tb_user"];
+		// Table object (audittrail)
+		if (!isset($GLOBALS["audittrail"]) || get_class($GLOBALS["audittrail"]) == "caudittrail") {
+			$GLOBALS["audittrail"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["audittrail"];
 		}
 		$KeyUrl = "";
-		if (@$_GET["user_id"] <> "") {
-			$this->RecKey["user_id"] = $_GET["user_id"];
-			$KeyUrl .= "&amp;user_id=" . urlencode($this->RecKey["user_id"]);
+		if (@$_GET["id"] <> "") {
+			$this->RecKey["id"] = $_GET["id"];
+			$KeyUrl .= "&amp;id=" . urlencode($this->RecKey["id"]);
 		}
 		$this->ExportPrintUrl = $this->PageUrl() . "export=print" . $KeyUrl;
 		$this->ExportHtmlUrl = $this->PageUrl() . "export=html" . $KeyUrl;
@@ -281,13 +276,16 @@ class ctb_user_view extends ctb_user {
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv" . $KeyUrl;
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf" . $KeyUrl;
 
+		// Table object (tb_user)
+		if (!isset($GLOBALS['tb_user'])) $GLOBALS['tb_user'] = new ctb_user();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'view', TRUE);
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'tb_user', TRUE);
+			define("EW_TABLE_NAME", 'audittrail', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -331,7 +329,7 @@ class ctb_user_view extends ctb_user {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("tb_userlist.php"));
+				$this->Page_Terminate(ew_GetUrl("audittraillist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -352,9 +350,9 @@ class ctb_user_view extends ctb_user {
 			$this->setExportReturnUrl(ew_CurrentUrl());
 		}
 		$gsExportFile = $this->TableVar; // Get export file, used in header
-		if (@$_GET["user_id"] <> "") {
+		if (@$_GET["id"] <> "") {
 			if ($gsExportFile <> "") $gsExportFile .= "_";
-			$gsExportFile .= ew_StripSlashes($_GET["user_id"]);
+			$gsExportFile .= ew_StripSlashes($_GET["id"]);
 		}
 
 		// Get custom export parameters
@@ -380,9 +378,17 @@ class ctb_user_view extends ctb_user {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->username->SetVisibility();
-		$this->password->SetVisibility();
-		$this->userlevel->SetVisibility();
+		$this->id->SetVisibility();
+		$this->id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
+		$this->datetime->SetVisibility();
+		$this->script->SetVisibility();
+		$this->user->SetVisibility();
+		$this->action->SetVisibility();
+		$this->_table->SetVisibility();
+		$this->_field->SetVisibility();
+		$this->keyvalue->SetVisibility();
+		$this->oldvalue->SetVisibility();
+		$this->newvalue->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -414,13 +420,13 @@ class ctb_user_view extends ctb_user {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $tb_user;
+		global $EW_EXPORT, $audittrail;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($tb_user);
+				$doc = new $class($audittrail);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -486,14 +492,14 @@ class ctb_user_view extends ctb_user {
 		if ($this->Export == "")
 			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
-			if (@$_GET["user_id"] <> "") {
-				$this->user_id->setQueryStringValue($_GET["user_id"]);
-				$this->RecKey["user_id"] = $this->user_id->QueryStringValue;
-			} elseif (@$_POST["user_id"] <> "") {
-				$this->user_id->setFormValue($_POST["user_id"]);
-				$this->RecKey["user_id"] = $this->user_id->FormValue;
+			if (@$_GET["id"] <> "") {
+				$this->id->setQueryStringValue($_GET["id"]);
+				$this->RecKey["id"] = $this->id->QueryStringValue;
+			} elseif (@$_POST["id"] <> "") {
+				$this->id->setFormValue($_POST["id"]);
+				$this->RecKey["id"] = $this->id->FormValue;
 			} else {
-				$sReturnUrl = "tb_userlist.php"; // Return to list
+				$sReturnUrl = "audittraillist.php"; // Return to list
 			}
 
 			// Get action
@@ -503,7 +509,7 @@ class ctb_user_view extends ctb_user {
 					if (!$this->LoadRow()) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-						$sReturnUrl = "tb_userlist.php"; // No matching record, return to list
+						$sReturnUrl = "audittraillist.php"; // No matching record, return to list
 					}
 			}
 
@@ -514,7 +520,7 @@ class ctb_user_view extends ctb_user {
 				exit();
 			}
 		} else {
-			$sReturnUrl = "tb_userlist.php"; // Not page request, return to list
+			$sReturnUrl = "audittraillist.php"; // Not page request, return to list
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
@@ -668,21 +674,32 @@ class ctb_user_view extends ctb_user {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		if ($this->AuditTrailOnView) $this->WriteAuditTrailOnView($row);
-		$this->user_id->setDbValue($rs->fields('user_id'));
-		$this->username->setDbValue($rs->fields('username'));
-		$this->password->setDbValue($rs->fields('password'));
-		$this->userlevel->setDbValue($rs->fields('userlevel'));
+		$this->id->setDbValue($rs->fields('id'));
+		$this->datetime->setDbValue($rs->fields('datetime'));
+		$this->script->setDbValue($rs->fields('script'));
+		$this->user->setDbValue($rs->fields('user'));
+		$this->action->setDbValue($rs->fields('action'));
+		$this->_table->setDbValue($rs->fields('table'));
+		$this->_field->setDbValue($rs->fields('field'));
+		$this->keyvalue->setDbValue($rs->fields('keyvalue'));
+		$this->oldvalue->setDbValue($rs->fields('oldvalue'));
+		$this->newvalue->setDbValue($rs->fields('newvalue'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->user_id->DbValue = $row['user_id'];
-		$this->username->DbValue = $row['username'];
-		$this->password->DbValue = $row['password'];
-		$this->userlevel->DbValue = $row['userlevel'];
+		$this->id->DbValue = $row['id'];
+		$this->datetime->DbValue = $row['datetime'];
+		$this->script->DbValue = $row['script'];
+		$this->user->DbValue = $row['user'];
+		$this->action->DbValue = $row['action'];
+		$this->_table->DbValue = $row['table'];
+		$this->_field->DbValue = $row['field'];
+		$this->keyvalue->DbValue = $row['keyvalue'];
+		$this->oldvalue->DbValue = $row['oldvalue'];
+		$this->newvalue->DbValue = $row['newvalue'];
 	}
 
 	// Render row values based on field settings
@@ -701,47 +718,109 @@ class ctb_user_view extends ctb_user {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// user_id
-		// username
-		// password
-		// userlevel
+		// id
+		// datetime
+		// script
+		// user
+		// action
+		// table
+		// field
+		// keyvalue
+		// oldvalue
+		// newvalue
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// username
-		$this->username->ViewValue = $this->username->CurrentValue;
-		$this->username->ViewCustomAttributes = "";
+		// id
+		$this->id->ViewValue = $this->id->CurrentValue;
+		$this->id->ViewCustomAttributes = "";
 
-		// password
-		$this->password->ViewValue = $this->password->CurrentValue;
-		$this->password->ViewCustomAttributes = "";
+		// datetime
+		$this->datetime->ViewValue = $this->datetime->CurrentValue;
+		$this->datetime->ViewValue = ew_FormatDateTime($this->datetime->ViewValue, 0);
+		$this->datetime->ViewCustomAttributes = "";
 
-		// userlevel
-		if ($Security->CanAdmin()) { // System admin
-		if (strval($this->userlevel->CurrentValue) <> "") {
-			$this->userlevel->ViewValue = $this->userlevel->OptionCaption($this->userlevel->CurrentValue);
-		} else {
-			$this->userlevel->ViewValue = NULL;
-		}
-		} else {
-			$this->userlevel->ViewValue = $Language->Phrase("PasswordMask");
-		}
-		$this->userlevel->ViewCustomAttributes = "";
+		// script
+		$this->script->ViewValue = $this->script->CurrentValue;
+		$this->script->ViewCustomAttributes = "";
 
-			// username
-			$this->username->LinkCustomAttributes = "";
-			$this->username->HrefValue = "";
-			$this->username->TooltipValue = "";
+		// user
+		$this->user->ViewValue = $this->user->CurrentValue;
+		$this->user->ViewCustomAttributes = "";
 
-			// password
-			$this->password->LinkCustomAttributes = "";
-			$this->password->HrefValue = "";
-			$this->password->TooltipValue = "";
+		// action
+		$this->action->ViewValue = $this->action->CurrentValue;
+		$this->action->ViewCustomAttributes = "";
 
-			// userlevel
-			$this->userlevel->LinkCustomAttributes = "";
-			$this->userlevel->HrefValue = "";
-			$this->userlevel->TooltipValue = "";
+		// table
+		$this->_table->ViewValue = $this->_table->CurrentValue;
+		$this->_table->ViewCustomAttributes = "";
+
+		// field
+		$this->_field->ViewValue = $this->_field->CurrentValue;
+		$this->_field->ViewCustomAttributes = "";
+
+		// keyvalue
+		$this->keyvalue->ViewValue = $this->keyvalue->CurrentValue;
+		$this->keyvalue->ViewCustomAttributes = "";
+
+		// oldvalue
+		$this->oldvalue->ViewValue = $this->oldvalue->CurrentValue;
+		$this->oldvalue->ViewCustomAttributes = "";
+
+		// newvalue
+		$this->newvalue->ViewValue = $this->newvalue->CurrentValue;
+		$this->newvalue->ViewCustomAttributes = "";
+
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
+
+			// datetime
+			$this->datetime->LinkCustomAttributes = "";
+			$this->datetime->HrefValue = "";
+			$this->datetime->TooltipValue = "";
+
+			// script
+			$this->script->LinkCustomAttributes = "";
+			$this->script->HrefValue = "";
+			$this->script->TooltipValue = "";
+
+			// user
+			$this->user->LinkCustomAttributes = "";
+			$this->user->HrefValue = "";
+			$this->user->TooltipValue = "";
+
+			// action
+			$this->action->LinkCustomAttributes = "";
+			$this->action->HrefValue = "";
+			$this->action->TooltipValue = "";
+
+			// table
+			$this->_table->LinkCustomAttributes = "";
+			$this->_table->HrefValue = "";
+			$this->_table->TooltipValue = "";
+
+			// field
+			$this->_field->LinkCustomAttributes = "";
+			$this->_field->HrefValue = "";
+			$this->_field->TooltipValue = "";
+
+			// keyvalue
+			$this->keyvalue->LinkCustomAttributes = "";
+			$this->keyvalue->HrefValue = "";
+			$this->keyvalue->TooltipValue = "";
+
+			// oldvalue
+			$this->oldvalue->LinkCustomAttributes = "";
+			$this->oldvalue->HrefValue = "";
+			$this->oldvalue->TooltipValue = "";
+
+			// newvalue
+			$this->newvalue->LinkCustomAttributes = "";
+			$this->newvalue->HrefValue = "";
+			$this->newvalue->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -791,7 +870,7 @@ class ctb_user_view extends ctb_user {
 		// Export to Email
 		$item = &$this->ExportOptions->Add("email");
 		$url = "";
-		$item->Body = "<button id=\"emf_tb_user\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_tb_user',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.ftb_userview,key:" . ew_ArrayToJsonAttr($this->RecKey) . ",sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
+		$item->Body = "<button id=\"emf_audittrail\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_audittrail',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.faudittrailview,key:" . ew_ArrayToJsonAttr($this->RecKey) . ",sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
 		$item->Visible = TRUE;
 
 		// Drop down button for export
@@ -1001,7 +1080,7 @@ class ctb_user_view extends ctb_user {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_userlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("audittraillist.php"), "", $this->TableVar, TRUE);
 		$PageId = "view";
 		$Breadcrumb->Add("view", $PageId, $url);
 	}
@@ -1020,13 +1099,6 @@ class ctb_user_view extends ctb_user {
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
 		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 'tb_user';
-		$usr = CurrentUserName();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
 
 	// Page Load event
@@ -1120,30 +1192,30 @@ class ctb_user_view extends ctb_user {
 <?php
 
 // Create page object
-if (!isset($tb_user_view)) $tb_user_view = new ctb_user_view();
+if (!isset($audittrail_view)) $audittrail_view = new caudittrail_view();
 
 // Page init
-$tb_user_view->Page_Init();
+$audittrail_view->Page_Init();
 
 // Page main
-$tb_user_view->Page_Main();
+$audittrail_view->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$tb_user_view->Page_Render();
+$audittrail_view->Page_Render();
 ?>
 <?php include_once "header.php" ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($audittrail->Export == "") { ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "view";
-var CurrentForm = ftb_userview = new ew_Form("ftb_userview", "view");
+var CurrentForm = faudittrailview = new ew_Form("faudittrailview", "view");
 
 // Form_CustomValidate event
-ftb_userview.Form_CustomValidate = 
+faudittrailview.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1152,101 +1224,176 @@ ftb_userview.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ftb_userview.ValidateRequired = true;
+faudittrailview.ValidateRequired = true;
 <?php } else { ?>
-ftb_userview.ValidateRequired = false; 
+faudittrailview.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ftb_userview.Lists["x_userlevel"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
-ftb_userview.Lists["x_userlevel"].Options = <?php echo json_encode($tb_user->userlevel->Options()) ?>;
-
 // Form object for search
+
 </script>
 <script type="text/javascript">
 
 // Write your client script here, no need to add script tags.
 </script>
 <?php } ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($audittrail->Export == "") { ?>
 <div class="ewToolbar">
-<?php if (!$tb_user_view->IsModal) { ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if (!$audittrail_view->IsModal) { ?>
+<?php if ($audittrail->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php } ?>
-<?php $tb_user_view->ExportOptions->Render("body") ?>
+<?php $audittrail_view->ExportOptions->Render("body") ?>
 <?php
-	foreach ($tb_user_view->OtherOptions as &$option)
+	foreach ($audittrail_view->OtherOptions as &$option)
 		$option->Render("body");
 ?>
-<?php if (!$tb_user_view->IsModal) { ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if (!$audittrail_view->IsModal) { ?>
+<?php if ($audittrail->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $tb_user_view->ShowPageHeader(); ?>
+<?php $audittrail_view->ShowPageHeader(); ?>
 <?php
-$tb_user_view->ShowMessage();
+$audittrail_view->ShowMessage();
 ?>
-<form name="ftb_userview" id="ftb_userview" class="form-inline ewForm ewViewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($tb_user_view->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_user_view->Token ?>">
+<form name="faudittrailview" id="faudittrailview" class="form-inline ewForm ewViewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($audittrail_view->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $audittrail_view->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="tb_user">
-<?php if ($tb_user_view->IsModal) { ?>
+<input type="hidden" name="t" value="audittrail">
+<?php if ($audittrail_view->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <table class="table table-bordered table-striped ewViewTable">
-<?php if ($tb_user->username->Visible) { // username ?>
-	<tr id="r_username">
-		<td><span id="elh_tb_user_username"><?php echo $tb_user->username->FldCaption() ?></span></td>
-		<td data-name="username"<?php echo $tb_user->username->CellAttributes() ?>>
-<span id="el_tb_user_username">
-<span<?php echo $tb_user->username->ViewAttributes() ?>>
-<?php echo $tb_user->username->ViewValue ?></span>
+<?php if ($audittrail->id->Visible) { // id ?>
+	<tr id="r_id">
+		<td><span id="elh_audittrail_id"><?php echo $audittrail->id->FldCaption() ?></span></td>
+		<td data-name="id"<?php echo $audittrail->id->CellAttributes() ?>>
+<span id="el_audittrail_id">
+<span<?php echo $audittrail->id->ViewAttributes() ?>>
+<?php echo $audittrail->id->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_user->password->Visible) { // password ?>
-	<tr id="r_password">
-		<td><span id="elh_tb_user_password"><?php echo $tb_user->password->FldCaption() ?></span></td>
-		<td data-name="password"<?php echo $tb_user->password->CellAttributes() ?>>
-<span id="el_tb_user_password">
-<span<?php echo $tb_user->password->ViewAttributes() ?>>
-<?php echo $tb_user->password->ViewValue ?></span>
+<?php if ($audittrail->datetime->Visible) { // datetime ?>
+	<tr id="r_datetime">
+		<td><span id="elh_audittrail_datetime"><?php echo $audittrail->datetime->FldCaption() ?></span></td>
+		<td data-name="datetime"<?php echo $audittrail->datetime->CellAttributes() ?>>
+<span id="el_audittrail_datetime">
+<span<?php echo $audittrail->datetime->ViewAttributes() ?>>
+<?php echo $audittrail->datetime->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_user->userlevel->Visible) { // userlevel ?>
-	<tr id="r_userlevel">
-		<td><span id="elh_tb_user_userlevel"><?php echo $tb_user->userlevel->FldCaption() ?></span></td>
-		<td data-name="userlevel"<?php echo $tb_user->userlevel->CellAttributes() ?>>
-<span id="el_tb_user_userlevel">
-<span<?php echo $tb_user->userlevel->ViewAttributes() ?>>
-<?php echo $tb_user->userlevel->ViewValue ?></span>
+<?php if ($audittrail->script->Visible) { // script ?>
+	<tr id="r_script">
+		<td><span id="elh_audittrail_script"><?php echo $audittrail->script->FldCaption() ?></span></td>
+		<td data-name="script"<?php echo $audittrail->script->CellAttributes() ?>>
+<span id="el_audittrail_script">
+<span<?php echo $audittrail->script->ViewAttributes() ?>>
+<?php echo $audittrail->script->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->user->Visible) { // user ?>
+	<tr id="r_user">
+		<td><span id="elh_audittrail_user"><?php echo $audittrail->user->FldCaption() ?></span></td>
+		<td data-name="user"<?php echo $audittrail->user->CellAttributes() ?>>
+<span id="el_audittrail_user">
+<span<?php echo $audittrail->user->ViewAttributes() ?>>
+<?php echo $audittrail->user->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->action->Visible) { // action ?>
+	<tr id="r_action">
+		<td><span id="elh_audittrail_action"><?php echo $audittrail->action->FldCaption() ?></span></td>
+		<td data-name="action"<?php echo $audittrail->action->CellAttributes() ?>>
+<span id="el_audittrail_action">
+<span<?php echo $audittrail->action->ViewAttributes() ?>>
+<?php echo $audittrail->action->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->_table->Visible) { // table ?>
+	<tr id="r__table">
+		<td><span id="elh_audittrail__table"><?php echo $audittrail->_table->FldCaption() ?></span></td>
+		<td data-name="_table"<?php echo $audittrail->_table->CellAttributes() ?>>
+<span id="el_audittrail__table">
+<span<?php echo $audittrail->_table->ViewAttributes() ?>>
+<?php echo $audittrail->_table->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->_field->Visible) { // field ?>
+	<tr id="r__field">
+		<td><span id="elh_audittrail__field"><?php echo $audittrail->_field->FldCaption() ?></span></td>
+		<td data-name="_field"<?php echo $audittrail->_field->CellAttributes() ?>>
+<span id="el_audittrail__field">
+<span<?php echo $audittrail->_field->ViewAttributes() ?>>
+<?php echo $audittrail->_field->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->keyvalue->Visible) { // keyvalue ?>
+	<tr id="r_keyvalue">
+		<td><span id="elh_audittrail_keyvalue"><?php echo $audittrail->keyvalue->FldCaption() ?></span></td>
+		<td data-name="keyvalue"<?php echo $audittrail->keyvalue->CellAttributes() ?>>
+<span id="el_audittrail_keyvalue">
+<span<?php echo $audittrail->keyvalue->ViewAttributes() ?>>
+<?php echo $audittrail->keyvalue->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->oldvalue->Visible) { // oldvalue ?>
+	<tr id="r_oldvalue">
+		<td><span id="elh_audittrail_oldvalue"><?php echo $audittrail->oldvalue->FldCaption() ?></span></td>
+		<td data-name="oldvalue"<?php echo $audittrail->oldvalue->CellAttributes() ?>>
+<span id="el_audittrail_oldvalue">
+<span<?php echo $audittrail->oldvalue->ViewAttributes() ?>>
+<?php echo $audittrail->oldvalue->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($audittrail->newvalue->Visible) { // newvalue ?>
+	<tr id="r_newvalue">
+		<td><span id="elh_audittrail_newvalue"><?php echo $audittrail->newvalue->FldCaption() ?></span></td>
+		<td data-name="newvalue"<?php echo $audittrail->newvalue->CellAttributes() ?>>
+<span id="el_audittrail_newvalue">
+<span<?php echo $audittrail->newvalue->ViewAttributes() ?>>
+<?php echo $audittrail->newvalue->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
 </table>
 </form>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($audittrail->Export == "") { ?>
 <script type="text/javascript">
-ftb_userview.Init();
+faudittrailview.Init();
 </script>
 <?php } ?>
 <?php
-$tb_user_view->ShowPageFooter();
+$audittrail_view->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
-<?php if ($tb_user->Export == "") { ?>
+<?php if ($audittrail->Export == "") { ?>
 <script type="text/javascript">
 
 // Write your table-specific startup script here
@@ -1256,5 +1403,5 @@ if (EW_DEBUG_ENABLED)
 <?php } ?>
 <?php include_once "footer.php" ?>
 <?php
-$tb_user_view->Page_Terminate();
+$audittrail_view->Page_Terminate();
 ?>
