@@ -25,7 +25,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME, TRUE); // Config file name
 define("EW_PROJECT_ID", "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", 'JUv3nig4dr8Qpw7v', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 'O2Yz9FzgzzeB9AJy', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/tetrasma.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -766,7 +766,7 @@ define("EW_BASIC_SEARCH_ANY_FIELDS", FALSE, TRUE); // Search "All keywords" in a
 
 // Validate option
 define("EW_CLIENT_VALIDATE", TRUE, TRUE);
-define("EW_SERVER_VALIDATE", FALSE, TRUE);
+define("EW_SERVER_VALIDATE", TRUE, TRUE);
 
 // Blob field byte count for hash value calculation
 define("EW_BLOB_FIELD_BYTE_COUNT", 200, TRUE);
@@ -925,5 +925,7 @@ define("EW_MENU_ROOT_GROUP_TITLE_AS_SUBMENU", FALSE, TRUE);
 define("EW_SHOW_RIGHT_MENU", FALSE, TRUE);
 ?>
 <?php
-define("EW_PDF_STYLESHEET_FILENAME", "", TRUE); // Export PDF CSS styles
+define("EW_PDF_STYLESHEET_FILENAME", "phpcss/ewpdf.css", TRUE); // export PDF CSS styles
+define("EW_PDF_MEMORY_LIMIT", "128M", TRUE); // Memory limit
+define("EW_PDF_TIME_LIMIT", 120, TRUE); // Time limit
 ?>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2016/12/30" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2016/12/31" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -604,6 +604,9 @@
     <menu id="10">
       <phrase id="menutext" value="Level 4" />
     </menu>
+    <menu id="19">
+      <phrase id="menutext" value="View Akun" />
+    </menu>
     <menu id="16">
       <phrase id="menutext" value="Manajemen User" />
     </menu>
@@ -759,6 +762,9 @@
         <phrase id="fldtagvalue3" value="0" />
         <phrase id="fldtagcaption3" value="Default" />
       </field>
+    </table>
+    <table id="view_akun_php">
+      <phrase id="tblcaption" value="View Akun" />
     </table>
   </project>
 </ew-language>

@@ -280,6 +280,8 @@ class cdefault {
 			$this->Page_Terminate("tb_level4list.php");
 		if ($Security->AllowList(CurrentProjectID() . 'tb_user'))
 			$this->Page_Terminate("tb_userlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'view_akun.php'))
+			$this->Page_Terminate("view_akun.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {
