@@ -291,6 +291,7 @@ class ctb_level4_edit extends ctb_level4 {
 		$this->level3_id->SetVisibility();
 		$this->level4_no->SetVisibility();
 		$this->level4_nama->SetVisibility();
+		$this->saldo_awal->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -513,6 +514,9 @@ class ctb_level4_edit extends ctb_level4 {
 		if (!$this->level4_nama->FldIsDetailKey) {
 			$this->level4_nama->setFormValue($objForm->GetValue("x_level4_nama"));
 		}
+		if (!$this->saldo_awal->FldIsDetailKey) {
+			$this->saldo_awal->setFormValue($objForm->GetValue("x_saldo_awal"));
+		}
 		if (!$this->level4_id->FldIsDetailKey)
 			$this->level4_id->setFormValue($objForm->GetValue("x_level4_id"));
 	}
@@ -527,6 +531,7 @@ class ctb_level4_edit extends ctb_level4 {
 		$this->level3_id->CurrentValue = $this->level3_id->FormValue;
 		$this->level4_no->CurrentValue = $this->level4_no->FormValue;
 		$this->level4_nama->CurrentValue = $this->level4_nama->FormValue;
+		$this->saldo_awal->CurrentValue = $this->saldo_awal->FormValue;
 	}
 
 	// Load row based on key values
@@ -579,6 +584,8 @@ class ctb_level4_edit extends ctb_level4 {
 		}
 		$this->level4_no->setDbValue($rs->fields('level4_no'));
 		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
+		$this->saldo_awal->setDbValue($rs->fields('saldo_awal'));
+		$this->saldo->setDbValue($rs->fields('saldo'));
 	}
 
 	// Load DbValue from recordset
@@ -591,6 +598,8 @@ class ctb_level4_edit extends ctb_level4 {
 		$this->level3_id->DbValue = $row['level3_id'];
 		$this->level4_no->DbValue = $row['level4_no'];
 		$this->level4_nama->DbValue = $row['level4_nama'];
+		$this->saldo_awal->DbValue = $row['saldo_awal'];
+		$this->saldo->DbValue = $row['saldo'];
 	}
 
 	// Render row values based on field settings
@@ -609,6 +618,8 @@ class ctb_level4_edit extends ctb_level4 {
 		// level3_id
 		// level4_no
 		// level4_nama
+		// saldo_awal
+		// saldo
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -707,6 +718,12 @@ class ctb_level4_edit extends ctb_level4 {
 		$this->level4_nama->ViewValue = $this->level4_nama->CurrentValue;
 		$this->level4_nama->ViewCustomAttributes = "";
 
+		// saldo_awal
+		$this->saldo_awal->ViewValue = $this->saldo_awal->CurrentValue;
+		$this->saldo_awal->ViewValue = ew_FormatNumber($this->saldo_awal->ViewValue, 0, -2, -2, -1);
+		$this->saldo_awal->CellCssStyle .= "text-align: right;";
+		$this->saldo_awal->ViewCustomAttributes = "";
+
 			// level1_id
 			$this->level1_id->LinkCustomAttributes = "";
 			$this->level1_id->HrefValue = "";
@@ -731,6 +748,11 @@ class ctb_level4_edit extends ctb_level4 {
 			$this->level4_nama->LinkCustomAttributes = "";
 			$this->level4_nama->HrefValue = "";
 			$this->level4_nama->TooltipValue = "";
+
+			// saldo_awal
+			$this->saldo_awal->LinkCustomAttributes = "";
+			$this->saldo_awal->HrefValue = "";
+			$this->saldo_awal->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// level1_id
@@ -826,6 +848,12 @@ class ctb_level4_edit extends ctb_level4 {
 			$this->level4_nama->EditValue = ew_HtmlEncode($this->level4_nama->CurrentValue);
 			$this->level4_nama->PlaceHolder = ew_RemoveHtml($this->level4_nama->FldCaption());
 
+			// saldo_awal
+			$this->saldo_awal->EditAttrs["class"] = "form-control";
+			$this->saldo_awal->EditCustomAttributes = "";
+			$this->saldo_awal->EditValue = ew_HtmlEncode($this->saldo_awal->CurrentValue);
+			$this->saldo_awal->PlaceHolder = ew_RemoveHtml($this->saldo_awal->FldCaption());
+
 			// Edit refer script
 			// level1_id
 
@@ -847,6 +875,10 @@ class ctb_level4_edit extends ctb_level4 {
 			// level4_nama
 			$this->level4_nama->LinkCustomAttributes = "";
 			$this->level4_nama->HrefValue = "";
+
+			// saldo_awal
+			$this->saldo_awal->LinkCustomAttributes = "";
+			$this->saldo_awal->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -883,6 +915,9 @@ class ctb_level4_edit extends ctb_level4 {
 		}
 		if (!$this->level4_nama->FldIsDetailKey && !is_null($this->level4_nama->FormValue) && $this->level4_nama->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->level4_nama->FldCaption(), $this->level4_nama->ReqErrMsg));
+		}
+		if (!ew_CheckInteger($this->saldo_awal->FormValue)) {
+			ew_AddMessage($gsFormError, $this->saldo_awal->FldErrMsg());
 		}
 
 		// Return validate result
@@ -934,6 +969,9 @@ class ctb_level4_edit extends ctb_level4 {
 
 			// level4_nama
 			$this->level4_nama->SetDbValueDef($rsnew, $this->level4_nama->CurrentValue, "", $this->level4_nama->ReadOnly);
+
+			// saldo_awal
+			$this->saldo_awal->SetDbValueDef($rsnew, $this->saldo_awal->CurrentValue, NULL, $this->saldo_awal->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -1248,6 +1286,9 @@ ftb_level4edit.Validate = function() {
 			elm = this.GetElements("x" + infix + "_level4_nama");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_level4->level4_nama->FldCaption(), $tb_level4->level4_nama->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_saldo_awal");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_level4->saldo_awal->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1377,6 +1418,16 @@ $tb_level4_edit->ShowMessage();
 <input type="text" data-table="tb_level4" data-field="x_level4_nama" name="x_level4_nama" id="x_level4_nama" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($tb_level4->level4_nama->getPlaceHolder()) ?>" value="<?php echo $tb_level4->level4_nama->EditValue ?>"<?php echo $tb_level4->level4_nama->EditAttributes() ?>>
 </span>
 <?php echo $tb_level4->level4_nama->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_level4->saldo_awal->Visible) { // saldo_awal ?>
+	<div id="r_saldo_awal" class="form-group">
+		<label id="elh_tb_level4_saldo_awal" for="x_saldo_awal" class="col-sm-2 control-label ewLabel"><?php echo $tb_level4->saldo_awal->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_level4->saldo_awal->CellAttributes() ?>>
+<span id="el_tb_level4_saldo_awal">
+<input type="text" data-table="tb_level4" data-field="x_saldo_awal" name="x_saldo_awal" id="x_saldo_awal" size="30" placeholder="<?php echo ew_HtmlEncode($tb_level4->saldo_awal->getPlaceHolder()) ?>" value="<?php echo $tb_level4->saldo_awal->EditValue ?>"<?php echo $tb_level4->saldo_awal->EditAttributes() ?>>
+</span>
+<?php echo $tb_level4->saldo_awal->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>

@@ -5,8 +5,9 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "tb_level4info.php" ?>
+<?php include_once "tb_jurnalinfo.php" ?>
 <?php include_once "tb_userinfo.php" ?>
+<?php include_once "tb_detailgridcls.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -14,9 +15,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$tb_level4_view = NULL; // Initialize page object first
+$tb_jurnal_view = NULL; // Initialize page object first
 
-class ctb_level4_view extends ctb_level4 {
+class ctb_jurnal_view extends ctb_jurnal {
 
 	// Page ID
 	var $PageID = 'view';
@@ -25,10 +26,10 @@ class ctb_level4_view extends ctb_level4 {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'tb_level4';
+	var $TableName = 'tb_jurnal';
 
 	// Page object name
-	var $PageObjName = 'tb_level4_view';
+	var $PageObjName = 'tb_jurnal_view';
 
 	// Page name
 	function PageName() {
@@ -264,15 +265,15 @@ class ctb_level4_view extends ctb_level4 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (tb_level4)
-		if (!isset($GLOBALS["tb_level4"]) || get_class($GLOBALS["tb_level4"]) == "ctb_level4") {
-			$GLOBALS["tb_level4"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["tb_level4"];
+		// Table object (tb_jurnal)
+		if (!isset($GLOBALS["tb_jurnal"]) || get_class($GLOBALS["tb_jurnal"]) == "ctb_jurnal") {
+			$GLOBALS["tb_jurnal"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["tb_jurnal"];
 		}
 		$KeyUrl = "";
-		if (@$_GET["level4_id"] <> "") {
-			$this->RecKey["level4_id"] = $_GET["level4_id"];
-			$KeyUrl .= "&amp;level4_id=" . urlencode($this->RecKey["level4_id"]);
+		if (@$_GET["jurnal_id"] <> "") {
+			$this->RecKey["jurnal_id"] = $_GET["jurnal_id"];
+			$KeyUrl .= "&amp;jurnal_id=" . urlencode($this->RecKey["jurnal_id"]);
 		}
 		$this->ExportPrintUrl = $this->PageUrl() . "export=print" . $KeyUrl;
 		$this->ExportHtmlUrl = $this->PageUrl() . "export=html" . $KeyUrl;
@@ -291,7 +292,7 @@ class ctb_level4_view extends ctb_level4 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'tb_level4', TRUE);
+			define("EW_TABLE_NAME", 'tb_jurnal', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -335,7 +336,7 @@ class ctb_level4_view extends ctb_level4 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("tb_level4list.php"));
+				$this->Page_Terminate(ew_GetUrl("tb_jurnallist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -356,9 +357,9 @@ class ctb_level4_view extends ctb_level4 {
 			$this->setExportReturnUrl(ew_CurrentUrl());
 		}
 		$gsExportFile = $this->TableVar; // Get export file, used in header
-		if (@$_GET["level4_id"] <> "") {
+		if (@$_GET["jurnal_id"] <> "") {
 			if ($gsExportFile <> "") $gsExportFile .= "_";
-			$gsExportFile .= ew_StripSlashes($_GET["level4_id"]);
+			$gsExportFile .= ew_StripSlashes($_GET["jurnal_id"]);
 		}
 
 		// Get custom export parameters
@@ -384,12 +385,12 @@ class ctb_level4_view extends ctb_level4 {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->level1_id->SetVisibility();
-		$this->level2_id->SetVisibility();
-		$this->level3_id->SetVisibility();
-		$this->level4_no->SetVisibility();
-		$this->level4_nama->SetVisibility();
-		$this->saldo_awal->SetVisibility();
+		$this->jurnal_id->SetVisibility();
+		$this->jurnal_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
+		$this->jenis_jurnal->SetVisibility();
+		$this->no_bukti->SetVisibility();
+		$this->tgl->SetVisibility();
+		$this->ket->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -421,13 +422,13 @@ class ctb_level4_view extends ctb_level4 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $tb_level4;
+		global $EW_EXPORT, $tb_jurnal;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($tb_level4);
+				$doc = new $class($tb_jurnal);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -493,14 +494,14 @@ class ctb_level4_view extends ctb_level4 {
 		if ($this->Export == "")
 			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
-			if (@$_GET["level4_id"] <> "") {
-				$this->level4_id->setQueryStringValue($_GET["level4_id"]);
-				$this->RecKey["level4_id"] = $this->level4_id->QueryStringValue;
-			} elseif (@$_POST["level4_id"] <> "") {
-				$this->level4_id->setFormValue($_POST["level4_id"]);
-				$this->RecKey["level4_id"] = $this->level4_id->FormValue;
+			if (@$_GET["jurnal_id"] <> "") {
+				$this->jurnal_id->setQueryStringValue($_GET["jurnal_id"]);
+				$this->RecKey["jurnal_id"] = $this->jurnal_id->QueryStringValue;
+			} elseif (@$_POST["jurnal_id"] <> "") {
+				$this->jurnal_id->setFormValue($_POST["jurnal_id"]);
+				$this->RecKey["jurnal_id"] = $this->jurnal_id->FormValue;
 			} else {
-				$sReturnUrl = "tb_level4list.php"; // Return to list
+				$sReturnUrl = "tb_jurnallist.php"; // Return to list
 			}
 
 			// Get action
@@ -510,7 +511,7 @@ class ctb_level4_view extends ctb_level4 {
 					if (!$this->LoadRow()) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-						$sReturnUrl = "tb_level4list.php"; // No matching record, return to list
+						$sReturnUrl = "tb_jurnallist.php"; // No matching record, return to list
 					}
 			}
 
@@ -521,7 +522,7 @@ class ctb_level4_view extends ctb_level4 {
 				exit();
 			}
 		} else {
-			$sReturnUrl = "tb_level4list.php"; // Not page request, return to list
+			$sReturnUrl = "tb_jurnallist.php"; // Not page request, return to list
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
@@ -530,6 +531,9 @@ class ctb_level4_view extends ctb_level4 {
 		$this->RowType = EW_ROWTYPE_VIEW;
 		$this->ResetAttrs();
 		$this->RenderRow();
+
+		// Set up detail parameters
+		$this->SetUpDetailParms();
 	}
 
 	// Set up other options
@@ -572,6 +576,81 @@ class ctb_level4_view extends ctb_level4 {
 		else
 			$item->Body = "<a class=\"ewAction ewDelete\" title=\"" . ew_HtmlTitle($Language->Phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("ViewPageDeleteLink")) . "\" href=\"" . ew_HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("ViewPageDeleteLink") . "</a>";
 		$item->Visible = ($this->DeleteUrl <> "" && $Security->CanDelete());
+		$option = &$options["detail"];
+		$DetailTableLink = "";
+		$DetailViewTblVar = "";
+		$DetailCopyTblVar = "";
+		$DetailEditTblVar = "";
+
+		// "detail_tb_detail"
+		$item = &$option->Add("detail_tb_detail");
+		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("tb_detail", "TblCaption");
+		$body = "<a class=\"btn btn-default btn-sm ewRowLink ewDetail\" data-action=\"list\" href=\"" . ew_HtmlEncode("tb_detaillist.php?" . EW_TABLE_SHOW_MASTER . "=tb_jurnal&fk_jurnal_id=" . urlencode(strval($this->jurnal_id->CurrentValue)) . "") . "\">" . $body . "</a>";
+		$links = "";
+		if ($GLOBALS["tb_detail_grid"] && $GLOBALS["tb_detail_grid"]->DetailView && $Security->CanView() && $Security->AllowView(CurrentProjectID() . 'tb_detail')) {
+			$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=tb_detail")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+			if ($DetailViewTblVar <> "") $DetailViewTblVar .= ",";
+			$DetailViewTblVar .= "tb_detail";
+		}
+		if ($GLOBALS["tb_detail_grid"] && $GLOBALS["tb_detail_grid"]->DetailEdit && $Security->CanEdit() && $Security->AllowEdit(CurrentProjectID() . 'tb_detail')) {
+			$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=tb_detail")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+			if ($DetailEditTblVar <> "") $DetailEditTblVar .= ",";
+			$DetailEditTblVar .= "tb_detail";
+		}
+		if ($GLOBALS["tb_detail_grid"] && $GLOBALS["tb_detail_grid"]->DetailAdd && $Security->CanAdd() && $Security->AllowAdd(CurrentProjectID() . 'tb_detail')) {
+			$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=tb_detail")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+			if ($DetailCopyTblVar <> "") $DetailCopyTblVar .= ",";
+			$DetailCopyTblVar .= "tb_detail";
+		}
+		if ($links <> "") {
+			$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewDetail\" data-toggle=\"dropdown\"><b class=\"caret\"></b></button>";
+			$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
+		}
+		$body = "<div class=\"btn-group\">" . $body . "</div>";
+		$item->Body = $body;
+		$item->Visible = $Security->AllowList(CurrentProjectID() . 'tb_detail');
+		if ($item->Visible) {
+			if ($DetailTableLink <> "") $DetailTableLink .= ",";
+			$DetailTableLink .= "tb_detail";
+		}
+		if ($this->ShowMultipleDetails) $item->Visible = FALSE;
+
+		// Multiple details
+		if ($this->ShowMultipleDetails) {
+			$body = $Language->Phrase("MultipleMasterDetails");
+			$body = "<div class=\"btn-group\">";
+			$links = "";
+			if ($DetailViewTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailViewTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+			}
+			if ($DetailEditTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailEditTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+			}
+			if ($DetailCopyTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailCopyTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+			}
+			if ($links <> "") {
+				$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewMasterDetail\" title=\"" . ew_HtmlTitle($Language->Phrase("MultipleMasterDetails")) . "\" data-toggle=\"dropdown\">" . $Language->Phrase("MultipleMasterDetails") . "<b class=\"caret\"></b></button>";
+				$body .= "<ul class=\"dropdown-menu ewMenu\">". $links . "</ul>";
+			}
+			$body .= "</div>";
+
+			// Multiple details
+			$oListOpt = &$option->Add("details");
+			$oListOpt->Body = $body;
+		}
+
+		// Set up detail default
+		$option = &$options["detail"];
+		$options["detail"]->DropDownButtonPhrase = $Language->Phrase("ButtonDetails");
+		$option->UseImageAndText = TRUE;
+		$ar = explode(",", $DetailTableLink);
+		$cnt = count($ar);
+		$option->UseDropDownButton = ($cnt > 1);
+		$option->UseButtonGroup = TRUE;
+		$item = &$option->Add($option->GroupOptionName);
+		$item->Body = "";
+		$item->Visible = FALSE;
 
 		// Set up action default
 		$option = &$options["action"];
@@ -632,7 +711,7 @@ class ctb_level4_view extends ctb_level4 {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -676,43 +755,22 @@ class ctb_level4_view extends ctb_level4 {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		if ($this->AuditTrailOnView) $this->WriteAuditTrailOnView($row);
-		$this->level4_id->setDbValue($rs->fields('level4_id'));
-		$this->level1_id->setDbValue($rs->fields('level1_id'));
-		if (array_key_exists('EV__level1_id', $rs->fields)) {
-			$this->level1_id->VirtualValue = $rs->fields('EV__level1_id'); // Set up virtual field value
-		} else {
-			$this->level1_id->VirtualValue = ""; // Clear value
-		}
-		$this->level2_id->setDbValue($rs->fields('level2_id'));
-		if (array_key_exists('EV__level2_id', $rs->fields)) {
-			$this->level2_id->VirtualValue = $rs->fields('EV__level2_id'); // Set up virtual field value
-		} else {
-			$this->level2_id->VirtualValue = ""; // Clear value
-		}
-		$this->level3_id->setDbValue($rs->fields('level3_id'));
-		if (array_key_exists('EV__level3_id', $rs->fields)) {
-			$this->level3_id->VirtualValue = $rs->fields('EV__level3_id'); // Set up virtual field value
-		} else {
-			$this->level3_id->VirtualValue = ""; // Clear value
-		}
-		$this->level4_no->setDbValue($rs->fields('level4_no'));
-		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
-		$this->saldo_awal->setDbValue($rs->fields('saldo_awal'));
-		$this->saldo->setDbValue($rs->fields('saldo'));
+		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
+		$this->jenis_jurnal->setDbValue($rs->fields('jenis_jurnal'));
+		$this->no_bukti->setDbValue($rs->fields('no_bukti'));
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->ket->setDbValue($rs->fields('ket'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->level4_id->DbValue = $row['level4_id'];
-		$this->level1_id->DbValue = $row['level1_id'];
-		$this->level2_id->DbValue = $row['level2_id'];
-		$this->level3_id->DbValue = $row['level3_id'];
-		$this->level4_no->DbValue = $row['level4_no'];
-		$this->level4_nama->DbValue = $row['level4_nama'];
-		$this->saldo_awal->DbValue = $row['saldo_awal'];
-		$this->saldo->DbValue = $row['saldo'];
+		$this->jurnal_id->DbValue = $row['jurnal_id'];
+		$this->jenis_jurnal->DbValue = $row['jenis_jurnal'];
+		$this->no_bukti->DbValue = $row['no_bukti'];
+		$this->tgl->DbValue = $row['tgl'];
+		$this->ket->DbValue = $row['ket'];
 	}
 
 	// Render row values based on field settings
@@ -731,147 +789,63 @@ class ctb_level4_view extends ctb_level4 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// level4_id
-		// level1_id
-		// level2_id
-		// level3_id
-		// level4_no
-		// level4_nama
-		// saldo_awal
-		// saldo
+		// jurnal_id
+		// jenis_jurnal
+		// no_bukti
+		// tgl
+		// ket
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// level1_id
-		if ($this->level1_id->VirtualValue <> "") {
-			$this->level1_id->ViewValue = $this->level1_id->VirtualValue;
+		// jurnal_id
+		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
+		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// jenis_jurnal
+		if (strval($this->jenis_jurnal->CurrentValue) <> "") {
+			$this->jenis_jurnal->ViewValue = $this->jenis_jurnal->OptionCaption($this->jenis_jurnal->CurrentValue);
 		} else {
-			$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-		if (strval($this->level1_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
-		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-			}
-		} else {
-			$this->level1_id->ViewValue = NULL;
+			$this->jenis_jurnal->ViewValue = NULL;
 		}
-		}
-		$this->level1_id->ViewCustomAttributes = "";
+		$this->jenis_jurnal->ViewCustomAttributes = "";
 
-		// level2_id
-		if ($this->level2_id->VirtualValue <> "") {
-			$this->level2_id->ViewValue = $this->level2_id->VirtualValue;
-		} else {
-			$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
-		if (strval($this->level2_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
-		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level2_id->ViewValue = $this->level2_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
-			}
-		} else {
-			$this->level2_id->ViewValue = NULL;
-		}
-		}
-		$this->level2_id->ViewCustomAttributes = "";
+		// no_bukti
+		$this->no_bukti->ViewValue = $this->no_bukti->CurrentValue;
+		$this->no_bukti->ViewCustomAttributes = "";
 
-		// level3_id
-		if ($this->level3_id->VirtualValue <> "") {
-			$this->level3_id->ViewValue = $this->level3_id->VirtualValue;
-		} else {
-			$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
-		if (strval($this->level3_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
-		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level3_id->ViewValue = $this->level3_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
-			}
-		} else {
-			$this->level3_id->ViewValue = NULL;
-		}
-		}
-		$this->level3_id->ViewCustomAttributes = "";
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewCustomAttributes = "";
 
-		// level4_no
-		$this->level4_no->ViewValue = $this->level4_no->CurrentValue;
-		$this->level4_no->ViewCustomAttributes = "";
+		// ket
+		$this->ket->ViewValue = $this->ket->CurrentValue;
+		$this->ket->ViewCustomAttributes = "";
 
-		// level4_nama
-		$this->level4_nama->ViewValue = $this->level4_nama->CurrentValue;
-		$this->level4_nama->ViewCustomAttributes = "";
+			// jurnal_id
+			$this->jurnal_id->LinkCustomAttributes = "";
+			$this->jurnal_id->HrefValue = "";
+			$this->jurnal_id->TooltipValue = "";
 
-		// saldo_awal
-		$this->saldo_awal->ViewValue = $this->saldo_awal->CurrentValue;
-		$this->saldo_awal->ViewValue = ew_FormatNumber($this->saldo_awal->ViewValue, 0, -2, -2, -1);
-		$this->saldo_awal->CellCssStyle .= "text-align: right;";
-		$this->saldo_awal->ViewCustomAttributes = "";
+			// jenis_jurnal
+			$this->jenis_jurnal->LinkCustomAttributes = "";
+			$this->jenis_jurnal->HrefValue = "";
+			$this->jenis_jurnal->TooltipValue = "";
 
-			// level1_id
-			$this->level1_id->LinkCustomAttributes = "";
-			$this->level1_id->HrefValue = "";
-			$this->level1_id->TooltipValue = "";
+			// no_bukti
+			$this->no_bukti->LinkCustomAttributes = "";
+			$this->no_bukti->HrefValue = "";
+			$this->no_bukti->TooltipValue = "";
 
-			// level2_id
-			$this->level2_id->LinkCustomAttributes = "";
-			$this->level2_id->HrefValue = "";
-			$this->level2_id->TooltipValue = "";
+			// tgl
+			$this->tgl->LinkCustomAttributes = "";
+			$this->tgl->HrefValue = "";
+			$this->tgl->TooltipValue = "";
 
-			// level3_id
-			$this->level3_id->LinkCustomAttributes = "";
-			$this->level3_id->HrefValue = "";
-			$this->level3_id->TooltipValue = "";
-
-			// level4_no
-			$this->level4_no->LinkCustomAttributes = "";
-			$this->level4_no->HrefValue = "";
-			$this->level4_no->TooltipValue = "";
-
-			// level4_nama
-			$this->level4_nama->LinkCustomAttributes = "";
-			$this->level4_nama->HrefValue = "";
-			$this->level4_nama->TooltipValue = "";
-
-			// saldo_awal
-			$this->saldo_awal->LinkCustomAttributes = "";
-			$this->saldo_awal->HrefValue = "";
-			$this->saldo_awal->TooltipValue = "";
+			// ket
+			$this->ket->LinkCustomAttributes = "";
+			$this->ket->HrefValue = "";
+			$this->ket->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -921,7 +895,7 @@ class ctb_level4_view extends ctb_level4 {
 		// Export to Email
 		$item = &$this->ExportOptions->Add("email");
 		$url = "";
-		$item->Body = "<button id=\"emf_tb_level4\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_tb_level4',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.ftb_level4view,key:" . ew_ArrayToJsonAttr($this->RecKey) . ",sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
+		$item->Body = "<button id=\"emf_tb_jurnal\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_tb_jurnal',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.ftb_jurnalview,key:" . ew_ArrayToJsonAttr($this->RecKey) . ",sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
 		$item->Visible = TRUE;
 
 		// Drop down button for export
@@ -991,6 +965,24 @@ class ctb_level4_view extends ctb_level4 {
 		$this->Page_DataRendering($sHeader);
 		$Doc->Text .= $sHeader;
 		$this->ExportDocument($Doc, $rs, $this->StartRec, $this->StopRec, "view");
+
+		// Export detail records (tb_detail)
+		if (EW_EXPORT_DETAIL_RECORDS && in_array("tb_detail", explode(",", $this->getCurrentDetailTable()))) {
+			global $tb_detail;
+			if (!isset($tb_detail)) $tb_detail = new ctb_detail;
+			$rsdetail = $tb_detail->LoadRs($tb_detail->GetDetailFilter()); // Load detail records
+			if ($rsdetail && !$rsdetail->EOF) {
+				$ExportStyle = $Doc->Style;
+				$Doc->SetStyle("h"); // Change to horizontal
+				if ($this->Export <> "csv" || EW_EXPORT_DETAIL_RECORDS_FOR_CSV) {
+					$Doc->ExportEmptyRow();
+					$detailcnt = $rsdetail->RecordCount();
+					$tb_detail->ExportDocument($Doc, $rsdetail, 1, $detailcnt);
+				}
+				$Doc->SetStyle($ExportStyle); // Restore
+				$rsdetail->Close();
+			}
+		}
 		$sFooter = $this->PageFooter;
 		$this->Page_DataRendered($sFooter);
 		$Doc->Text .= $sFooter;
@@ -1126,12 +1118,41 @@ class ctb_level4_view extends ctb_level4 {
 		return $sQry;
 	}
 
+	// Set up detail parms based on QueryString
+	function SetUpDetailParms() {
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_DETAIL])) {
+			$sDetailTblVar = $_GET[EW_TABLE_SHOW_DETAIL];
+			$this->setCurrentDetailTable($sDetailTblVar);
+		} else {
+			$sDetailTblVar = $this->getCurrentDetailTable();
+		}
+		if ($sDetailTblVar <> "") {
+			$DetailTblVar = explode(",", $sDetailTblVar);
+			if (in_array("tb_detail", $DetailTblVar)) {
+				if (!isset($GLOBALS["tb_detail_grid"]))
+					$GLOBALS["tb_detail_grid"] = new ctb_detail_grid;
+				if ($GLOBALS["tb_detail_grid"]->DetailView) {
+					$GLOBALS["tb_detail_grid"]->CurrentMode = "view";
+
+					// Save current master table to detail table
+					$GLOBALS["tb_detail_grid"]->setCurrentMasterTable($this->TableVar);
+					$GLOBALS["tb_detail_grid"]->setStartRecordNumber(1);
+					$GLOBALS["tb_detail_grid"]->jurnal_id->FldIsDetailKey = TRUE;
+					$GLOBALS["tb_detail_grid"]->jurnal_id->CurrentValue = $this->jurnal_id->CurrentValue;
+					$GLOBALS["tb_detail_grid"]->jurnal_id->setSessionValue($GLOBALS["tb_detail_grid"]->jurnal_id->CurrentValue);
+				}
+			}
+		}
+	}
+
 	// Set up Breadcrumb
 	function SetupBreadcrumb() {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_level4list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("tb_jurnallist.php"), "", $this->TableVar, TRUE);
 		$PageId = "view";
 		$Breadcrumb->Add("view", $PageId, $url);
 	}
@@ -1154,7 +1175,7 @@ class ctb_level4_view extends ctb_level4 {
 
 	// Write Audit Trail start/end for grid update
 	function WriteAuditTrailDummy($typ) {
-		$table = 'tb_level4';
+		$table = 'tb_jurnal';
 		$usr = CurrentUserName();
 		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
@@ -1250,30 +1271,30 @@ class ctb_level4_view extends ctb_level4 {
 <?php
 
 // Create page object
-if (!isset($tb_level4_view)) $tb_level4_view = new ctb_level4_view();
+if (!isset($tb_jurnal_view)) $tb_jurnal_view = new ctb_jurnal_view();
 
 // Page init
-$tb_level4_view->Page_Init();
+$tb_jurnal_view->Page_Init();
 
 // Page main
-$tb_level4_view->Page_Main();
+$tb_jurnal_view->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$tb_level4_view->Page_Render();
+$tb_jurnal_view->Page_Render();
 ?>
 <?php include_once "header.php" ?>
-<?php if ($tb_level4->Export == "") { ?>
+<?php if ($tb_jurnal->Export == "") { ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "view";
-var CurrentForm = ftb_level4view = new ew_Form("ftb_level4view", "view");
+var CurrentForm = ftb_jurnalview = new ew_Form("ftb_jurnalview", "view");
 
 // Form_CustomValidate event
-ftb_level4view.Form_CustomValidate = 
+ftb_jurnalview.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1282,15 +1303,14 @@ ftb_level4view.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ftb_level4view.ValidateRequired = true;
+ftb_jurnalview.ValidateRequired = true;
 <?php } else { ?>
-ftb_level4view.ValidateRequired = false; 
+ftb_jurnalview.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ftb_level4view.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_no","x_level1_nama","",""],"ParentFields":[],"ChildFields":["x_level2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level1"};
-ftb_level4view.Lists["x_level2_id"] = {"LinkField":"x_level2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level2_no","x_level2_nama","",""],"ParentFields":[],"ChildFields":["x_level3_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level2"};
-ftb_level4view.Lists["x_level3_id"] = {"LinkField":"x_level3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level3_no","x_level3_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level3"};
+ftb_jurnalview.Lists["x_jenis_jurnal"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_jurnalview.Lists["x_jenis_jurnal"].Options = <?php echo json_encode($tb_jurnal->jenis_jurnal->Options()) ?>;
 
 // Form object for search
 </script>
@@ -1299,118 +1319,115 @@ ftb_level4view.Lists["x_level3_id"] = {"LinkField":"x_level3_id","Ajax":true,"Au
 // Write your client script here, no need to add script tags.
 </script>
 <?php } ?>
-<?php if ($tb_level4->Export == "") { ?>
+<?php if ($tb_jurnal->Export == "") { ?>
 <div class="ewToolbar">
-<?php if (!$tb_level4_view->IsModal) { ?>
-<?php if ($tb_level4->Export == "") { ?>
+<?php if (!$tb_jurnal_view->IsModal) { ?>
+<?php if ($tb_jurnal->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php } ?>
-<?php $tb_level4_view->ExportOptions->Render("body") ?>
+<?php $tb_jurnal_view->ExportOptions->Render("body") ?>
 <?php
-	foreach ($tb_level4_view->OtherOptions as &$option)
+	foreach ($tb_jurnal_view->OtherOptions as &$option)
 		$option->Render("body");
 ?>
-<?php if (!$tb_level4_view->IsModal) { ?>
-<?php if ($tb_level4->Export == "") { ?>
+<?php if (!$tb_jurnal_view->IsModal) { ?>
+<?php if ($tb_jurnal->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $tb_level4_view->ShowPageHeader(); ?>
+<?php $tb_jurnal_view->ShowPageHeader(); ?>
 <?php
-$tb_level4_view->ShowMessage();
+$tb_jurnal_view->ShowMessage();
 ?>
-<form name="ftb_level4view" id="ftb_level4view" class="form-inline ewForm ewViewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($tb_level4_view->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_level4_view->Token ?>">
+<form name="ftb_jurnalview" id="ftb_jurnalview" class="form-inline ewForm ewViewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($tb_jurnal_view->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $tb_jurnal_view->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="tb_level4">
-<?php if ($tb_level4_view->IsModal) { ?>
+<input type="hidden" name="t" value="tb_jurnal">
+<?php if ($tb_jurnal_view->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <table class="table table-bordered table-striped ewViewTable">
-<?php if ($tb_level4->level1_id->Visible) { // level1_id ?>
-	<tr id="r_level1_id">
-		<td><span id="elh_tb_level4_level1_id"><?php echo $tb_level4->level1_id->FldCaption() ?></span></td>
-		<td data-name="level1_id"<?php echo $tb_level4->level1_id->CellAttributes() ?>>
-<span id="el_tb_level4_level1_id">
-<span<?php echo $tb_level4->level1_id->ViewAttributes() ?>>
-<?php echo $tb_level4->level1_id->ViewValue ?></span>
+<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
+	<tr id="r_jurnal_id">
+		<td><span id="elh_tb_jurnal_jurnal_id"><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></span></td>
+		<td data-name="jurnal_id"<?php echo $tb_jurnal->jurnal_id->CellAttributes() ?>>
+<span id="el_tb_jurnal_jurnal_id">
+<span<?php echo $tb_jurnal->jurnal_id->ViewAttributes() ?>>
+<?php echo $tb_jurnal->jurnal_id->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_level4->level2_id->Visible) { // level2_id ?>
-	<tr id="r_level2_id">
-		<td><span id="elh_tb_level4_level2_id"><?php echo $tb_level4->level2_id->FldCaption() ?></span></td>
-		<td data-name="level2_id"<?php echo $tb_level4->level2_id->CellAttributes() ?>>
-<span id="el_tb_level4_level2_id">
-<span<?php echo $tb_level4->level2_id->ViewAttributes() ?>>
-<?php echo $tb_level4->level2_id->ViewValue ?></span>
+<?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
+	<tr id="r_jenis_jurnal">
+		<td><span id="elh_tb_jurnal_jenis_jurnal"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></span></td>
+		<td data-name="jenis_jurnal"<?php echo $tb_jurnal->jenis_jurnal->CellAttributes() ?>>
+<span id="el_tb_jurnal_jenis_jurnal">
+<span<?php echo $tb_jurnal->jenis_jurnal->ViewAttributes() ?>>
+<?php echo $tb_jurnal->jenis_jurnal->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_level4->level3_id->Visible) { // level3_id ?>
-	<tr id="r_level3_id">
-		<td><span id="elh_tb_level4_level3_id"><?php echo $tb_level4->level3_id->FldCaption() ?></span></td>
-		<td data-name="level3_id"<?php echo $tb_level4->level3_id->CellAttributes() ?>>
-<span id="el_tb_level4_level3_id">
-<span<?php echo $tb_level4->level3_id->ViewAttributes() ?>>
-<?php echo $tb_level4->level3_id->ViewValue ?></span>
+<?php if ($tb_jurnal->no_bukti->Visible) { // no_bukti ?>
+	<tr id="r_no_bukti">
+		<td><span id="elh_tb_jurnal_no_bukti"><?php echo $tb_jurnal->no_bukti->FldCaption() ?></span></td>
+		<td data-name="no_bukti"<?php echo $tb_jurnal->no_bukti->CellAttributes() ?>>
+<span id="el_tb_jurnal_no_bukti">
+<span<?php echo $tb_jurnal->no_bukti->ViewAttributes() ?>>
+<?php echo $tb_jurnal->no_bukti->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_level4->level4_no->Visible) { // level4_no ?>
-	<tr id="r_level4_no">
-		<td><span id="elh_tb_level4_level4_no"><?php echo $tb_level4->level4_no->FldCaption() ?></span></td>
-		<td data-name="level4_no"<?php echo $tb_level4->level4_no->CellAttributes() ?>>
-<span id="el_tb_level4_level4_no">
-<span<?php echo $tb_level4->level4_no->ViewAttributes() ?>>
-<?php echo $tb_level4->level4_no->ViewValue ?></span>
+<?php if ($tb_jurnal->tgl->Visible) { // tgl ?>
+	<tr id="r_tgl">
+		<td><span id="elh_tb_jurnal_tgl"><?php echo $tb_jurnal->tgl->FldCaption() ?></span></td>
+		<td data-name="tgl"<?php echo $tb_jurnal->tgl->CellAttributes() ?>>
+<span id="el_tb_jurnal_tgl">
+<span<?php echo $tb_jurnal->tgl->ViewAttributes() ?>>
+<?php echo $tb_jurnal->tgl->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($tb_level4->level4_nama->Visible) { // level4_nama ?>
-	<tr id="r_level4_nama">
-		<td><span id="elh_tb_level4_level4_nama"><?php echo $tb_level4->level4_nama->FldCaption() ?></span></td>
-		<td data-name="level4_nama"<?php echo $tb_level4->level4_nama->CellAttributes() ?>>
-<span id="el_tb_level4_level4_nama">
-<span<?php echo $tb_level4->level4_nama->ViewAttributes() ?>>
-<?php echo $tb_level4->level4_nama->ViewValue ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
-<?php if ($tb_level4->saldo_awal->Visible) { // saldo_awal ?>
-	<tr id="r_saldo_awal">
-		<td><span id="elh_tb_level4_saldo_awal"><?php echo $tb_level4->saldo_awal->FldCaption() ?></span></td>
-		<td data-name="saldo_awal"<?php echo $tb_level4->saldo_awal->CellAttributes() ?>>
-<span id="el_tb_level4_saldo_awal">
-<span<?php echo $tb_level4->saldo_awal->ViewAttributes() ?>>
-<?php echo $tb_level4->saldo_awal->ViewValue ?></span>
+<?php if ($tb_jurnal->ket->Visible) { // ket ?>
+	<tr id="r_ket">
+		<td><span id="elh_tb_jurnal_ket"><?php echo $tb_jurnal->ket->FldCaption() ?></span></td>
+		<td data-name="ket"<?php echo $tb_jurnal->ket->CellAttributes() ?>>
+<span id="el_tb_jurnal_ket">
+<span<?php echo $tb_jurnal->ket->ViewAttributes() ?>>
+<?php echo $tb_jurnal->ket->ViewValue ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
 </table>
+<?php
+	if (in_array("tb_detail", explode(",", $tb_jurnal->getCurrentDetailTable())) && $tb_detail->DetailView) {
+?>
+<?php if ($tb_jurnal->getCurrentDetailTable() <> "") { ?>
+<h4 class="ewDetailCaption"><?php echo $Language->TablePhrase("tb_detail", "TblCaption") ?></h4>
+<?php } ?>
+<?php include_once "tb_detailgrid.php" ?>
+<?php } ?>
 </form>
-<?php if ($tb_level4->Export == "") { ?>
+<?php if ($tb_jurnal->Export == "") { ?>
 <script type="text/javascript">
-ftb_level4view.Init();
+ftb_jurnalview.Init();
 </script>
 <?php } ?>
 <?php
-$tb_level4_view->ShowPageFooter();
+$tb_jurnal_view->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
-<?php if ($tb_level4->Export == "") { ?>
+<?php if ($tb_jurnal->Export == "") { ?>
 <script type="text/javascript">
 
 // Write your table-specific startup script here
@@ -1420,5 +1437,5 @@ if (EW_DEBUG_ENABLED)
 <?php } ?>
 <?php include_once "footer.php" ?>
 <?php
-$tb_level4_view->Page_Terminate();
+$tb_jurnal_view->Page_Terminate();
 ?>

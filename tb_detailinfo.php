@@ -1,20 +1,19 @@
 <?php
 
 // Global variable for table object
-$tb_level4 = NULL;
+$tb_detail = NULL;
 
 //
-// Table class for tb_level4
+// Table class for tb_detail
 //
-class ctb_level4 extends cTable {
-	var $level4_id;
-	var $level1_id;
-	var $level2_id;
-	var $level3_id;
-	var $level4_no;
-	var $level4_nama;
-	var $saldo_awal;
-	var $saldo;
+class ctb_detail extends cTable {
+	var $detail_id;
+	var $jurnal_id;
+	var $item;
+	var $akun_id;
+	var $debet;
+	var $kredit;
+	var $anggota_id;
 
 	//
 	// Table class constructor
@@ -24,12 +23,12 @@ class ctb_level4 extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'tb_level4';
-		$this->TableName = 'tb_level4';
+		$this->TableVar = 'tb_detail';
+		$this->TableName = 'tb_detail';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`tb_level4`";
+		$this->UpdateTable = "`tb_detail`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -37,60 +36,56 @@ class ctb_level4 extends cTable {
 		$this->ExportPageSize = "a4"; // Page size (PDF only)
 		$this->ExportExcelPageOrientation = ""; // Page orientation (PHPExcel only)
 		$this->ExportExcelPageSize = ""; // Page size (PHPExcel only)
-		$this->DetailAdd = FALSE; // Allow detail add
-		$this->DetailEdit = FALSE; // Allow detail edit
-		$this->DetailView = FALSE; // Allow detail view
+		$this->DetailAdd = TRUE; // Allow detail add
+		$this->DetailEdit = TRUE; // Allow detail edit
+		$this->DetailView = TRUE; // Allow detail view
 		$this->ShowMultipleDetails = FALSE; // Show multiple details
 		$this->GridAddRowCount = 5;
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// level4_id
-		$this->level4_id = new cField('tb_level4', 'tb_level4', 'x_level4_id', 'level4_id', '`level4_id`', '`level4_id`', 3, -1, FALSE, '`level4_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
-		$this->level4_id->Sortable = TRUE; // Allow sort
-		$this->level4_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['level4_id'] = &$this->level4_id;
+		// detail_id
+		$this->detail_id = new cField('tb_detail', 'tb_detail', 'x_detail_id', 'detail_id', '`detail_id`', '`detail_id`', 3, -1, FALSE, '`detail_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->detail_id->Sortable = TRUE; // Allow sort
+		$this->detail_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['detail_id'] = &$this->detail_id;
 
-		// level1_id
-		$this->level1_id = new cField('tb_level4', 'tb_level4', 'x_level1_id', 'level1_id', '`level1_id`', '`level1_id`', 3, -1, FALSE, '`EV__level1_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
-		$this->level1_id->Sortable = TRUE; // Allow sort
-		$this->level1_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['level1_id'] = &$this->level1_id;
+		// jurnal_id
+		$this->jurnal_id = new cField('tb_detail', 'tb_detail', 'x_jurnal_id', 'jurnal_id', '`jurnal_id`', '`jurnal_id`', 3, -1, FALSE, '`jurnal_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->jurnal_id->Sortable = TRUE; // Allow sort
+		$this->jurnal_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['jurnal_id'] = &$this->jurnal_id;
 
-		// level2_id
-		$this->level2_id = new cField('tb_level4', 'tb_level4', 'x_level2_id', 'level2_id', '`level2_id`', '`level2_id`', 3, -1, FALSE, '`EV__level2_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
-		$this->level2_id->Sortable = TRUE; // Allow sort
-		$this->level2_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['level2_id'] = &$this->level2_id;
+		// item
+		$this->item = new cField('tb_detail', 'tb_detail', 'x_item', 'item', '`item`', '`item`', 3, -1, FALSE, '`item`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->item->Sortable = TRUE; // Allow sort
+		$this->item->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['item'] = &$this->item;
 
-		// level3_id
-		$this->level3_id = new cField('tb_level4', 'tb_level4', 'x_level3_id', 'level3_id', '`level3_id`', '`level3_id`', 3, -1, FALSE, '`EV__level3_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
-		$this->level3_id->Sortable = TRUE; // Allow sort
-		$this->level3_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['level3_id'] = &$this->level3_id;
+		// akun_id
+		$this->akun_id = new cField('tb_detail', 'tb_detail', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`EV__akun_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->akun_id->Sortable = TRUE; // Allow sort
+		$this->akun_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['akun_id'] = &$this->akun_id;
 
-		// level4_no
-		$this->level4_no = new cField('tb_level4', 'tb_level4', 'x_level4_no', 'level4_no', '`level4_no`', '`level4_no`', 200, -1, FALSE, '`level4_no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->level4_no->Sortable = TRUE; // Allow sort
-		$this->fields['level4_no'] = &$this->level4_no;
+		// debet
+		$this->debet = new cField('tb_detail', 'tb_detail', 'x_debet', 'debet', '`debet`', '`debet`', 20, -1, FALSE, '`debet`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->debet->Sortable = TRUE; // Allow sort
+		$this->debet->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['debet'] = &$this->debet;
 
-		// level4_nama
-		$this->level4_nama = new cField('tb_level4', 'tb_level4', 'x_level4_nama', 'level4_nama', '`level4_nama`', '`level4_nama`', 200, -1, FALSE, '`level4_nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->level4_nama->Sortable = TRUE; // Allow sort
-		$this->fields['level4_nama'] = &$this->level4_nama;
+		// kredit
+		$this->kredit = new cField('tb_detail', 'tb_detail', 'x_kredit', 'kredit', '`kredit`', '`kredit`', 20, -1, FALSE, '`kredit`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->kredit->Sortable = TRUE; // Allow sort
+		$this->kredit->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['kredit'] = &$this->kredit;
 
-		// saldo_awal
-		$this->saldo_awal = new cField('tb_level4', 'tb_level4', 'x_saldo_awal', 'saldo_awal', '`saldo_awal`', '`saldo_awal`', 20, -1, FALSE, '`saldo_awal`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->saldo_awal->Sortable = TRUE; // Allow sort
-		$this->saldo_awal->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['saldo_awal'] = &$this->saldo_awal;
-
-		// saldo
-		$this->saldo = new cField('tb_level4', 'tb_level4', 'x_saldo', 'saldo', '`saldo`', '`saldo`', 20, -1, FALSE, '`saldo`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->saldo->Sortable = FALSE; // Allow sort
-		$this->saldo->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['saldo'] = &$this->saldo;
+		// anggota_id
+		$this->anggota_id = new cField('tb_detail', 'tb_detail', 'x_anggota_id', 'anggota_id', '`anggota_id`', '`anggota_id`', 3, -1, FALSE, '`EV__anggota_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->anggota_id->Sortable = TRUE; // Allow sort
+		$this->anggota_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['anggota_id'] = &$this->anggota_id;
 	}
 
 	// Set Field Visibility
@@ -127,11 +122,58 @@ class ctb_level4 extends cTable {
 		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST] = $v;
 	}
 
+	// Current master table name
+	function getCurrentMasterTable() {
+		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE];
+	}
+
+	function setCurrentMasterTable($v) {
+		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE] = $v;
+	}
+
+	// Session master WHERE clause
+	function GetMasterFilter() {
+
+		// Master filter
+		$sMasterFilter = "";
+		if ($this->getCurrentMasterTable() == "tb_jurnal") {
+			if ($this->jurnal_id->getSessionValue() <> "")
+				$sMasterFilter .= "`jurnal_id`=" . ew_QuotedValue($this->jurnal_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
+			else
+				return "";
+		}
+		return $sMasterFilter;
+	}
+
+	// Session detail WHERE clause
+	function GetDetailFilter() {
+
+		// Detail filter
+		$sDetailFilter = "";
+		if ($this->getCurrentMasterTable() == "tb_jurnal") {
+			if ($this->jurnal_id->getSessionValue() <> "")
+				$sDetailFilter .= "`jurnal_id`=" . ew_QuotedValue($this->jurnal_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
+			else
+				return "";
+		}
+		return $sDetailFilter;
+	}
+
+	// Master filter
+	function SqlMasterFilter_tb_jurnal() {
+		return "`jurnal_id`=@jurnal_id@";
+	}
+
+	// Detail filter
+	function SqlDetailFilter_tb_jurnal() {
+		return "`jurnal_id`=@jurnal_id@";
+	}
+
 	// Table level SQL
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`tb_level4`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`tb_detail`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -159,7 +201,7 @@ class ctb_level4 extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT CONCAT(`level1_no`,'" . ew_ValueSeparator(1, $this->level1_id) . "',`level1_nama`) FROM `tb_level1` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level1_id` = `tb_level4`.`level1_id` LIMIT 1) AS `EV__level1_id`, (SELECT CONCAT(`level2_no`,'" . ew_ValueSeparator(1, $this->level2_id) . "',`level2_nama`) FROM `tb_level2` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level2_id` = `tb_level4`.`level2_id` LIMIT 1) AS `EV__level2_id`, (SELECT CONCAT(`level3_no`,'" . ew_ValueSeparator(1, $this->level3_id) . "',`level3_nama`) FROM `tb_level3` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level3_id` = `tb_level4`.`level3_id` LIMIT 1) AS `EV__level3_id` FROM `tb_level4`" .
+			"SELECT *, (SELECT CONCAT(`level4_no`,'" . ew_ValueSeparator(1, $this->akun_id) . "',`level4_nama`) FROM `tb_level4` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level4_id` = `tb_detail`.`akun_id` LIMIT 1) AS `EV__akun_id`, (SELECT `nama` FROM `tb_anggota` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`anggota_id` = `tb_detail`.`anggota_id` LIMIT 1) AS `EV__anggota_id` FROM `tb_detail`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -307,23 +349,17 @@ class ctb_level4 extends cTable {
 			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
 		if ($sOrderBy <> "")
 			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
-		if ($this->level1_id->AdvancedSearch->SearchValue <> "" ||
-			$this->level1_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->level1_id->FldVirtualExpression . " ") !== FALSE)
+		if ($this->akun_id->AdvancedSearch->SearchValue <> "" ||
+			$this->akun_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->akun_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
-		if (strpos($sOrderBy, " " . $this->level1_id->FldVirtualExpression . " ") !== FALSE)
+		if (strpos($sOrderBy, " " . $this->akun_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
-		if ($this->level2_id->AdvancedSearch->SearchValue <> "" ||
-			$this->level2_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->level2_id->FldVirtualExpression . " ") !== FALSE)
+		if ($this->anggota_id->AdvancedSearch->SearchValue <> "" ||
+			$this->anggota_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->anggota_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
-		if (strpos($sOrderBy, " " . $this->level2_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if ($this->level3_id->AdvancedSearch->SearchValue <> "" ||
-			$this->level3_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->level3_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if (strpos($sOrderBy, " " . $this->level3_id->FldVirtualExpression . " ") !== FALSE)
+		if (strpos($sOrderBy, " " . $this->anggota_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
 		return FALSE;
 	}
@@ -436,8 +472,8 @@ class ctb_level4 extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
-			if (array_key_exists('level4_id', $rs))
-				ew_AddFilter($where, ew_QuotedName('level4_id', $this->DBID) . '=' . ew_QuotedValue($rs['level4_id'], $this->level4_id->FldDataType, $this->DBID));
+			if (array_key_exists('detail_id', $rs))
+				ew_AddFilter($where, ew_QuotedName('detail_id', $this->DBID) . '=' . ew_QuotedValue($rs['detail_id'], $this->detail_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -456,15 +492,15 @@ class ctb_level4 extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`level4_id` = @level4_id@";
+		return "`detail_id` = @detail_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->level4_id->CurrentValue))
+		if (!is_numeric($this->detail_id->CurrentValue))
 			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@level4_id@", ew_AdjustSql($this->level4_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
+		$sKeyFilter = str_replace("@detail_id@", ew_AdjustSql($this->detail_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -478,7 +514,7 @@ class ctb_level4 extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "tb_level4list.php";
+			return "tb_detaillist.php";
 		}
 	}
 
@@ -488,30 +524,30 @@ class ctb_level4 extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "tb_level4list.php";
+		return "tb_detaillist.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("tb_level4view.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("tb_detailview.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("tb_level4view.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("tb_detailview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "tb_level4add.php?" . $this->UrlParm($parm);
+			$url = "tb_detailadd.php?" . $this->UrlParm($parm);
 		else
-			$url = "tb_level4add.php";
+			$url = "tb_detailadd.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("tb_level4edit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("tb_detailedit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -523,7 +559,7 @@ class ctb_level4 extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("tb_level4add.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("tb_detailadd.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -535,17 +571,21 @@ class ctb_level4 extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("tb_level4delete.php", $this->UrlParm());
+		return $this->KeyUrl("tb_detaildelete.php", $this->UrlParm());
 	}
 
 	// Add master url
 	function AddMasterUrl($url) {
+		if ($this->getCurrentMasterTable() == "tb_jurnal" && strpos($url, EW_TABLE_SHOW_MASTER . "=") === FALSE) {
+			$url .= (strpos($url, "?") !== FALSE ? "&" : "?") . EW_TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
+			$url .= "&fk_jurnal_id=" . urlencode($this->jurnal_id->CurrentValue);
+		}
 		return $url;
 	}
 
 	function KeyToJson() {
 		$json = "";
-		$json .= "level4_id:" . ew_VarToJson($this->level4_id->CurrentValue, "number", "'");
+		$json .= "detail_id:" . ew_VarToJson($this->detail_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -553,8 +593,8 @@ class ctb_level4 extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->level4_id->CurrentValue)) {
-			$sUrl .= "level4_id=" . urlencode($this->level4_id->CurrentValue);
+		if (!is_null($this->detail_id->CurrentValue)) {
+			$sUrl .= "detail_id=" . urlencode($this->detail_id->CurrentValue);
 		} else {
 			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
 		}
@@ -587,10 +627,10 @@ class ctb_level4 extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
-			if ($isPost && isset($_POST["level4_id"]))
-				$arKeys[] = ew_StripSlashes($_POST["level4_id"]);
-			elseif (isset($_GET["level4_id"]))
-				$arKeys[] = ew_StripSlashes($_GET["level4_id"]);
+			if ($isPost && isset($_POST["detail_id"]))
+				$arKeys[] = ew_StripSlashes($_POST["detail_id"]);
+			elseif (isset($_GET["detail_id"]))
+				$arKeys[] = ew_StripSlashes($_GET["detail_id"]);
 			else
 				$arKeys = NULL; // Do not setup
 
@@ -615,7 +655,7 @@ class ctb_level4 extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->level4_id->CurrentValue = $key;
+			$this->detail_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -636,14 +676,13 @@ class ctb_level4 extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->level4_id->setDbValue($rs->fields('level4_id'));
-		$this->level1_id->setDbValue($rs->fields('level1_id'));
-		$this->level2_id->setDbValue($rs->fields('level2_id'));
-		$this->level3_id->setDbValue($rs->fields('level3_id'));
-		$this->level4_no->setDbValue($rs->fields('level4_no'));
-		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
-		$this->saldo_awal->setDbValue($rs->fields('saldo_awal'));
-		$this->saldo->setDbValue($rs->fields('saldo'));
+		$this->detail_id->setDbValue($rs->fields('detail_id'));
+		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
+		$this->item->setDbValue($rs->fields('item'));
+		$this->akun_id->setDbValue($rs->fields('akun_id'));
+		$this->debet->setDbValue($rs->fields('debet'));
+		$this->kredit->setDbValue($rs->fields('kredit'));
+		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 	}
 
 	// Render list row values
@@ -654,165 +693,125 @@ class ctb_level4 extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// level4_id
-		// level1_id
-		// level2_id
-		// level3_id
-		// level4_no
-		// level4_nama
-		// saldo_awal
-		// saldo
-		// level4_id
+		// detail_id
+		// jurnal_id
+		// item
+		// akun_id
+		// debet
+		// kredit
+		// anggota_id
+		// detail_id
 
-		$this->level4_id->ViewValue = $this->level4_id->CurrentValue;
-		$this->level4_id->ViewCustomAttributes = "";
+		$this->detail_id->ViewValue = $this->detail_id->CurrentValue;
+		$this->detail_id->ViewCustomAttributes = "";
 
-		// level1_id
-		if ($this->level1_id->VirtualValue <> "") {
-			$this->level1_id->ViewValue = $this->level1_id->VirtualValue;
+		// jurnal_id
+		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
+		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// item
+		$this->item->ViewValue = $this->item->CurrentValue;
+		$this->item->ViewCustomAttributes = "";
+
+		// akun_id
+		if ($this->akun_id->VirtualValue <> "") {
+			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
 		} else {
-			$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
-		if (strval($this->level1_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
+			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if (strval($this->akun_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
+		$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
+		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
 				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level1_id->ViewValue = $this->level1_id->DisplayValue($arwrk);
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
-				$this->level1_id->ViewValue = $this->level1_id->CurrentValue;
+				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 			}
 		} else {
-			$this->level1_id->ViewValue = NULL;
+			$this->akun_id->ViewValue = NULL;
 		}
 		}
-		$this->level1_id->ViewCustomAttributes = "";
+		$this->akun_id->ViewCustomAttributes = "";
 
-		// level2_id
-		if ($this->level2_id->VirtualValue <> "") {
-			$this->level2_id->ViewValue = $this->level2_id->VirtualValue;
+		// debet
+		$this->debet->ViewValue = $this->debet->CurrentValue;
+		$this->debet->ViewCustomAttributes = "";
+
+		// kredit
+		$this->kredit->ViewValue = $this->kredit->CurrentValue;
+		$this->kredit->ViewCustomAttributes = "";
+
+		// anggota_id
+		if ($this->anggota_id->VirtualValue <> "") {
+			$this->anggota_id->ViewValue = $this->anggota_id->VirtualValue;
 		} else {
-			$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
-		if (strval($this->level2_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
+			$this->anggota_id->ViewValue = $this->anggota_id->CurrentValue;
+		if (strval($this->anggota_id->CurrentValue) <> "") {
+			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
+		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
+		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level2_id->ViewValue = $this->level2_id->DisplayValue($arwrk);
+				$this->anggota_id->ViewValue = $this->anggota_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
-				$this->level2_id->ViewValue = $this->level2_id->CurrentValue;
+				$this->anggota_id->ViewValue = $this->anggota_id->CurrentValue;
 			}
 		} else {
-			$this->level2_id->ViewValue = NULL;
+			$this->anggota_id->ViewValue = NULL;
 		}
 		}
-		$this->level2_id->ViewCustomAttributes = "";
+		$this->anggota_id->ViewCustomAttributes = "";
 
-		// level3_id
-		if ($this->level3_id->VirtualValue <> "") {
-			$this->level3_id->ViewValue = $this->level3_id->VirtualValue;
-		} else {
-			$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
-		if (strval($this->level3_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
-		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->level3_id->ViewValue = $this->level3_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->level3_id->ViewValue = $this->level3_id->CurrentValue;
-			}
-		} else {
-			$this->level3_id->ViewValue = NULL;
-		}
-		}
-		$this->level3_id->ViewCustomAttributes = "";
+		// detail_id
+		$this->detail_id->LinkCustomAttributes = "";
+		$this->detail_id->HrefValue = "";
+		$this->detail_id->TooltipValue = "";
 
-		// level4_no
-		$this->level4_no->ViewValue = $this->level4_no->CurrentValue;
-		$this->level4_no->ViewCustomAttributes = "";
+		// jurnal_id
+		$this->jurnal_id->LinkCustomAttributes = "";
+		$this->jurnal_id->HrefValue = "";
+		$this->jurnal_id->TooltipValue = "";
 
-		// level4_nama
-		$this->level4_nama->ViewValue = $this->level4_nama->CurrentValue;
-		$this->level4_nama->ViewCustomAttributes = "";
+		// item
+		$this->item->LinkCustomAttributes = "";
+		$this->item->HrefValue = "";
+		$this->item->TooltipValue = "";
 
-		// saldo_awal
-		$this->saldo_awal->ViewValue = $this->saldo_awal->CurrentValue;
-		$this->saldo_awal->ViewValue = ew_FormatNumber($this->saldo_awal->ViewValue, 0, -2, -2, -1);
-		$this->saldo_awal->CellCssStyle .= "text-align: right;";
-		$this->saldo_awal->ViewCustomAttributes = "";
+		// akun_id
+		$this->akun_id->LinkCustomAttributes = "";
+		$this->akun_id->HrefValue = "";
+		$this->akun_id->TooltipValue = "";
 
-		// saldo
-		$this->saldo->ViewValue = $this->saldo->CurrentValue;
-		$this->saldo->ViewValue = ew_FormatNumber($this->saldo->ViewValue, 0, -2, -2, -1);
-		$this->saldo->CellCssStyle .= "text-align: right;";
-		$this->saldo->ViewCustomAttributes = "";
+		// debet
+		$this->debet->LinkCustomAttributes = "";
+		$this->debet->HrefValue = "";
+		$this->debet->TooltipValue = "";
 
-		// level4_id
-		$this->level4_id->LinkCustomAttributes = "";
-		$this->level4_id->HrefValue = "";
-		$this->level4_id->TooltipValue = "";
+		// kredit
+		$this->kredit->LinkCustomAttributes = "";
+		$this->kredit->HrefValue = "";
+		$this->kredit->TooltipValue = "";
 
-		// level1_id
-		$this->level1_id->LinkCustomAttributes = "";
-		$this->level1_id->HrefValue = "";
-		$this->level1_id->TooltipValue = "";
-
-		// level2_id
-		$this->level2_id->LinkCustomAttributes = "";
-		$this->level2_id->HrefValue = "";
-		$this->level2_id->TooltipValue = "";
-
-		// level3_id
-		$this->level3_id->LinkCustomAttributes = "";
-		$this->level3_id->HrefValue = "";
-		$this->level3_id->TooltipValue = "";
-
-		// level4_no
-		$this->level4_no->LinkCustomAttributes = "";
-		$this->level4_no->HrefValue = "";
-		$this->level4_no->TooltipValue = "";
-
-		// level4_nama
-		$this->level4_nama->LinkCustomAttributes = "";
-		$this->level4_nama->HrefValue = "";
-		$this->level4_nama->TooltipValue = "";
-
-		// saldo_awal
-		$this->saldo_awal->LinkCustomAttributes = "";
-		$this->saldo_awal->HrefValue = "";
-		$this->saldo_awal->TooltipValue = "";
-
-		// saldo
-		$this->saldo->LinkCustomAttributes = "";
-		$this->saldo->HrefValue = "";
-		$this->saldo->TooltipValue = "";
+		// anggota_id
+		$this->anggota_id->LinkCustomAttributes = "";
+		$this->anggota_id->HrefValue = "";
+		$this->anggota_id->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -825,53 +824,53 @@ class ctb_level4 extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
-		// level4_id
-		$this->level4_id->EditAttrs["class"] = "form-control";
-		$this->level4_id->EditCustomAttributes = "";
-		$this->level4_id->EditValue = $this->level4_id->CurrentValue;
-		$this->level4_id->ViewCustomAttributes = "";
+		// detail_id
+		$this->detail_id->EditAttrs["class"] = "form-control";
+		$this->detail_id->EditCustomAttributes = "";
+		$this->detail_id->EditValue = $this->detail_id->CurrentValue;
+		$this->detail_id->ViewCustomAttributes = "";
 
-		// level1_id
-		$this->level1_id->EditAttrs["class"] = "form-control";
-		$this->level1_id->EditCustomAttributes = "";
-		$this->level1_id->EditValue = $this->level1_id->CurrentValue;
-		$this->level1_id->PlaceHolder = ew_RemoveHtml($this->level1_id->FldCaption());
+		// jurnal_id
+		$this->jurnal_id->EditAttrs["class"] = "form-control";
+		$this->jurnal_id->EditCustomAttributes = "";
+		if ($this->jurnal_id->getSessionValue() <> "") {
+			$this->jurnal_id->CurrentValue = $this->jurnal_id->getSessionValue();
+		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
+		$this->jurnal_id->ViewCustomAttributes = "";
+		} else {
+		$this->jurnal_id->EditValue = $this->jurnal_id->CurrentValue;
+		$this->jurnal_id->PlaceHolder = ew_RemoveHtml($this->jurnal_id->FldCaption());
+		}
 
-		// level2_id
-		$this->level2_id->EditAttrs["class"] = "form-control";
-		$this->level2_id->EditCustomAttributes = "";
-		$this->level2_id->EditValue = $this->level2_id->CurrentValue;
-		$this->level2_id->PlaceHolder = ew_RemoveHtml($this->level2_id->FldCaption());
+		// item
+		$this->item->EditAttrs["class"] = "form-control";
+		$this->item->EditCustomAttributes = "";
+		$this->item->EditValue = $this->item->CurrentValue;
+		$this->item->PlaceHolder = ew_RemoveHtml($this->item->FldCaption());
 
-		// level3_id
-		$this->level3_id->EditAttrs["class"] = "form-control";
-		$this->level3_id->EditCustomAttributes = "";
-		$this->level3_id->EditValue = $this->level3_id->CurrentValue;
-		$this->level3_id->PlaceHolder = ew_RemoveHtml($this->level3_id->FldCaption());
+		// akun_id
+		$this->akun_id->EditAttrs["class"] = "form-control";
+		$this->akun_id->EditCustomAttributes = "";
+		$this->akun_id->EditValue = $this->akun_id->CurrentValue;
+		$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
-		// level4_no
-		$this->level4_no->EditAttrs["class"] = "form-control";
-		$this->level4_no->EditCustomAttributes = "";
-		$this->level4_no->EditValue = $this->level4_no->CurrentValue;
-		$this->level4_no->PlaceHolder = ew_RemoveHtml($this->level4_no->FldCaption());
+		// debet
+		$this->debet->EditAttrs["class"] = "form-control";
+		$this->debet->EditCustomAttributes = "";
+		$this->debet->EditValue = $this->debet->CurrentValue;
+		$this->debet->PlaceHolder = ew_RemoveHtml($this->debet->FldCaption());
 
-		// level4_nama
-		$this->level4_nama->EditAttrs["class"] = "form-control";
-		$this->level4_nama->EditCustomAttributes = "";
-		$this->level4_nama->EditValue = $this->level4_nama->CurrentValue;
-		$this->level4_nama->PlaceHolder = ew_RemoveHtml($this->level4_nama->FldCaption());
+		// kredit
+		$this->kredit->EditAttrs["class"] = "form-control";
+		$this->kredit->EditCustomAttributes = "";
+		$this->kredit->EditValue = $this->kredit->CurrentValue;
+		$this->kredit->PlaceHolder = ew_RemoveHtml($this->kredit->FldCaption());
 
-		// saldo_awal
-		$this->saldo_awal->EditAttrs["class"] = "form-control";
-		$this->saldo_awal->EditCustomAttributes = "";
-		$this->saldo_awal->EditValue = $this->saldo_awal->CurrentValue;
-		$this->saldo_awal->PlaceHolder = ew_RemoveHtml($this->saldo_awal->FldCaption());
-
-		// saldo
-		$this->saldo->EditAttrs["class"] = "form-control";
-		$this->saldo->EditCustomAttributes = "";
-		$this->saldo->EditValue = $this->saldo->CurrentValue;
-		$this->saldo->PlaceHolder = ew_RemoveHtml($this->saldo->FldCaption());
+		// anggota_id
+		$this->anggota_id->EditAttrs["class"] = "form-control";
+		$this->anggota_id->EditCustomAttributes = "";
+		$this->anggota_id->EditValue = $this->anggota_id->CurrentValue;
+		$this->anggota_id->PlaceHolder = ew_RemoveHtml($this->anggota_id->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -900,19 +899,21 @@ class ctb_level4 extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->level1_id->Exportable) $Doc->ExportCaption($this->level1_id);
-					if ($this->level2_id->Exportable) $Doc->ExportCaption($this->level2_id);
-					if ($this->level3_id->Exportable) $Doc->ExportCaption($this->level3_id);
-					if ($this->level4_no->Exportable) $Doc->ExportCaption($this->level4_no);
-					if ($this->level4_nama->Exportable) $Doc->ExportCaption($this->level4_nama);
-					if ($this->saldo_awal->Exportable) $Doc->ExportCaption($this->saldo_awal);
+					if ($this->detail_id->Exportable) $Doc->ExportCaption($this->detail_id);
+					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
+					if ($this->item->Exportable) $Doc->ExportCaption($this->item);
+					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
+					if ($this->debet->Exportable) $Doc->ExportCaption($this->debet);
+					if ($this->kredit->Exportable) $Doc->ExportCaption($this->kredit);
+					if ($this->anggota_id->Exportable) $Doc->ExportCaption($this->anggota_id);
 				} else {
-					if ($this->level1_id->Exportable) $Doc->ExportCaption($this->level1_id);
-					if ($this->level2_id->Exportable) $Doc->ExportCaption($this->level2_id);
-					if ($this->level3_id->Exportable) $Doc->ExportCaption($this->level3_id);
-					if ($this->level4_no->Exportable) $Doc->ExportCaption($this->level4_no);
-					if ($this->level4_nama->Exportable) $Doc->ExportCaption($this->level4_nama);
-					if ($this->saldo_awal->Exportable) $Doc->ExportCaption($this->saldo_awal);
+					if ($this->detail_id->Exportable) $Doc->ExportCaption($this->detail_id);
+					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
+					if ($this->item->Exportable) $Doc->ExportCaption($this->item);
+					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
+					if ($this->debet->Exportable) $Doc->ExportCaption($this->debet);
+					if ($this->kredit->Exportable) $Doc->ExportCaption($this->kredit);
+					if ($this->anggota_id->Exportable) $Doc->ExportCaption($this->anggota_id);
 				}
 				$Doc->EndExportRow();
 			}
@@ -944,19 +945,21 @@ class ctb_level4 extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->level1_id->Exportable) $Doc->ExportField($this->level1_id);
-						if ($this->level2_id->Exportable) $Doc->ExportField($this->level2_id);
-						if ($this->level3_id->Exportable) $Doc->ExportField($this->level3_id);
-						if ($this->level4_no->Exportable) $Doc->ExportField($this->level4_no);
-						if ($this->level4_nama->Exportable) $Doc->ExportField($this->level4_nama);
-						if ($this->saldo_awal->Exportable) $Doc->ExportField($this->saldo_awal);
+						if ($this->detail_id->Exportable) $Doc->ExportField($this->detail_id);
+						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
+						if ($this->item->Exportable) $Doc->ExportField($this->item);
+						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
+						if ($this->debet->Exportable) $Doc->ExportField($this->debet);
+						if ($this->kredit->Exportable) $Doc->ExportField($this->kredit);
+						if ($this->anggota_id->Exportable) $Doc->ExportField($this->anggota_id);
 					} else {
-						if ($this->level1_id->Exportable) $Doc->ExportField($this->level1_id);
-						if ($this->level2_id->Exportable) $Doc->ExportField($this->level2_id);
-						if ($this->level3_id->Exportable) $Doc->ExportField($this->level3_id);
-						if ($this->level4_no->Exportable) $Doc->ExportField($this->level4_no);
-						if ($this->level4_nama->Exportable) $Doc->ExportField($this->level4_nama);
-						if ($this->saldo_awal->Exportable) $Doc->ExportField($this->saldo_awal);
+						if ($this->detail_id->Exportable) $Doc->ExportField($this->detail_id);
+						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
+						if ($this->item->Exportable) $Doc->ExportField($this->item);
+						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
+						if ($this->debet->Exportable) $Doc->ExportField($this->debet);
+						if ($this->kredit->Exportable) $Doc->ExportField($this->kredit);
+						if ($this->anggota_id->Exportable) $Doc->ExportField($this->anggota_id);
 					}
 					$Doc->EndExportRow();
 				}

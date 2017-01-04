@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 27, 2016 at 07:35 AM
+-- Generation Time: Jan 04, 2017 at 08:12 AM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
 
 --
 -- Dumping data for table `audittrail`
@@ -101,103 +101,31 @@ INSERT INTO `audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table`,
 (55, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (56, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (57, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(58, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, '2016-12-29 22:20:49', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(64, '2016-12-29 22:20:56', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(65, '2016-12-30 16:46:49', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(66, '2016-12-31 11:56:05', '/tetrasma/tb_level1add.php', 'admin', 'A', 'tb_level1', 'level1_no', '2', '', '2'),
+(67, '2016-12-31 11:56:05', '/tetrasma/tb_level1add.php', 'admin', 'A', 'tb_level1', 'level1_nama', '2', '', 'Pasiva'),
+(68, '2016-12-31 11:56:05', '/tetrasma/tb_level1add.php', 'admin', 'A', 'tb_level1', 'level1_id', '2', '', '2'),
+(69, '2016-12-31 14:20:39', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(70, '2017-01-01 11:39:40', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(71, '2017-01-01 15:12:37', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(72, '2017-01-01 15:31:49', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(73, '2017-01-01 15:36:55', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(74, '2017-01-01 15:36:58', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `level1`
+-- Table structure for table `tb_anggota`
 --
 
-CREATE TABLE IF NOT EXISTS `level1` (
-  `level1_id` int(11) NOT NULL AUTO_INCREMENT,
-  `level1_no` varchar(2) NOT NULL,
-  `level1_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`level1_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `level1`
---
-
-INSERT INTO `level1` (`level1_id`, `level1_no`, `level1_nama`) VALUES
-(1, '1', 'Aktiva');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `level2`
---
-
-CREATE TABLE IF NOT EXISTS `level2` (
-  `level2_id` int(11) NOT NULL AUTO_INCREMENT,
-  `level1_id` int(11) NOT NULL,
-  `level2_no` varchar(2) NOT NULL,
-  `level2_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`level2_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `level2`
---
-
-INSERT INTO `level2` (`level2_id`, `level1_id`, `level2_no`, `level2_nama`) VALUES
-(1, 1, '1', 'Aktiva Lancar'),
-(2, 1, '2', 'Aktiva Tetap');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `level3`
---
-
-CREATE TABLE IF NOT EXISTS `level3` (
-  `level3_id` int(11) NOT NULL AUTO_INCREMENT,
-  `level1_id` int(11) NOT NULL,
-  `level2_id` int(11) NOT NULL,
-  `level3_no` varchar(2) NOT NULL,
-  `level3_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`level3_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `level3`
---
-
-INSERT INTO `level3` (`level3_id`, `level1_id`, `level2_id`, `level3_no`, `level3_nama`) VALUES
-(1, 1, 1, '1', 'Kas');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `level4`
---
-
-CREATE TABLE IF NOT EXISTS `level4` (
-  `level4_id` int(11) NOT NULL AUTO_INCREMENT,
-  `level1_id` int(11) NOT NULL,
-  `level2_id` int(11) NOT NULL,
-  `level3_id` int(11) NOT NULL,
-  `level4_no` varchar(2) NOT NULL,
-  `level4_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`level4_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `level4`
---
-
-INSERT INTO `level4` (`level4_id`, `level1_id`, `level2_id`, `level3_id`, `level4_no`, `level4_nama`) VALUES
-(1, 1, 1, 1, '01', 'Kas'),
-(2, 1, 1, 1, '02', 'Bank BCA');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_anggota`
---
-
-CREATE TABLE IF NOT EXISTS `tbl_anggota` (
+CREATE TABLE IF NOT EXISTS `tb_anggota` (
   `anggota_id` int(11) NOT NULL AUTO_INCREMENT,
   `no_anggota` varchar(25) DEFAULT NULL,
   `nama` varchar(25) DEFAULT NULL,
@@ -212,10 +140,10 @@ CREATE TABLE IF NOT EXISTS `tbl_anggota` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=254 ;
 
 --
--- Dumping data for table `tbl_anggota`
+-- Dumping data for table `tb_anggota`
 --
 
-INSERT INTO `tbl_anggota` (`anggota_id`, `no_anggota`, `nama`, `tgl_masuk`, `alamat`, `kota`, `no_telp`, `pekerjaan`, `jns_pengenal`, `no_pengenal`) VALUES
+INSERT INTO `tb_anggota` (`anggota_id`, `no_anggota`, `nama`, `tgl_masuk`, `alamat`, `kota`, `no_telp`, `pekerjaan`, `jns_pengenal`, `no_pengenal`) VALUES
 (4, '1.01.10.2009', 'Sigit Warsito', '0000-00-00', 'jl.Gunung Sari Indah YY-6 Sby', 'Surabaya', 'O81553791188', 'IPT REA KALTIM PLANTATION', 'KTP', 'x'),
 (5, '2.01.10.2009', 'Resmi Setyaningsih', '0000-00-00', 'JL.Griya Pesona Asri Blok C-50 Sby', 'Surabaya', 'O81331501861', 'Guru SMA 4, Sby', 'KTP', 'x'),
 (6, '3.03.10.2009', 'Wenny Williarso', '0000-00-00', 'Puri Taman Asri C-14 Sby', 'Surabaya', 'O318275800', 'Bank Indonesia', 'KTP', 'x'),
@@ -469,90 +397,156 @@ INSERT INTO `tbl_anggota` (`anggota_id`, `no_anggota`, `nama`, `tgl_masuk`, `ala
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_akun_lvl1`
+-- Table structure for table `tb_detail`
 --
 
-CREATE TABLE IF NOT EXISTS `tb_akun_lvl1` (
-  `akun_lvl1_id` int(11) NOT NULL AUTO_INCREMENT,
-  `akun_lvl1_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`akun_lvl1_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+CREATE TABLE IF NOT EXISTS `tb_detail` (
+  `detail_id` int(11) NOT NULL AUTO_INCREMENT,
+  `jurnal_id` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `akun_id` int(11) NOT NULL,
+  `debet` bigint(20) NOT NULL DEFAULT '0',
+  `kredit` bigint(20) NOT NULL DEFAULT '0',
+  `anggota_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`detail_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `tb_akun_lvl1`
+-- Dumping data for table `tb_detail`
 --
 
-INSERT INTO `tb_akun_lvl1` (`akun_lvl1_id`, `akun_lvl1_nama`) VALUES
-(1, 'Aktiva'),
-(2, 'Hutang'),
-(3, 'Modal'),
-(4, 'Pendapatan'),
-(5, 'HPP'),
-(6, 'Biaya');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_akun_lvl2`
+-- Table structure for table `tb_jurnal`
 --
 
-CREATE TABLE IF NOT EXISTS `tb_akun_lvl2` (
-  `akun_lvl2_id` int(11) NOT NULL AUTO_INCREMENT,
-  `akun_lvl1_id` int(11) NOT NULL,
-  `akun_lvl2_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`akun_lvl2_id`)
+CREATE TABLE IF NOT EXISTS `tb_jurnal` (
+  `jurnal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `no_bukti` varchar(25) NOT NULL,
+  `tgl` date NOT NULL,
+  `ket` text NOT NULL,
+  `jenis_jurnal` tinyint(4) NOT NULL,
+  PRIMARY KEY (`jurnal_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `tb_jurnal`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_level1`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_level1` (
+  `level1_id` int(11) NOT NULL AUTO_INCREMENT,
+  `level1_no` varchar(2) NOT NULL,
+  `level1_nama` varchar(50) NOT NULL,
+  PRIMARY KEY (`level1_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `tb_akun_lvl2`
+-- Dumping data for table `tb_level1`
 --
 
-INSERT INTO `tb_akun_lvl2` (`akun_lvl2_id`, `akun_lvl1_id`, `akun_lvl2_nama`) VALUES
-(1, 1, 'Aktiva Lancar'),
-(2, 2, 'Hutang Jangka Pendek');
+INSERT INTO `tb_level1` (`level1_id`, `level1_no`, `level1_nama`) VALUES
+(1, '1', 'Aktiva'),
+(2, '2', 'Pasiva');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_akun_lvl3`
+-- Table structure for table `tb_level2`
 --
 
-CREATE TABLE IF NOT EXISTS `tb_akun_lvl3` (
-  `akun_lvl3_id` int(11) NOT NULL AUTO_INCREMENT,
-  `akun_lvl1_id` int(11) NOT NULL,
-  `akun_lvl2_id` int(11) NOT NULL,
-  `akun_lvl3_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`akun_lvl3_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+CREATE TABLE IF NOT EXISTS `tb_level2` (
+  `level2_id` int(11) NOT NULL AUTO_INCREMENT,
+  `level1_id` int(11) NOT NULL,
+  `level2_no` varchar(2) NOT NULL,
+  `level2_nama` varchar(50) NOT NULL,
+  PRIMARY KEY (`level2_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `tb_akun_lvl3`
+-- Dumping data for table `tb_level2`
 --
 
-INSERT INTO `tb_akun_lvl3` (`akun_lvl3_id`, `akun_lvl1_id`, `akun_lvl2_id`, `akun_lvl3_nama`) VALUES
-(1, 1, 1, 'Kas');
+INSERT INTO `tb_level2` (`level2_id`, `level1_id`, `level2_no`, `level2_nama`) VALUES
+(1, 1, '1', 'Aktiva Lancar'),
+(2, 1, '2', 'Aktiva Tetap');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_akun_lvl4`
+-- Table structure for table `tb_level3`
 --
 
-CREATE TABLE IF NOT EXISTS `tb_akun_lvl4` (
-  `akun_lvl4_id` int(11) NOT NULL AUTO_INCREMENT,
-  `akun_lvl1_id` int(11) NOT NULL,
-  `akun_lvl2_id` int(11) NOT NULL,
-  `akun_lvl3_id` int(11) NOT NULL,
-  `akun_lvl4_nama` varchar(50) NOT NULL,
-  PRIMARY KEY (`akun_lvl4_id`)
+CREATE TABLE IF NOT EXISTS `tb_level3` (
+  `level3_id` int(11) NOT NULL AUTO_INCREMENT,
+  `level1_id` int(11) NOT NULL,
+  `level2_id` int(11) NOT NULL,
+  `level3_no` varchar(2) NOT NULL,
+  `level3_nama` varchar(50) NOT NULL,
+  PRIMARY KEY (`level3_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `tb_akun_lvl4`
+-- Dumping data for table `tb_level3`
 --
 
-INSERT INTO `tb_akun_lvl4` (`akun_lvl4_id`, `akun_lvl1_id`, `akun_lvl2_id`, `akun_lvl3_id`, `akun_lvl4_nama`) VALUES
-(1, 1, 1, 1, 'Kas');
+INSERT INTO `tb_level3` (`level3_id`, `level1_id`, `level2_id`, `level3_no`, `level3_nama`) VALUES
+(1, 1, 1, '1', 'Kas');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_level4`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_level4` (
+  `level4_id` int(11) NOT NULL AUTO_INCREMENT,
+  `level1_id` int(11) NOT NULL,
+  `level2_id` int(11) NOT NULL,
+  `level3_id` int(11) NOT NULL,
+  `level4_no` varchar(2) NOT NULL,
+  `level4_nama` varchar(50) NOT NULL,
+  `saldo_awal` bigint(20) DEFAULT NULL,
+  `saldo` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`level4_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `tb_level4`
+--
+
+INSERT INTO `tb_level4` (`level4_id`, `level1_id`, `level2_id`, `level3_id`, `level4_no`, `level4_nama`, `saldo_awal`, `saldo`) VALUES
+(1, 1, 1, 1, '01', 'Kas', NULL, NULL),
+(2, 1, 1, 1, '02', 'Bank BCA', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_user`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `userlevel` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+INSERT INTO `tb_user` (`user_id`, `username`, `password`, `userlevel`) VALUES
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', -1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

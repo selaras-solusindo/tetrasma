@@ -4711,8 +4711,7 @@ function ew_CloseConn() {
 }
 
 // Database Connecting event
-function Database_Connecting(&$info) {
-
+//function Database_Connecting(&$info) {
 	// Example:
 	//var_dump($info);
 	//if ($info["id"] == "DB" && ew_CurrentUserIP() == "127.0.0.1") { // Testing on local PC
@@ -4720,7 +4719,19 @@ function Database_Connecting(&$info) {
 	//	$info["user"] = "root";
 	//	$info["pass"] = "";
 	//}
-
+//}
+function Database_Connecting(&$info) {
+	if (ew_CurrentUserIP() == "127.0.0.1" || ew_CurrentUserIP () == ":: 1" || ew_CurrentHost () == "localhost") { // setting koneksi database di komputer localhost
+		$info["host"] = "localhost";
+		$info["user"] = "root"; // sesuaikan dengan username database di komputer localhost
+		$info["pass"] = "admin"; // sesuaikan dengan password database di komputer localhost
+		$info["db"] = "db_tetrasma"; // sesuaikan dengan nama database di komputer localhost
+	} else { // setting koneksi database untuk komputer server
+		$info["host"] = "www";  // sesuaikan dengan ip address atau hostname komputer server
+		$info["user"] = "xxx"; // sesuaikan dengan username database di komputer server
+		$info["pass"] = "yyy"; // sesuaikan deengan password database di komputer server
+		$info["db"] = "zzz"; // sesuaikan dengan nama database di komputer server
+	}
 }
 
 // Database Connected event

@@ -11,6 +11,7 @@ $RootMenu->AddMenuItem(8, "mi_tb_level2", $Language->MenuPhrase("8", "MenuText")
 $RootMenu->AddMenuItem(9, "mi_tb_level3", $Language->MenuPhrase("9", "MenuText"), "tb_level3list.php", 15, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}tb_level3'), FALSE, FALSE);
 $RootMenu->AddMenuItem(10, "mi_tb_level4", $Language->MenuPhrase("10", "MenuText"), "tb_level4list.php", 15, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}tb_level4'), FALSE, FALSE);
 $RootMenu->AddMenuItem(19, "mi_view_akun_php", $Language->MenuPhrase("19", "MenuText"), "view_akun.php", 15, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}view_akun.php'), FALSE, TRUE);
+$RootMenu->AddMenuItem(20, "mi_tb_jurnal", $Language->MenuPhrase("20", "MenuText"), "tb_jurnallist.php", -1, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}tb_jurnal'), FALSE, FALSE);
 $RootMenu->AddMenuItem(16, "mi_tb_user", $Language->MenuPhrase("16", "MenuText"), "tb_userlist.php", -1, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}tb_user'), FALSE, FALSE);
 $RootMenu->AddMenuItem(-2, "mi_changepwd", $Language->Phrase("ChangePwd"), "changepwd.php", -1, "", IsLoggedIn() && !IsSysAdmin());
 $RootMenu->AddMenuItem(-1, "mi_logout", $Language->Phrase("Logout"), "logout.php", -1, "", IsLoggedIn());
