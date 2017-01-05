@@ -1,3 +1,20 @@
+10:50 AM 1/5/2017
+- sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
+	belum
+	
+- tampilan awal :: tabel jurnal
+- ada edit, add, delete
+	belum, sedang diuji coba
+
+- desain tabel jurnal seperti apa ya ?
+	sedang uji coba
+	
+- coba mencontoh tabel jurnal dari keuangan guyub
+	sedang uji coba
+	
+- buat home.php untuk landing page
+
+
 12:42 AM 12/30/2016
 - sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
 - tampilan awal :: tabel jurnal
