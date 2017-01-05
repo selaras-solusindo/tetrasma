@@ -64,7 +64,7 @@ class ctb_jurnal extends cTable {
 		$this->fields['no_bukti'] = &$this->no_bukti;
 
 		// tgl
-		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', 'DATE_FORMAT(`tgl`, \'%Y/%m/%d\')', 133, 0, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, 0, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
 		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['tgl'] = &$this->tgl;
@@ -965,19 +965,8 @@ class ctb_jurnal extends cTable {
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>);
-		// Kondisi saat form Tambah sedang terbuka (tidak dalam mode konfirmasi)
+		//var_dump($this-><FieldName>); 
 
-		if (CurrentPageID() == "add" && $this->CurrentAction != "F") {
-			$this->no_bukti->CurrentValue = GetNextNoBukti(); // trik
-			$this->no_bukti->EditValue = $this->no_bukti->CurrentValue; // tampilkan
-			$this->no_bukti->ReadOnly = TRUE; // supaya tidak bisa diubah
-		}
-
-		// Kondisi saat form Tambah sedang dalam mode konfirmasi
-		if ($this->CurrentAction == "add" && $this->CurrentAction=="F") {
-			$this->no_bukti->ViewValue = $this->no_bukti->CurrentValue; // ambil dari mode sebelumnya
-		}
 	}
 
 	// User ID Filtering event

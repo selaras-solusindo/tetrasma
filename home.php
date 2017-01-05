@@ -313,8 +313,6 @@ Page_Rendering();
 &copy;2017 Tetrasma. Powered by Selaras Solusindo. All rights reserved.
 	</body>
 </html>
-
-
 <?php if (EW_DEBUG_ENABLED) echo ew_DebugMsg(); ?>
 <?php include_once "footer.php" ?>
 <?php

@@ -1217,7 +1217,29 @@ if (EW_DEBUG_ENABLED)
 
 // Write your table-specific startup script here
 // document.write("page loaded");
+//function MyEvent(event) {
+//	 var elm_name = $(event.target).attr('name');
+//	 alert(elm_name);alert("x");
+//}
 
+$("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
+
+	//alert(this.value);
+	//alert("xxx");
+
+	if (this.value == "1") {
+		$(this).fields("no_bukti").value("KM"); // Set value to FieldA
+	}
+	else if (this.value == "2") {
+		$(this).fields("no_bukti").value("KK"); // Set value to FieldA
+	}
+	else if (this.value == "3") {
+		$(this).fields("no_bukti").value("BM"); // Set value to FieldA
+	}
+	else {
+		$(this).fields("no_bukti").value("BK"); // Set value to FieldA
+	}
+ });
 </script>
 <?php include_once "footer.php" ?>
 <?php

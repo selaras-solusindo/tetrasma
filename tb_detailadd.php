@@ -659,7 +659,7 @@ class ctb_detail_add extends ctb_detail {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+		$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -696,7 +696,7 @@ class ctb_detail_add extends ctb_detail {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -772,7 +772,7 @@ class ctb_detail_add extends ctb_detail {
 				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -811,7 +811,7 @@ class ctb_detail_add extends ctb_detail {
 				$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1059,8 +1059,8 @@ class ctb_detail_add extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 			$sWhereWrk = "{filter}";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1071,8 +1071,8 @@ class ctb_detail_add extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id` AS `LinkFld`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "{filter}";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`anggota_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`anggota_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1091,7 +1091,7 @@ class ctb_detail_add extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld` FROM `tb_level4`";
 			$sWhereWrk = "`level4_no` LIKE '{query_value}%' OR CONCAT(`level4_no`,'" . ew_ValueSeparator(1, $this->akun_id) . "',`level4_nama`) LIKE '{query_value}%'";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
@@ -1104,7 +1104,7 @@ class ctb_detail_add extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld` FROM `tb_anggota`";
 			$sWhereWrk = "`nama` LIKE '{query_value}%'";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
@@ -1392,12 +1392,21 @@ $tb_detail_add->ShowMessage();
 		<label id="elh_tb_detail_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_detail->akun_id->CellAttributes() ?>>
 <span id="el_tb_detail_akun_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_akun_id"><?php echo (strval($tb_detail->akun_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->akun_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->akun_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->akun_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x_akun_id" style="white-space: nowrap; z-index: 8960">
+	<input type="text" name="sv_x_akun_id" id="sv_x_akun_id" value="<?php echo $tb_detail->akun_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akun_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x_akun_id" id="x_akun_id" value="<?php echo $tb_detail->akun_id->CurrentValue ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
-<input type="hidden" name="s_x_akun_id" id="s_x_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x_akun_id" id="x_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x_akun_id" id="q_x_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailadd.CreateAutoSuggest({"id":"x_akun_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akun_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x_akun_id" id="s_x_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(false) ?>">
 </span>
 <?php echo $tb_detail->akun_id->CustomMsg ?></div></div>
 	</div>
@@ -1427,12 +1436,21 @@ $tb_detail_add->ShowMessage();
 		<label id="elh_tb_detail_anggota_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->anggota_id->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_detail->anggota_id->CellAttributes() ?>>
 <span id="el_tb_detail_anggota_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_anggota_id"><?php echo (strval($tb_detail->anggota_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->anggota_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->anggota_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->anggota_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x_anggota_id" style="white-space: nowrap; z-index: 8930">
+	<input type="text" name="sv_x_anggota_id" id="sv_x_anggota_id" value="<?php echo $tb_detail->anggota_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_anggota_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x_anggota_id" id="x_anggota_id" value="<?php echo $tb_detail->anggota_id->CurrentValue ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
-<input type="hidden" name="s_x_anggota_id" id="s_x_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x_anggota_id" id="x_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x_anggota_id" id="q_x_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailadd.CreateAutoSuggest({"id":"x_anggota_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_anggota_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x_anggota_id" id="s_x_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(false) ?>">
 </span>
 <?php echo $tb_detail->anggota_id->CustomMsg ?></div></div>
 	</div>

@@ -1389,7 +1389,7 @@ class ctb_detail_grid extends ctb_detail {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+		$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1426,7 +1426,7 @@ class ctb_detail_grid extends ctb_detail {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1510,7 +1510,7 @@ class ctb_detail_grid extends ctb_detail {
 				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1549,7 +1549,7 @@ class ctb_detail_grid extends ctb_detail {
 				$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1631,7 +1631,7 @@ class ctb_detail_grid extends ctb_detail {
 				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1670,7 +1670,7 @@ class ctb_detail_grid extends ctb_detail {
 				$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -2029,8 +2029,8 @@ class ctb_detail_grid extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
 			$sWhereWrk = "{filter}";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -2041,8 +2041,8 @@ class ctb_detail_grid extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id` AS `LinkFld`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "{filter}";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`anggota_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`anggota_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -2061,7 +2061,7 @@ class ctb_detail_grid extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld` FROM `tb_level4`";
 			$sWhereWrk = "`level4_no` LIKE '{query_value}%' OR CONCAT(`level4_no`,'" . ew_ValueSeparator(1, $this->akun_id) . "',`level4_nama`) LIKE '{query_value}%'";
-			$this->akun_id->LookupFilters = array("dx1" => "`level4_no`", "dx2" => "`level4_nama`");
+			$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
@@ -2074,7 +2074,7 @@ class ctb_detail_grid extends ctb_detail {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld` FROM `tb_anggota`";
 			$sWhereWrk = "`nama` LIKE '{query_value}%'";
-			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
