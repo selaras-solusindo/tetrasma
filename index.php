@@ -266,8 +266,10 @@ class cdefault {
 			$this->setFailureMessage($Language->Phrase("SessionExpired"));
 		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
 		$Security->LoadUserLevel(); // Load User Level
+		if ($Security->AllowList(CurrentProjectID() . 'home.php'))
+		$this->Page_Terminate("home.php"); // Exit and go to default page
 		if ($Security->AllowList(CurrentProjectID() . 'tb_anggota'))
-		$this->Page_Terminate("tb_anggotalist.php"); // Exit and go to default page
+			$this->Page_Terminate("tb_anggotalist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'audittrail'))
 			$this->Page_Terminate("audittraillist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'tb_level1'))

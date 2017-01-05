@@ -14,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$view_akun_php = NULL; // Initialize page object first
+$home_php = NULL; // Initialize page object first
 
-class cview_akun_php {
+class chome_php {
 
 	// Page ID
 	var $PageID = 'custom';
@@ -25,10 +25,10 @@ class cview_akun_php {
 	var $ProjectID = "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}";
 
 	// Table name
-	var $TableName = 'view_akun.php';
+	var $TableName = 'home.php';
 
 	// Page object name
-	var $PageObjName = 'view_akun_php';
+	var $PageObjName = 'home_php';
 
 	// Page name
 	function PageName() {
@@ -195,7 +195,7 @@ class cview_akun_php {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'view_akun.php', TRUE);
+			define("EW_TABLE_NAME", 'home.php', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -279,7 +279,7 @@ class cview_akun_php {
 		global $Breadcrumb;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("custom", "view_akun_php", $url, "", "view_akun_php", TRUE);
+		$Breadcrumb->Add("custom", "home_php", $url, "", "home_php", TRUE);
 	}
 }
 ?>
@@ -287,13 +287,13 @@ class cview_akun_php {
 <?php
 
 // Create page object
-if (!isset($view_akun_php)) $view_akun_php = new cview_akun_php();
+if (!isset($home_php)) $home_php = new chome_php();
 
 // Page init
-$view_akun_php->Page_Init();
+$home_php->Page_Init();
 
 // Page main
-$view_akun_php->Page_Main();
+$home_php->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
@@ -306,90 +306,11 @@ Page_Rendering();
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php 
-//echo "hello world";
-include("conn.php");
-mysql_connect($hostname_conn, $username_conn, $password_conn) or die ("Tidak bisa terkoneksi ke Database server");
-mysql_select_db($database_conn) or die ("Database tidak ditemukan");
-
-$msql_level1 = "select * from tb_level1 order by level1_no";
-$mquery_level1 = mysql_query($msql_level1);
-?>
-
 <html>
 	<head>
 	</head>
 	<body>
-		<!--<table border="1">-->
-		<table cellspacing="0" class="table ewTableSeparate">
-			<thead>
-				<tr class="ewTableHeader">
-					<th class="ewTableHeaderCaption">Level 1</th>
-					<th class="ewTableHeaderCaption">Level 2</th>
-					<th class="ewTableHeaderCaption">Level 3</th>
-					<th class="ewTableHeaderCaption">Level 4</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-			while($row_level1 = mysql_fetch_array($mquery_level1)) {
-			?>
-				<tr>
-					<td><?php echo $row_level1["level1_no"]." - ".$row_level1["level1_nama"]; ?></td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-				</tr>
-				<?php
-				$msql_level2 = "select * from tb_level2 where level1_id = ".$row_level1["level1_id"]." order by level2_no"; //echo $msql_level2;
-				$mquery_level2 = mysql_query($msql_level2);
-				while($row_level2 = mysql_fetch_array($mquery_level2)) {
-				?>
-					<tr>
-						<td>&nbsp;</td>
-						<td><?php echo $row_level1["level1_no"].".".$row_level2["level2_no"]." - ".$row_level2["level2_nama"]; ?></td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-					</tr>
-					<?php
-					$msql_level3 = "select * from tb_level3 where level2_id = ".$row_level2["level2_id"]." order by level3_no"; //echo $msql_level3;
-					$mquery_level3 = mysql_query($msql_level3);
-					while($row_level3 = mysql_fetch_array($mquery_level3)) {
-					?>
-						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td><?php echo $row_level1["level1_no"].".".$row_level2["level2_no"].".".$row_level3["level3_no"]." - ".$row_level3["level3_nama"]; ?></td>
-							<td>&nbsp;</td>
-						</tr>
-						<?php
-						$msql_level4 = "select * from tb_level4 where level3_id = ".$row_level3["level3_id"]." order by level4_no"; //echo $msql_level4;
-						$mquery_level4 = mysql_query($msql_level4);
-						while($row_level4 = mysql_fetch_array($mquery_level4)) {
-						?>
-							<tr>
-								<td>&nbsp;</td>
-								<td>&nbsp;</td>
-								<td>&nbsp;</td>
-								<td><?php echo $row_level1["level1_no"].".".$row_level2["level2_no"].".".$row_level3["level3_no"].".".$row_level4["level4_no"]." - ".$row_level4["level4_nama"]; ?></td>
-							</tr>
-						<?php
-						}
-						?>
-					<?php
-					}
-					?>
-				<?php
-				}
-				?>
-			<?php
-			}
-			?>
-				<tr>
-					<td colspan="4">&nbsp;</td>
-				</tr>
-			</tbody>
-		</table>
+&copy;2017 Tetrasma. Powered by SELUSIN. All rights reserved.
 	</body>
 </html>
 
@@ -397,5 +318,5 @@ $mquery_level1 = mysql_query($msql_level1);
 <?php if (EW_DEBUG_ENABLED) echo ew_DebugMsg(); ?>
 <?php include_once "footer.php" ?>
 <?php
-$view_akun_php->Page_Terminate();
+$home_php->Page_Terminate();
 ?>

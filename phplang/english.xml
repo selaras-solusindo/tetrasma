@@ -583,6 +583,9 @@
   <project>
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
+    <menu id="22">
+      <phrase id="menutext" value="Home" />
+    </menu>
     <menu id="21">
       <phrase id="menutext" value="Detail Jurnal" />
     </menu>
@@ -827,6 +830,9 @@
       <field id="ket">
         <phrase id="fldcaption" value="ket" />
       </field>
+    </table>
+    <table id="home_php">
+      <phrase id="tblcaption" value="Home" />
     </table>
   </project>
 </ew-language>
