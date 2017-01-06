@@ -1227,7 +1227,8 @@ $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 	//alert(this.value);
 	//alert("xxx");
 
-	if (this.value == "1") {
+	ambil_no_bukti(this.value);
+	/*if (this.value == "1") {
 		$(this).fields("no_bukti").value("KM"); // Set value to FieldA
 	}
 	else if (this.value == "2") {
@@ -1238,8 +1239,60 @@ $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 	}
 	else {
 		$(this).fields("no_bukti").value("BK"); // Set value to FieldA
-	}
+	}*/
  });
+var ajaxku;
+
+function ambil_no_bukti(kode) {
+	ajaxku = buatajax();
+	var url="ambildata.php";
+	url=url+"?q="+kode;
+	url=url+"&sid="+Math.random();
+	ajaxku.onreadystatechange=stateChanged;
+	ajaxku.open("GET",url,true);
+	ajaxku.send(null);
+}
+
+function ambildata(nip) {
+	ajaxku = buatajax();
+	var url="ambildata.php";
+	url=url+"?q="+nip;
+	url=url+"&sid="+Math.random();
+	ajaxku.onreadystatechange=stateChanged;
+	ajaxku.open("GET",url,true);
+	ajaxku.send(null);
+}
+
+function buatajax() {
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	}
+	if (window.ActiveXObject) {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	return null;
+}
+
+function stateChanged() {
+	var data;
+	if (ajaxku.readyState==4) {
+		data=ajaxku.responseText;
+		if(data.length>0) {
+
+			//$("#x_no_bukti").value(data);
+			//$(this).fields("no_bukti").value(data); // Set value to FieldA
+
+			document.getElementById("x_no_bukti").value = data
+		}
+		else {
+
+			//$("#x_no_bukti").value("");
+			//$(this).fields("no_bukti").value("");
+
+			document.getElementById("x_no_bukti").value = "";
+		}
+	}
+}
 </script>
 <?php include_once "footer.php" ?>
 <?php

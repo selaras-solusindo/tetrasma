@@ -288,6 +288,8 @@ class cdefault {
 			$this->Page_Terminate("tb_detaillist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'tb_jurnal'))
 			$this->Page_Terminate("tb_jurnallist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'ambildata.php'))
+			$this->Page_Terminate("ambildata.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

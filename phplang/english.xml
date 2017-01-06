@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/1/5" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/1/6" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -583,6 +583,7 @@
   <project>
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
+    <menu id="23" />
     <menu id="22">
       <phrase id="menutext" value="Home" />
     </menu>
@@ -812,13 +813,13 @@
       </field>
       <field id="jenis_jurnal">
         <phrase id="fldcaption" value="jenis jurnal" />
-        <phrase id="fldtagvalue1" value="1" />
+        <phrase id="fldtagvalue1" value="KM" />
         <phrase id="fldtagcaption1" value="Kas Masuk" />
-        <phrase id="fldtagvalue2" value="2" />
+        <phrase id="fldtagvalue2" value="KK" />
         <phrase id="fldtagcaption2" value="Kas Keluar" />
-        <phrase id="fldtagvalue3" value="3" />
+        <phrase id="fldtagvalue3" value="BM" />
         <phrase id="fldtagcaption3" value="Bank Masuk" />
-        <phrase id="fldtagvalue4" value="4" />
+        <phrase id="fldtagvalue4" value="BK" />
         <phrase id="fldtagcaption4" value="Bank Keluar" />
       </field>
       <field id="no_bukti">
@@ -834,5 +835,6 @@
     <table id="home_php">
       <phrase id="tblcaption" value="Home" />
     </table>
+    <table id="ambildata_php" />
   </project>
 </ew-language>
