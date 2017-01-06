@@ -515,7 +515,7 @@ class ctb_jurnal_delete extends ctb_jurnal {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 7);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// ket

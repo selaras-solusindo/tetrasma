@@ -531,9 +531,9 @@ class ctb_detail_delete extends ctb_detail {
 			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		if (strval($this->akun_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level4_id`, `level4_no` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level4`";
+		$sSqlWrk = "SELECT `level4_id`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => '`level4_no`', "dx2" => '`level4_nama`');
+		$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -926,7 +926,7 @@ ftb_detaildelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-ftb_detaildelete.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level4_no","x_level4_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level4"};
+ftb_detaildelete.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_akun","x_level4_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 ftb_detaildelete.Lists["x_anggota_id"] = {"LinkField":"x_anggota_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_anggota"};
 
 // Form object for search

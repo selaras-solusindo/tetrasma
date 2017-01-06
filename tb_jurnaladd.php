@@ -520,7 +520,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 		}
 		if (!$this->tgl->FldIsDetailKey) {
 			$this->tgl->setFormValue($objForm->GetValue("x_tgl"));
-			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
+			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 7);
 		}
 		if (!$this->ket->FldIsDetailKey) {
 			$this->ket->setFormValue($objForm->GetValue("x_ket"));
@@ -534,7 +534,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 		$this->jenis_jurnal->CurrentValue = $this->jenis_jurnal->FormValue;
 		$this->no_bukti->CurrentValue = $this->no_bukti->FormValue;
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
-		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
+		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 7);
 		$this->ket->CurrentValue = $this->ket->FormValue;
 	}
 
@@ -644,7 +644,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 7);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// ket
@@ -686,7 +686,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl->CurrentValue, 8));
+			$this->tgl->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl->CurrentValue, 7));
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 			// ket
@@ -743,7 +743,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
-		if (!ew_CheckDateDef($this->tgl->FormValue)) {
+		if (!ew_CheckEuroDate($this->tgl->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
 		if (!$this->ket->FldIsDetailKey && !is_null($this->ket->FormValue) && $this->ket->FormValue == "") {
@@ -791,7 +791,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 		$this->no_bukti->SetDbValueDef($rsnew, $this->no_bukti->CurrentValue, "", FALSE);
 
 		// tgl
-		$this->tgl->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl->CurrentValue, 0), ew_CurrentDate(), FALSE);
+		$this->tgl->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl->CurrentValue, 7), ew_CurrentDate(), FALSE);
 
 		// ket
 		$this->ket->SetDbValueDef($rsnew, $this->ket->CurrentValue, "", FALSE);
@@ -1072,7 +1072,7 @@ ftb_jurnaladd.Validate = function() {
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_jurnal->tgl->FldCaption(), $tb_jurnal->tgl->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
-			if (elm && !ew_CheckDateDef(elm.value))
+			if (elm && !ew_CheckEuroDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_jurnal->tgl->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_ket");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
@@ -1167,10 +1167,10 @@ $tb_jurnal_add->ShowMessage();
 		<label id="elh_tb_jurnal_tgl" for="x_tgl" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->tgl->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_jurnal->tgl->CellAttributes() ?>>
 <span id="el_tb_jurnal_tgl">
-<input type="text" data-table="tb_jurnal" data-field="x_tgl" name="x_tgl" id="x_tgl" placeholder="<?php echo ew_HtmlEncode($tb_jurnal->tgl->getPlaceHolder()) ?>" value="<?php echo $tb_jurnal->tgl->EditValue ?>"<?php echo $tb_jurnal->tgl->EditAttributes() ?>>
+<input type="text" data-table="tb_jurnal" data-field="x_tgl" data-format="7" name="x_tgl" id="x_tgl" placeholder="<?php echo ew_HtmlEncode($tb_jurnal->tgl->getPlaceHolder()) ?>" value="<?php echo $tb_jurnal->tgl->EditValue ?>"<?php echo $tb_jurnal->tgl->EditAttributes() ?>>
 <?php if (!$tb_jurnal->tgl->ReadOnly && !$tb_jurnal->tgl->Disabled && !isset($tb_jurnal->tgl->EditAttrs["readonly"]) && !isset($tb_jurnal->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ftb_jurnaladd", "x_tgl", 0);
+ew_CreateCalendar("ftb_jurnaladd", "x_tgl", 7);
 </script>
 <?php } ?>
 </span>

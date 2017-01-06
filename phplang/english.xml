@@ -584,6 +584,9 @@
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
     <menu id="23" />
+    <menu id="24">
+      <phrase id="menutext" value="view akun jurnal" />
+    </menu>
     <menu id="22">
       <phrase id="menutext" value="Home" />
     </menu>
@@ -833,5 +836,17 @@
       <phrase id="tblcaption" value="Home" />
     </table>
     <table id="ambildata_php" />
+    <table id="view_akun_jurnal">
+      <phrase id="tblcaption" value="view akun jurnal" />
+      <field id="level4_id">
+        <phrase id="fldcaption" value="level 4 id" />
+      </field>
+      <field id="akun">
+        <phrase id="fldcaption" value="akun" />
+      </field>
+      <field id="level4_nama">
+        <phrase id="fldcaption" value="Nama Akun Level 4" />
+      </field>
+    </table>
   </project>
 </ew-language>

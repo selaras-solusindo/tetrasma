@@ -3,7 +3,6 @@
 
 // Generate all menu items
 $RootMenu->IsRoot = TRUE;
-$RootMenu->AddMenuItem(23, "mmi_ambildata_php", $Language->MenuPhrase("23", "MenuText"), "ambildata.php", -1, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}ambildata.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(22, "mmi_home_php", $Language->MenuPhrase("22", "MenuText"), "home.php", -1, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}home.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(1, "mmi_tb_anggota", $Language->MenuPhrase("1", "MenuText"), "tb_anggotalist.php", -1, "", AllowListMenu('{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}tb_anggota'), FALSE, FALSE);
 $RootMenu->AddMenuItem(15, "mmci_Manajemen_Akun", $Language->MenuPhrase("15", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
