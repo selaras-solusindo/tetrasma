@@ -34,9 +34,9 @@ class ctb_jurnal extends cTable {
 		$this->ExportPageSize = "a4"; // Page size (PDF only)
 		$this->ExportExcelPageOrientation = ""; // Page orientation (PHPExcel only)
 		$this->ExportExcelPageSize = ""; // Page size (PHPExcel only)
-		$this->DetailAdd = TRUE; // Allow detail add
-		$this->DetailEdit = TRUE; // Allow detail edit
-		$this->DetailView = TRUE; // Allow detail view
+		$this->DetailAdd = FALSE; // Allow detail add
+		$this->DetailEdit = FALSE; // Allow detail edit
+		$this->DetailView = FALSE; // Allow detail view
 		$this->ShowMultipleDetails = FALSE; // Show multiple details
 		$this->GridAddRowCount = 5;
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
@@ -50,7 +50,7 @@ class ctb_jurnal extends cTable {
 		$this->fields['jurnal_id'] = &$this->jurnal_id;
 
 		// jenis_jurnal
-		$this->jenis_jurnal = new cField('tb_jurnal', 'tb_jurnal', 'x_jenis_jurnal', 'jenis_jurnal', '`jenis_jurnal`', '`jenis_jurnal`', 16, -1, FALSE, '`jenis_jurnal`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
+		$this->jenis_jurnal = new cField('tb_jurnal', 'tb_jurnal', 'x_jenis_jurnal', 'jenis_jurnal', '`jenis_jurnal`', '`jenis_jurnal`', 200, -1, FALSE, '`jenis_jurnal`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
 		$this->jenis_jurnal->Sortable = TRUE; // Allow sort
 		$this->jenis_jurnal->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->jenis_jurnal->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text

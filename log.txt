@@ -1,3 +1,9 @@
+5:17 PM 1/6/2017
+- untuk tabel jurnal dan tabel detail :: 
+	- record detail disimpan di tabel detail
+	- record lawan disimpan di tabel jurnal sebagai akumulasi dari record detail
+	- perlu pendefinisian awal, apa2 aja yang disimpan di tabel jurnal, antara lain :: akun_id dan nilai (nilai total dari detail)
+
 10:50 AM 1/5/2017
 - sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
 	belum

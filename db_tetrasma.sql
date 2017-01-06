@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 05, 2017 at 10:23 AM
+-- Generation Time: Jan 06, 2017 at 05:20 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=76 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=151 ;
 
 --
 -- Dumping data for table `audittrail`
@@ -118,7 +118,82 @@ INSERT INTO `audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table`,
 (72, '2017-01-01 15:31:49', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
 (73, '2017-01-01 15:36:55', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
 (74, '2017-01-01 15:36:58', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
-(75, '2017-01-05 02:18:05', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', '');
+(75, '2017-01-05 02:18:05', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(76, '2017-01-05 13:19:43', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(77, '2017-01-06 01:52:10', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(78, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(79, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '1', '', '2'),
+(80, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '1', '', '10000'),
+(81, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '1', '', NULL),
+(82, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '1', '', '1'),
+(83, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '1', '', '1'),
+(84, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(85, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '1', '', '0'),
+(86, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '1', '', 'KM201701001'),
+(87, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '1', '', '2017-01-06'),
+(88, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '1', '', 'tes'),
+(89, '2017-01-06 04:27:59', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '1', '', '1'),
+(90, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(91, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '1', '', '2'),
+(92, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '1', '', '11000'),
+(93, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '1', '', '5'),
+(94, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '1', '', '1'),
+(95, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '1', '', '1'),
+(96, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(97, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '1', '', 'KM'),
+(98, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '1', '', 'KM201701001'),
+(99, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '1', '', '2017-01-06'),
+(100, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '1', '', 'tes1'),
+(101, '2017-01-06 05:44:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '1', '', '1'),
+(102, '2017-01-06 05:48:32', '/tetrasma/tb_jurnaledit.php', 'admin', '*** Batch update begin ***', 'tb_detail', '', '', '', ''),
+(103, '2017-01-06 05:48:32', '/tetrasma/tb_jurnaledit.php', 'admin', 'U', 'tb_detail', 'nilai', '1', '11000', '11500'),
+(104, '2017-01-06 05:48:32', '/tetrasma/tb_jurnaledit.php', 'admin', '*** Batch update successful ***', 'tb_detail', '', '', '', ''),
+(105, '2017-01-06 08:43:35', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(106, '2017-01-06 09:06:43', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(107, '2017-01-06 09:06:43', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert rollback ***', 'tb_detail', '', '', '', ''),
+(108, '2017-01-06 09:07:01', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(109, '2017-01-06 09:07:01', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert rollback ***', 'tb_detail', '', '', '', ''),
+(110, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(111, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '1', '', '2'),
+(112, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '1', '', '13000'),
+(113, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '1', '', NULL),
+(114, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '1', '', '1'),
+(115, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '1', '', '1'),
+(116, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(117, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '1', '', 'KM'),
+(118, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '1', '', 'KM201701001'),
+(119, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '1', '', '2017-01-06'),
+(120, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '1', '', 'tes3'),
+(121, '2017-01-06 09:11:23', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '1', '', '1'),
+(122, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(123, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '2', '', '2'),
+(124, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '2', '', '13500'),
+(125, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '2', '', NULL),
+(126, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '2', '', '2'),
+(127, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '2', '', '2'),
+(128, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(129, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '2', '', 'KM'),
+(130, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '2', '', 'KM201701002'),
+(131, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '2', '', '2017-01-06'),
+(132, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '2', '', 'tes4'),
+(133, '2017-01-06 09:13:47', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '2', '', '2'),
+(134, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(135, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '3', '', '2'),
+(136, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '3', '', '14000'),
+(137, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '3', '', NULL),
+(138, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '3', '', '3'),
+(139, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '3', '', '3'),
+(140, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '5', '', '2'),
+(141, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '5', '', '14500'),
+(142, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '5', '', NULL),
+(143, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '5', '', '3'),
+(144, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '5', '', '5'),
+(145, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(146, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '3', '', 'KM'),
+(147, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '3', '', 'KM201701003'),
+(148, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '3', '', '2017-01-06'),
+(149, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '3', '', 'tes5'),
+(150, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '3', '', '3');
 
 -- --------------------------------------------------------
 
@@ -404,18 +479,24 @@ INSERT INTO `tb_anggota` (`anggota_id`, `no_anggota`, `nama`, `tgl_masuk`, `alam
 CREATE TABLE IF NOT EXISTS `tb_detail` (
   `detail_id` int(11) NOT NULL AUTO_INCREMENT,
   `jurnal_id` int(11) NOT NULL,
-  `item` int(11) NOT NULL,
   `akun_id` int(11) NOT NULL,
-  `debet` bigint(20) NOT NULL DEFAULT '0',
-  `kredit` bigint(20) NOT NULL DEFAULT '0',
+  `dk` tinyint(1) NOT NULL DEFAULT '0',
+  `nilai` bigint(20) NOT NULL DEFAULT '0',
   `anggota_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`detail_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `tb_detail`
 --
 
+INSERT INTO `tb_detail` (`detail_id`, `jurnal_id`, `akun_id`, `dk`, `nilai`, `anggota_id`) VALUES
+(1, 1, 2, 0, 13000, NULL),
+(2, 2, 2, 1, 13500, NULL),
+(3, 3, 2, 1, 14000, NULL),
+(4, 3, 1, 1, 14000, NULL),
+(5, 3, 2, 1, 14500, NULL),
+(6, 3, 1, 0, 42500, NULL);
 
 -- --------------------------------------------------------
 
@@ -428,14 +509,18 @@ CREATE TABLE IF NOT EXISTS `tb_jurnal` (
   `no_bukti` varchar(25) NOT NULL,
   `tgl` date NOT NULL,
   `ket` text NOT NULL,
-  `jenis_jurnal` tinyint(4) NOT NULL,
+  `jenis_jurnal` varchar(2) NOT NULL,
   PRIMARY KEY (`jurnal_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `tb_jurnal`
 --
 
+INSERT INTO `tb_jurnal` (`jurnal_id`, `no_bukti`, `tgl`, `ket`, `jenis_jurnal`) VALUES
+(1, 'KM201701001', '2017-01-06', 'tes3', 'KM'),
+(2, 'KM201701002', '2017-01-06', 'tes4', 'KM'),
+(3, 'KM201701003', '2017-01-06', 'tes5', 'KM');
 
 -- --------------------------------------------------------
 
@@ -548,6 +633,22 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
 
 INSERT INTO `tb_user` (`user_id`, `username`, `password`, `userlevel`) VALUES
 (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', -1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `view_akun_jurnal`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`view_akun_jurnal` AS select `db_tetrasma`.`tb_level4`.`level4_id` AS `level4_id`,concat(`db_tetrasma`.`tb_level1`.`level1_no`,'.',`db_tetrasma`.`tb_level2`.`level2_no`,'.',`db_tetrasma`.`tb_level3`.`level3_no`,'.',`db_tetrasma`.`tb_level4`.`level4_no`) AS `akun`,`db_tetrasma`.`tb_level4`.`level4_nama` AS `level4_nama` from (((`db_tetrasma`.`tb_level4` join `db_tetrasma`.`tb_level1` on((`db_tetrasma`.`tb_level4`.`level1_id` = `db_tetrasma`.`tb_level1`.`level1_id`))) join `db_tetrasma`.`tb_level2` on((`db_tetrasma`.`tb_level4`.`level2_id` = `db_tetrasma`.`tb_level2`.`level2_id`))) join `db_tetrasma`.`tb_level3` on((`db_tetrasma`.`tb_level4`.`level3_id` = `db_tetrasma`.`tb_level3`.`level3_id`)));
+
+--
+-- Dumping data for table `view_akun_jurnal`
+--
+
+INSERT INTO `view_akun_jurnal` (`level4_id`, `akun`, `level4_nama`) VALUES
+(1, '1.1.1.01', 'Kas'),
+(2, '1.1.1.02', 'Bank BCA');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

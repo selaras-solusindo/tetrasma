@@ -1017,6 +1017,21 @@ class ctb_detail extends cTable {
 	function Row_Inserted($rsold, &$rsnew) {
 
 		//echo "Row Inserted"
+		//$total_nilai = ew_ExecuteScalar("select sum(nilai) ");
+
+		$jenis_jurnal = ew_ExecuteScalar("select jenis_jurnal from tb_jurnal where jurnal_id = ".$rsnew["jurnal_id"]."");
+		if ($jenis_jurnal == "KM" || $jenis_jurnal == "BM") {
+			$dk = 1;
+			$dk_lawan = 0;
+		}
+		else {
+			$dk = 0;
+			$dk_lawan = 1;
+		}
+		ew_Execute("update tb_detail set dk = ".$dk." where jurnal_id = ".$rsnew["jurnal_id"]."");
+		$total_lawan = ew_ExecuteScalar("select sum(nilai) from tb_detail where jurnal_id = ".$rsnew["jurnal_id"]." and dk = ".$dk."");
+		ew_Execute("insert into tb_detail (jurnal_id, akun_id, dk, nilai) values ("
+			.$rsnew["jurnal_id"].", 1, ".$dk_lawan.", ".$total_lawan.")");
 	}
 
 	// Row Updating event

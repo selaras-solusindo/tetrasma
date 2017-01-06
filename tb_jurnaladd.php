@@ -785,7 +785,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 		$rsnew = array();
 
 		// jenis_jurnal
-		$this->jenis_jurnal->SetDbValueDef($rsnew, $this->jenis_jurnal->CurrentValue, 0, FALSE);
+		$this->jenis_jurnal->SetDbValueDef($rsnew, $this->jenis_jurnal->CurrentValue, "", FALSE);
 
 		// no_bukti
 		$this->no_bukti->SetDbValueDef($rsnew, $this->no_bukti->CurrentValue, "", FALSE);

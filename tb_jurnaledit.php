@@ -783,7 +783,7 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$rsnew = array();
 
 			// jenis_jurnal
-			$this->jenis_jurnal->SetDbValueDef($rsnew, $this->jenis_jurnal->CurrentValue, 0, $this->jenis_jurnal->ReadOnly);
+			$this->jenis_jurnal->SetDbValueDef($rsnew, $this->jenis_jurnal->CurrentValue, "", $this->jenis_jurnal->ReadOnly);
 
 			// no_bukti
 			$this->no_bukti->SetDbValueDef($rsnew, $this->no_bukti->CurrentValue, "", $this->no_bukti->ReadOnly);
