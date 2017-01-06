@@ -412,8 +412,6 @@ class ctb_jurnal_list extends ctb_jurnal {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->jurnal_id->SetVisibility();
-		$this->jurnal_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -1012,7 +1010,6 @@ class ctb_jurnal_list extends ctb_jurnal {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->jurnal_id); // jurnal_id
 			$this->UpdateSort($this->jenis_jurnal); // jenis_jurnal
 			$this->UpdateSort($this->no_bukti); // no_bukti
 			$this->UpdateSort($this->tgl); // tgl
@@ -1049,7 +1046,6 @@ class ctb_jurnal_list extends ctb_jurnal {
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->jurnal_id->setSort("");
 				$this->jenis_jurnal->setSort("");
 				$this->no_bukti->setSort("");
 				$this->tgl->setSort("");
@@ -1707,11 +1703,6 @@ class ctb_jurnal_list extends ctb_jurnal {
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
 
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
-
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
 			$this->jenis_jurnal->HrefValue = "";
@@ -2330,15 +2321,6 @@ $tb_jurnal_list->RenderListOptions();
 // Render list options (header, left)
 $tb_jurnal_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-	<?php if ($tb_jurnal->SortUrl($tb_jurnal->jurnal_id) == "") { ?>
-		<th data-name="jurnal_id"><div id="elh_tb_jurnal_jurnal_id" class="tb_jurnal_jurnal_id"><div class="ewTableHeaderCaption"><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="jurnal_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $tb_jurnal->SortUrl($tb_jurnal->jurnal_id) ?>',1);"><div id="elh_tb_jurnal_jurnal_id" class="tb_jurnal_jurnal_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_jurnal->jurnal_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_jurnal->jurnal_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 	<?php if ($tb_jurnal->SortUrl($tb_jurnal->jenis_jurnal) == "") { ?>
 		<th data-name="jenis_jurnal"><div id="elh_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal"><div class="ewTableHeaderCaption"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></div></div></th>
@@ -2440,21 +2422,13 @@ while ($tb_jurnal_list->RecCnt < $tb_jurnal_list->StopRec) {
 // Render list options (body, left)
 $tb_jurnal_list->ListOptions->Render("body", "left", $tb_jurnal_list->RowCnt);
 ?>
-	<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-		<td data-name="jurnal_id"<?php echo $tb_jurnal->jurnal_id->CellAttributes() ?>>
-<span id="el<?php echo $tb_jurnal_list->RowCnt ?>_tb_jurnal_jurnal_id" class="tb_jurnal_jurnal_id">
-<span<?php echo $tb_jurnal->jurnal_id->ViewAttributes() ?>>
-<?php echo $tb_jurnal->jurnal_id->ListViewValue() ?></span>
-</span>
-<a id="<?php echo $tb_jurnal_list->PageObjName . "_row_" . $tb_jurnal_list->RowCnt ?>"></a></td>
-	<?php } ?>
 	<?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<td data-name="jenis_jurnal"<?php echo $tb_jurnal->jenis_jurnal->CellAttributes() ?>>
 <span id="el<?php echo $tb_jurnal_list->RowCnt ?>_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal">
 <span<?php echo $tb_jurnal->jenis_jurnal->ViewAttributes() ?>>
 <?php echo $tb_jurnal->jenis_jurnal->ListViewValue() ?></span>
 </span>
-</td>
+<a id="<?php echo $tb_jurnal_list->PageObjName . "_row_" . $tb_jurnal_list->RowCnt ?>"></a></td>
 	<?php } ?>
 	<?php if ($tb_jurnal->no_bukti->Visible) { // no_bukti ?>
 		<td data-name="no_bukti"<?php echo $tb_jurnal->no_bukti->CellAttributes() ?>>

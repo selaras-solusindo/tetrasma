@@ -41,33 +41,15 @@ ftb_detailgrid.Validate = function() {
 		var checkrow = (gridinsert) ? !this.EmptyRow(infix) : true;
 		if (checkrow) {
 			addcnt++;
-			elm = this.GetElements("x" + infix + "_jurnal_id");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->jurnal_id->FldCaption(), $tb_detail->jurnal_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_jurnal_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->jurnal_id->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_item");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->item->FldCaption(), $tb_detail->item->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_item");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->item->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_akun_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->akun_id->FldCaption(), $tb_detail->akun_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_debet");
+			elm = this.GetElements("x" + infix + "_nilai");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->debet->FldCaption(), $tb_detail->debet->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_debet");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->nilai->FldCaption(), $tb_detail->nilai->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_nilai");
 			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->debet->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_kredit");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->kredit->FldCaption(), $tb_detail->kredit->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_kredit");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->kredit->FldErrMsg()) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->nilai->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -80,11 +62,8 @@ ftb_detailgrid.Validate = function() {
 // Check empty row
 ftb_detailgrid.EmptyRow = function(infix) {
 	var fobj = this.Form;
-	if (ew_ValueChanged(fobj, infix, "jurnal_id", false)) return false;
-	if (ew_ValueChanged(fobj, infix, "item", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "akun_id", false)) return false;
-	if (ew_ValueChanged(fobj, infix, "debet", false)) return false;
-	if (ew_ValueChanged(fobj, infix, "kredit", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "nilai", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "anggota_id", false)) return false;
 	return true;
 }
@@ -180,33 +159,6 @@ $tb_detail_grid->RenderListOptions();
 // Render list options (header, left)
 $tb_detail_grid->ListOptions->Render("header", "left");
 ?>
-<?php if ($tb_detail->detail_id->Visible) { // detail_id ?>
-	<?php if ($tb_detail->SortUrl($tb_detail->detail_id) == "") { ?>
-		<th data-name="detail_id"><div id="elh_tb_detail_detail_id" class="tb_detail_detail_id"><div class="ewTableHeaderCaption"><?php echo $tb_detail->detail_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="detail_id"><div><div id="elh_tb_detail_detail_id" class="tb_detail_detail_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_detail->detail_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_detail->detail_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_detail->detail_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($tb_detail->jurnal_id->Visible) { // jurnal_id ?>
-	<?php if ($tb_detail->SortUrl($tb_detail->jurnal_id) == "") { ?>
-		<th data-name="jurnal_id"><div id="elh_tb_detail_jurnal_id" class="tb_detail_jurnal_id"><div class="ewTableHeaderCaption"><?php echo $tb_detail->jurnal_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="jurnal_id"><div><div id="elh_tb_detail_jurnal_id" class="tb_detail_jurnal_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_detail->jurnal_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_detail->jurnal_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_detail->jurnal_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($tb_detail->item->Visible) { // item ?>
-	<?php if ($tb_detail->SortUrl($tb_detail->item) == "") { ?>
-		<th data-name="item"><div id="elh_tb_detail_item" class="tb_detail_item"><div class="ewTableHeaderCaption"><?php echo $tb_detail->item->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="item"><div><div id="elh_tb_detail_item" class="tb_detail_item">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_detail->item->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_detail->item->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_detail->item->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 	<?php if ($tb_detail->SortUrl($tb_detail->akun_id) == "") { ?>
 		<th data-name="akun_id"><div id="elh_tb_detail_akun_id" class="tb_detail_akun_id"><div class="ewTableHeaderCaption"><?php echo $tb_detail->akun_id->FldCaption() ?></div></div></th>
@@ -216,21 +168,12 @@ $tb_detail_grid->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($tb_detail->debet->Visible) { // debet ?>
-	<?php if ($tb_detail->SortUrl($tb_detail->debet) == "") { ?>
-		<th data-name="debet"><div id="elh_tb_detail_debet" class="tb_detail_debet"><div class="ewTableHeaderCaption"><?php echo $tb_detail->debet->FldCaption() ?></div></div></th>
+<?php if ($tb_detail->nilai->Visible) { // nilai ?>
+	<?php if ($tb_detail->SortUrl($tb_detail->nilai) == "") { ?>
+		<th data-name="nilai"><div id="elh_tb_detail_nilai" class="tb_detail_nilai"><div class="ewTableHeaderCaption"><?php echo $tb_detail->nilai->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="debet"><div><div id="elh_tb_detail_debet" class="tb_detail_debet">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_detail->debet->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_detail->debet->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_detail->debet->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($tb_detail->kredit->Visible) { // kredit ?>
-	<?php if ($tb_detail->SortUrl($tb_detail->kredit) == "") { ?>
-		<th data-name="kredit"><div id="elh_tb_detail_kredit" class="tb_detail_kredit"><div class="ewTableHeaderCaption"><?php echo $tb_detail->kredit->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="kredit"><div><div id="elh_tb_detail_kredit" class="tb_detail_kredit">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_detail->kredit->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_detail->kredit->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_detail->kredit->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="nilai"><div><div id="elh_tb_detail_nilai" class="tb_detail_nilai">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_detail->nilai->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_detail->nilai->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_detail->nilai->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -352,105 +295,6 @@ while ($tb_detail_grid->RecCnt < $tb_detail_grid->StopRec) {
 // Render list options (body, left)
 $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowCnt);
 ?>
-	<?php if ($tb_detail->detail_id->Visible) { // detail_id ?>
-		<td data-name="detail_id"<?php echo $tb_detail->detail_id->CellAttributes() ?>>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->OldValue) ?>">
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_detail_id" class="form-group tb_detail_detail_id">
-<span<?php echo $tb_detail->detail_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->detail_id->EditValue ?></p></span>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->CurrentValue) ?>">
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_detail_id" class="tb_detail_detail_id">
-<span<?php echo $tb_detail->detail_id->ViewAttributes() ?>>
-<?php echo $tb_detail->detail_id->ListViewValue() ?></span>
-</span>
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->OldValue) ?>">
-<?php } else { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-<a id="<?php echo $tb_detail_grid->PageObjName . "_row_" . $tb_detail_grid->RowCnt ?>"></a></td>
-	<?php } ?>
-	<?php if ($tb_detail->jurnal_id->Visible) { // jurnal_id ?>
-		<td data-name="jurnal_id"<?php echo $tb_detail->jurnal_id->CellAttributes() ?>>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<?php if ($tb_detail->jurnal_id->getSessionValue() <> "") { ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->jurnal_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<input type="text" data-table="tb_detail" data-field="x_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->getPlaceHolder()) ?>" value="<?php echo $tb_detail->jurnal_id->EditValue ?>"<?php echo $tb_detail->jurnal_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->OldValue) ?>">
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<?php if ($tb_detail->jurnal_id->getSessionValue() <> "") { ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->jurnal_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<input type="text" data-table="tb_detail" data-field="x_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->getPlaceHolder()) ?>" value="<?php echo $tb_detail->jurnal_id->EditValue ?>"<?php echo $tb_detail->jurnal_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_jurnal_id" class="tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<?php echo $tb_detail->jurnal_id->ListViewValue() ?></span>
-</span>
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->OldValue) ?>">
-<?php } else { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-</td>
-	<?php } ?>
-	<?php if ($tb_detail->item->Visible) { // item ?>
-		<td data-name="item"<?php echo $tb_detail->item->CellAttributes() ?>>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_item" class="form-group tb_detail_item">
-<input type="text" data-table="tb_detail" data-field="x_item" name="x<?php echo $tb_detail_grid->RowIndex ?>_item" id="x<?php echo $tb_detail_grid->RowIndex ?>_item" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->item->getPlaceHolder()) ?>" value="<?php echo $tb_detail->item->EditValue ?>"<?php echo $tb_detail->item->EditAttributes() ?>>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="o<?php echo $tb_detail_grid->RowIndex ?>_item" id="o<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->OldValue) ?>">
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_item" class="form-group tb_detail_item">
-<input type="text" data-table="tb_detail" data-field="x_item" name="x<?php echo $tb_detail_grid->RowIndex ?>_item" id="x<?php echo $tb_detail_grid->RowIndex ?>_item" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->item->getPlaceHolder()) ?>" value="<?php echo $tb_detail->item->EditValue ?>"<?php echo $tb_detail->item->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_item" class="tb_detail_item">
-<span<?php echo $tb_detail->item->ViewAttributes() ?>>
-<?php echo $tb_detail->item->ListViewValue() ?></span>
-</span>
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="x<?php echo $tb_detail_grid->RowIndex ?>_item" id="x<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="o<?php echo $tb_detail_grid->RowIndex ?>_item" id="o<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->OldValue) ?>">
-<?php } else { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_item" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_item" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-</td>
-	<?php } ?>
 	<?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 		<td data-name="akun_id"<?php echo $tb_detail->akun_id->CellAttributes() ?>>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
@@ -505,60 +349,39 @@ ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>
 <input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->OldValue) ?>">
 <?php } ?>
 <?php } ?>
-</td>
+<a id="<?php echo $tb_detail_grid->PageObjName . "_row_" . $tb_detail_grid->RowCnt ?>"></a></td>
 	<?php } ?>
-	<?php if ($tb_detail->debet->Visible) { // debet ?>
-		<td data-name="debet"<?php echo $tb_detail->debet->CellAttributes() ?>>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_debet" class="form-group tb_detail_debet">
-<input type="text" data-table="tb_detail" data-field="x_debet" name="x<?php echo $tb_detail_grid->RowIndex ?>_debet" id="x<?php echo $tb_detail_grid->RowIndex ?>_debet" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->debet->getPlaceHolder()) ?>" value="<?php echo $tb_detail->debet->EditValue ?>"<?php echo $tb_detail->debet->EditAttributes() ?>>
+<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->CurrentValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->OldValue) ?>">
+<?php } ?>
+<?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT || $tb_detail->CurrentMode == "edit") { ?>
+<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->CurrentValue) ?>">
+<?php } ?>
+	<?php if ($tb_detail->nilai->Visible) { // nilai ?>
+		<td data-name="nilai"<?php echo $tb_detail->nilai->CellAttributes() ?>>
+<?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_nilai" class="form-group tb_detail_nilai">
+<input type="text" data-table="tb_detail" data-field="x_nilai" name="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->nilai->getPlaceHolder()) ?>" value="<?php echo $tb_detail->nilai->EditValue ?>"<?php echo $tb_detail->nilai->EditAttributes() ?>>
 </span>
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="o<?php echo $tb_detail_grid->RowIndex ?>_debet" id="o<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->OldValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->OldValue) ?>">
 <?php } ?>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_debet" class="form-group tb_detail_debet">
-<input type="text" data-table="tb_detail" data-field="x_debet" name="x<?php echo $tb_detail_grid->RowIndex ?>_debet" id="x<?php echo $tb_detail_grid->RowIndex ?>_debet" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->debet->getPlaceHolder()) ?>" value="<?php echo $tb_detail->debet->EditValue ?>"<?php echo $tb_detail->debet->EditAttributes() ?>>
+<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_nilai" class="form-group tb_detail_nilai">
+<input type="text" data-table="tb_detail" data-field="x_nilai" name="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->nilai->getPlaceHolder()) ?>" value="<?php echo $tb_detail->nilai->EditValue ?>"<?php echo $tb_detail->nilai->EditAttributes() ?>>
 </span>
 <?php } ?>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_debet" class="tb_detail_debet">
-<span<?php echo $tb_detail->debet->ViewAttributes() ?>>
-<?php echo $tb_detail->debet->ListViewValue() ?></span>
+<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_nilai" class="tb_detail_nilai">
+<span<?php echo $tb_detail->nilai->ViewAttributes() ?>>
+<?php echo $tb_detail->nilai->ListViewValue() ?></span>
 </span>
 <?php if ($tb_detail->CurrentAction <> "F") { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="x<?php echo $tb_detail_grid->RowIndex ?>_debet" id="x<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="o<?php echo $tb_detail_grid->RowIndex ?>_debet" id="o<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->OldValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->FormValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->OldValue) ?>">
 <?php } else { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_debet" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_debet" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-</td>
-	<?php } ?>
-	<?php if ($tb_detail->kredit->Visible) { // kredit ?>
-		<td data-name="kredit"<?php echo $tb_detail->kredit->CellAttributes() ?>>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_kredit" class="form-group tb_detail_kredit">
-<input type="text" data-table="tb_detail" data-field="x_kredit" name="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->kredit->getPlaceHolder()) ?>" value="<?php echo $tb_detail->kredit->EditValue ?>"<?php echo $tb_detail->kredit->EditAttributes() ?>>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="o<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="o<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->OldValue) ?>">
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_kredit" class="form-group tb_detail_kredit">
-<input type="text" data-table="tb_detail" data-field="x_kredit" name="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->kredit->getPlaceHolder()) ?>" value="<?php echo $tb_detail->kredit->EditValue ?>"<?php echo $tb_detail->kredit->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_kredit" class="tb_detail_kredit">
-<span<?php echo $tb_detail->kredit->ViewAttributes() ?>>
-<?php echo $tb_detail->kredit->ListViewValue() ?></span>
-</span>
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="o<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="o<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->OldValue) ?>">
-<?php } else { ?>
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->FormValue) ?>">
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->OldValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->FormValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->OldValue) ?>">
 <?php } ?>
 <?php } ?>
 </td>
@@ -661,59 +484,6 @@ ftb_detailgrid.UpdateOpts(<?php echo $tb_detail_grid->RowIndex ?>);
 // Render list options (body, left)
 $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowIndex);
 ?>
-	<?php if ($tb_detail->detail_id->Visible) { // detail_id ?>
-		<td data-name="detail_id">
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<?php } else { ?>
-<span id="el$rowindex$_tb_detail_detail_id" class="form-group tb_detail_detail_id">
-<span<?php echo $tb_detail->detail_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->detail_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->FormValue) ?>">
-<?php } ?>
-<input type="hidden" data-table="tb_detail" data-field="x_detail_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_detail_id" value="<?php echo ew_HtmlEncode($tb_detail->detail_id->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($tb_detail->jurnal_id->Visible) { // jurnal_id ?>
-		<td data-name="jurnal_id">
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<?php if ($tb_detail->jurnal_id->getSessionValue() <> "") { ?>
-<span id="el$rowindex$_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->jurnal_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el$rowindex$_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<input type="text" data-table="tb_detail" data-field="x_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->getPlaceHolder()) ?>" value="<?php echo $tb_detail->jurnal_id->EditValue ?>"<?php echo $tb_detail->jurnal_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php } else { ?>
-<span id="el$rowindex$_tb_detail_jurnal_id" class="form-group tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->jurnal_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->FormValue) ?>">
-<?php } ?>
-<input type="hidden" data-table="tb_detail" data-field="x_jurnal_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($tb_detail->item->Visible) { // item ?>
-		<td data-name="item">
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<span id="el$rowindex$_tb_detail_item" class="form-group tb_detail_item">
-<input type="text" data-table="tb_detail" data-field="x_item" name="x<?php echo $tb_detail_grid->RowIndex ?>_item" id="x<?php echo $tb_detail_grid->RowIndex ?>_item" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->item->getPlaceHolder()) ?>" value="<?php echo $tb_detail->item->EditValue ?>"<?php echo $tb_detail->item->EditAttributes() ?>>
-</span>
-<?php } else { ?>
-<span id="el$rowindex$_tb_detail_item" class="form-group tb_detail_item">
-<span<?php echo $tb_detail->item->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->item->ViewValue ?></p></span>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="x<?php echo $tb_detail_grid->RowIndex ?>_item" id="x<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->FormValue) ?>">
-<?php } ?>
-<input type="hidden" data-table="tb_detail" data-field="x_item" name="o<?php echo $tb_detail_grid->RowIndex ?>_item" id="o<?php echo $tb_detail_grid->RowIndex ?>_item" value="<?php echo ew_HtmlEncode($tb_detail->item->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 		<td data-name="akun_id">
 <?php if ($tb_detail->CurrentAction <> "F") { ?>
@@ -744,36 +514,20 @@ ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>
 <input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($tb_detail->debet->Visible) { // debet ?>
-		<td data-name="debet">
+	<?php if ($tb_detail->nilai->Visible) { // nilai ?>
+		<td data-name="nilai">
 <?php if ($tb_detail->CurrentAction <> "F") { ?>
-<span id="el$rowindex$_tb_detail_debet" class="form-group tb_detail_debet">
-<input type="text" data-table="tb_detail" data-field="x_debet" name="x<?php echo $tb_detail_grid->RowIndex ?>_debet" id="x<?php echo $tb_detail_grid->RowIndex ?>_debet" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->debet->getPlaceHolder()) ?>" value="<?php echo $tb_detail->debet->EditValue ?>"<?php echo $tb_detail->debet->EditAttributes() ?>>
+<span id="el$rowindex$_tb_detail_nilai" class="form-group tb_detail_nilai">
+<input type="text" data-table="tb_detail" data-field="x_nilai" name="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->nilai->getPlaceHolder()) ?>" value="<?php echo $tb_detail->nilai->EditValue ?>"<?php echo $tb_detail->nilai->EditAttributes() ?>>
 </span>
 <?php } else { ?>
-<span id="el$rowindex$_tb_detail_debet" class="form-group tb_detail_debet">
-<span<?php echo $tb_detail->debet->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->debet->ViewValue ?></p></span>
+<span id="el$rowindex$_tb_detail_nilai" class="form-group tb_detail_nilai">
+<span<?php echo $tb_detail->nilai->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $tb_detail->nilai->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="x<?php echo $tb_detail_grid->RowIndex ?>_debet" id="x<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->FormValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->FormValue) ?>">
 <?php } ?>
-<input type="hidden" data-table="tb_detail" data-field="x_debet" name="o<?php echo $tb_detail_grid->RowIndex ?>_debet" id="o<?php echo $tb_detail_grid->RowIndex ?>_debet" value="<?php echo ew_HtmlEncode($tb_detail->debet->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($tb_detail->kredit->Visible) { // kredit ?>
-		<td data-name="kredit">
-<?php if ($tb_detail->CurrentAction <> "F") { ?>
-<span id="el$rowindex$_tb_detail_kredit" class="form-group tb_detail_kredit">
-<input type="text" data-table="tb_detail" data-field="x_kredit" name="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->kredit->getPlaceHolder()) ?>" value="<?php echo $tb_detail->kredit->EditValue ?>"<?php echo $tb_detail->kredit->EditAttributes() ?>>
-</span>
-<?php } else { ?>
-<span id="el$rowindex$_tb_detail_kredit" class="form-group tb_detail_kredit">
-<span<?php echo $tb_detail->kredit->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->kredit->ViewValue ?></p></span>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="x<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->FormValue) ?>">
-<?php } ?>
-<input type="hidden" data-table="tb_detail" data-field="x_kredit" name="o<?php echo $tb_detail_grid->RowIndex ?>_kredit" id="o<?php echo $tb_detail_grid->RowIndex ?>_kredit" value="<?php echo ew_HtmlEncode($tb_detail->kredit->OldValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($tb_detail->anggota_id->Visible) { // anggota_id ?>

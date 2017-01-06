@@ -1,6 +1,5 @@
 <?php
 
-// jurnal_id
 // jenis_jurnal
 // no_bukti
 // tgl
@@ -12,17 +11,6 @@
 <table id="tbl_tb_jurnalmaster" class="table table-bordered table-striped ewViewTable">
 <?php echo $tb_jurnal->TableCustomInnerHtml ?>
 	<tbody>
-<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-		<tr id="r_jurnal_id">
-			<td><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></td>
-			<td<?php echo $tb_jurnal->jurnal_id->CellAttributes() ?>>
-<span id="el_tb_jurnal_jurnal_id">
-<span<?php echo $tb_jurnal->jurnal_id->ViewAttributes() ?>>
-<?php echo $tb_jurnal->jurnal_id->ListViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<tr id="r_jenis_jurnal">
 			<td><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></td>

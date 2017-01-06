@@ -290,11 +290,8 @@ class ctb_detail_add extends ctb_detail {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->jurnal_id->SetVisibility();
-		$this->item->SetVisibility();
 		$this->akun_id->SetVisibility();
-		$this->debet->SetVisibility();
-		$this->kredit->SetVisibility();
+		$this->nilai->SetVisibility();
 		$this->anggota_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
@@ -485,14 +482,9 @@ class ctb_detail_add extends ctb_detail {
 
 	// Load default values
 	function LoadDefaultValues() {
-		$this->jurnal_id->CurrentValue = NULL;
-		$this->jurnal_id->OldValue = $this->jurnal_id->CurrentValue;
-		$this->item->CurrentValue = NULL;
-		$this->item->OldValue = $this->item->CurrentValue;
 		$this->akun_id->CurrentValue = NULL;
 		$this->akun_id->OldValue = $this->akun_id->CurrentValue;
-		$this->debet->CurrentValue = 0;
-		$this->kredit->CurrentValue = 0;
+		$this->nilai->CurrentValue = 0;
 		$this->anggota_id->CurrentValue = NULL;
 		$this->anggota_id->OldValue = $this->anggota_id->CurrentValue;
 	}
@@ -502,20 +494,11 @@ class ctb_detail_add extends ctb_detail {
 
 		// Load from form
 		global $objForm;
-		if (!$this->jurnal_id->FldIsDetailKey) {
-			$this->jurnal_id->setFormValue($objForm->GetValue("x_jurnal_id"));
-		}
-		if (!$this->item->FldIsDetailKey) {
-			$this->item->setFormValue($objForm->GetValue("x_item"));
-		}
 		if (!$this->akun_id->FldIsDetailKey) {
 			$this->akun_id->setFormValue($objForm->GetValue("x_akun_id"));
 		}
-		if (!$this->debet->FldIsDetailKey) {
-			$this->debet->setFormValue($objForm->GetValue("x_debet"));
-		}
-		if (!$this->kredit->FldIsDetailKey) {
-			$this->kredit->setFormValue($objForm->GetValue("x_kredit"));
+		if (!$this->nilai->FldIsDetailKey) {
+			$this->nilai->setFormValue($objForm->GetValue("x_nilai"));
 		}
 		if (!$this->anggota_id->FldIsDetailKey) {
 			$this->anggota_id->setFormValue($objForm->GetValue("x_anggota_id"));
@@ -526,11 +509,8 @@ class ctb_detail_add extends ctb_detail {
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadOldRecord();
-		$this->jurnal_id->CurrentValue = $this->jurnal_id->FormValue;
-		$this->item->CurrentValue = $this->item->FormValue;
 		$this->akun_id->CurrentValue = $this->akun_id->FormValue;
-		$this->debet->CurrentValue = $this->debet->FormValue;
-		$this->kredit->CurrentValue = $this->kredit->FormValue;
+		$this->nilai->CurrentValue = $this->nilai->FormValue;
 		$this->anggota_id->CurrentValue = $this->anggota_id->FormValue;
 	}
 
@@ -565,21 +545,20 @@ class ctb_detail_add extends ctb_detail {
 		$this->Row_Selected($row);
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
-		$this->item->setDbValue($rs->fields('item'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
 		if (array_key_exists('EV__akun_id', $rs->fields)) {
 			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
 		} else {
 			$this->akun_id->VirtualValue = ""; // Clear value
 		}
-		$this->debet->setDbValue($rs->fields('debet'));
-		$this->kredit->setDbValue($rs->fields('kredit'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 		if (array_key_exists('EV__anggota_id', $rs->fields)) {
 			$this->anggota_id->VirtualValue = $rs->fields('EV__anggota_id'); // Set up virtual field value
 		} else {
 			$this->anggota_id->VirtualValue = ""; // Clear value
 		}
+		$this->dk->setDbValue($rs->fields('dk'));
 	}
 
 	// Load DbValue from recordset
@@ -588,11 +567,10 @@ class ctb_detail_add extends ctb_detail {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->detail_id->DbValue = $row['detail_id'];
 		$this->jurnal_id->DbValue = $row['jurnal_id'];
-		$this->item->DbValue = $row['item'];
 		$this->akun_id->DbValue = $row['akun_id'];
-		$this->debet->DbValue = $row['debet'];
-		$this->kredit->DbValue = $row['kredit'];
+		$this->nilai->DbValue = $row['nilai'];
 		$this->anggota_id->DbValue = $row['anggota_id'];
+		$this->dk->DbValue = $row['dk'];
 	}
 
 	// Load old record
@@ -630,11 +608,10 @@ class ctb_detail_add extends ctb_detail {
 		// Common render codes for all row types
 		// detail_id
 		// jurnal_id
-		// item
 		// akun_id
-		// debet
-		// kredit
+		// nilai
 		// anggota_id
+		// dk
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -645,10 +622,6 @@ class ctb_detail_add extends ctb_detail {
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
-
-		// item
-		$this->item->ViewValue = $this->item->CurrentValue;
-		$this->item->ViewCustomAttributes = "";
 
 		// akun_id
 		if ($this->akun_id->VirtualValue <> "") {
@@ -679,13 +652,9 @@ class ctb_detail_add extends ctb_detail {
 		}
 		$this->akun_id->ViewCustomAttributes = "";
 
-		// debet
-		$this->debet->ViewValue = $this->debet->CurrentValue;
-		$this->debet->ViewCustomAttributes = "";
-
-		// kredit
-		$this->kredit->ViewValue = $this->kredit->CurrentValue;
-		$this->kredit->ViewCustomAttributes = "";
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id
 		if ($this->anggota_id->VirtualValue <> "") {
@@ -715,54 +684,21 @@ class ctb_detail_add extends ctb_detail {
 		}
 		$this->anggota_id->ViewCustomAttributes = "";
 
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
-
-			// item
-			$this->item->LinkCustomAttributes = "";
-			$this->item->HrefValue = "";
-			$this->item->TooltipValue = "";
-
 			// akun_id
 			$this->akun_id->LinkCustomAttributes = "";
 			$this->akun_id->HrefValue = "";
 			$this->akun_id->TooltipValue = "";
 
-			// debet
-			$this->debet->LinkCustomAttributes = "";
-			$this->debet->HrefValue = "";
-			$this->debet->TooltipValue = "";
-
-			// kredit
-			$this->kredit->LinkCustomAttributes = "";
-			$this->kredit->HrefValue = "";
-			$this->kredit->TooltipValue = "";
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 
 			// anggota_id
 			$this->anggota_id->LinkCustomAttributes = "";
 			$this->anggota_id->HrefValue = "";
 			$this->anggota_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
-
-			// jurnal_id
-			$this->jurnal_id->EditAttrs["class"] = "form-control";
-			$this->jurnal_id->EditCustomAttributes = "";
-			if ($this->jurnal_id->getSessionValue() <> "") {
-				$this->jurnal_id->CurrentValue = $this->jurnal_id->getSessionValue();
-			$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
-			$this->jurnal_id->ViewCustomAttributes = "";
-			} else {
-			$this->jurnal_id->EditValue = ew_HtmlEncode($this->jurnal_id->CurrentValue);
-			$this->jurnal_id->PlaceHolder = ew_RemoveHtml($this->jurnal_id->FldCaption());
-			}
-
-			// item
-			$this->item->EditAttrs["class"] = "form-control";
-			$this->item->EditCustomAttributes = "";
-			$this->item->EditValue = ew_HtmlEncode($this->item->CurrentValue);
-			$this->item->PlaceHolder = ew_RemoveHtml($this->item->FldCaption());
 
 			// akun_id
 			$this->akun_id->EditAttrs["class"] = "form-control";
@@ -791,17 +727,11 @@ class ctb_detail_add extends ctb_detail {
 			}
 			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
-			// debet
-			$this->debet->EditAttrs["class"] = "form-control";
-			$this->debet->EditCustomAttributes = "";
-			$this->debet->EditValue = ew_HtmlEncode($this->debet->CurrentValue);
-			$this->debet->PlaceHolder = ew_RemoveHtml($this->debet->FldCaption());
-
-			// kredit
-			$this->kredit->EditAttrs["class"] = "form-control";
-			$this->kredit->EditCustomAttributes = "";
-			$this->kredit->EditValue = ew_HtmlEncode($this->kredit->CurrentValue);
-			$this->kredit->PlaceHolder = ew_RemoveHtml($this->kredit->FldCaption());
+			// nilai
+			$this->nilai->EditAttrs["class"] = "form-control";
+			$this->nilai->EditCustomAttributes = "";
+			$this->nilai->EditValue = ew_HtmlEncode($this->nilai->CurrentValue);
+			$this->nilai->PlaceHolder = ew_RemoveHtml($this->nilai->FldCaption());
 
 			// anggota_id
 			$this->anggota_id->EditAttrs["class"] = "form-control";
@@ -830,26 +760,14 @@ class ctb_detail_add extends ctb_detail {
 			$this->anggota_id->PlaceHolder = ew_RemoveHtml($this->anggota_id->FldCaption());
 
 			// Add refer script
-			// jurnal_id
-
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-
-			// item
-			$this->item->LinkCustomAttributes = "";
-			$this->item->HrefValue = "";
-
 			// akun_id
+
 			$this->akun_id->LinkCustomAttributes = "";
 			$this->akun_id->HrefValue = "";
 
-			// debet
-			$this->debet->LinkCustomAttributes = "";
-			$this->debet->HrefValue = "";
-
-			// kredit
-			$this->kredit->LinkCustomAttributes = "";
-			$this->kredit->HrefValue = "";
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
 
 			// anggota_id
 			$this->anggota_id->LinkCustomAttributes = "";
@@ -876,32 +794,14 @@ class ctb_detail_add extends ctb_detail {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
-		if (!$this->jurnal_id->FldIsDetailKey && !is_null($this->jurnal_id->FormValue) && $this->jurnal_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->jurnal_id->FldCaption(), $this->jurnal_id->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->jurnal_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->jurnal_id->FldErrMsg());
-		}
-		if (!$this->item->FldIsDetailKey && !is_null($this->item->FormValue) && $this->item->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->item->FldCaption(), $this->item->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->item->FormValue)) {
-			ew_AddMessage($gsFormError, $this->item->FldErrMsg());
-		}
 		if (!$this->akun_id->FldIsDetailKey && !is_null($this->akun_id->FormValue) && $this->akun_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->akun_id->FldCaption(), $this->akun_id->ReqErrMsg));
 		}
-		if (!$this->debet->FldIsDetailKey && !is_null($this->debet->FormValue) && $this->debet->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->debet->FldCaption(), $this->debet->ReqErrMsg));
+		if (!$this->nilai->FldIsDetailKey && !is_null($this->nilai->FormValue) && $this->nilai->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->nilai->FldCaption(), $this->nilai->ReqErrMsg));
 		}
-		if (!ew_CheckInteger($this->debet->FormValue)) {
-			ew_AddMessage($gsFormError, $this->debet->FldErrMsg());
-		}
-		if (!$this->kredit->FldIsDetailKey && !is_null($this->kredit->FormValue) && $this->kredit->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->kredit->FldCaption(), $this->kredit->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->kredit->FormValue)) {
-			ew_AddMessage($gsFormError, $this->kredit->FldErrMsg());
+		if (!ew_CheckInteger($this->nilai->FormValue)) {
+			ew_AddMessage($gsFormError, $this->nilai->FldErrMsg());
 		}
 
 		// Return validate result
@@ -927,23 +827,19 @@ class ctb_detail_add extends ctb_detail {
 		}
 		$rsnew = array();
 
-		// jurnal_id
-		$this->jurnal_id->SetDbValueDef($rsnew, $this->jurnal_id->CurrentValue, 0, FALSE);
-
-		// item
-		$this->item->SetDbValueDef($rsnew, $this->item->CurrentValue, 0, FALSE);
-
 		// akun_id
 		$this->akun_id->SetDbValueDef($rsnew, $this->akun_id->CurrentValue, 0, FALSE);
 
-		// debet
-		$this->debet->SetDbValueDef($rsnew, $this->debet->CurrentValue, 0, strval($this->debet->CurrentValue) == "");
-
-		// kredit
-		$this->kredit->SetDbValueDef($rsnew, $this->kredit->CurrentValue, 0, strval($this->kredit->CurrentValue) == "");
+		// nilai
+		$this->nilai->SetDbValueDef($rsnew, $this->nilai->CurrentValue, 0, strval($this->nilai->CurrentValue) == "");
 
 		// anggota_id
 		$this->anggota_id->SetDbValueDef($rsnew, $this->anggota_id->CurrentValue, NULL, FALSE);
+
+		// jurnal_id
+		if ($this->jurnal_id->getSessionValue() <> "") {
+			$rsnew['jurnal_id'] = $this->jurnal_id->getSessionValue();
+		}
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
@@ -1265,33 +1161,15 @@ ftb_detailadd.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
-			elm = this.GetElements("x" + infix + "_jurnal_id");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->jurnal_id->FldCaption(), $tb_detail->jurnal_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_jurnal_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->jurnal_id->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_item");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->item->FldCaption(), $tb_detail->item->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_item");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->item->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_akun_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->akun_id->FldCaption(), $tb_detail->akun_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_debet");
+			elm = this.GetElements("x" + infix + "_nilai");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->debet->FldCaption(), $tb_detail->debet->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_debet");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->nilai->FldCaption(), $tb_detail->nilai->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_nilai");
 			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->debet->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_kredit");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->kredit->FldCaption(), $tb_detail->kredit->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_kredit");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->kredit->FldErrMsg()) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->nilai->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1359,34 +1237,6 @@ $tb_detail_add->ShowMessage();
 <input type="hidden" name="fk_jurnal_id" value="<?php echo $tb_detail->jurnal_id->getSessionValue() ?>">
 <?php } ?>
 <div>
-<?php if ($tb_detail->jurnal_id->Visible) { // jurnal_id ?>
-	<div id="r_jurnal_id" class="form-group">
-		<label id="elh_tb_detail_jurnal_id" for="x_jurnal_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->jurnal_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $tb_detail->jurnal_id->CellAttributes() ?>>
-<?php if ($tb_detail->jurnal_id->getSessionValue() <> "") { ?>
-<span id="el_tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_detail->jurnal_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x_jurnal_id" name="x_jurnal_id" value="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el_tb_detail_jurnal_id">
-<input type="text" data-table="tb_detail" data-field="x_jurnal_id" name="x_jurnal_id" id="x_jurnal_id" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->jurnal_id->getPlaceHolder()) ?>" value="<?php echo $tb_detail->jurnal_id->EditValue ?>"<?php echo $tb_detail->jurnal_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php echo $tb_detail->jurnal_id->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($tb_detail->item->Visible) { // item ?>
-	<div id="r_item" class="form-group">
-		<label id="elh_tb_detail_item" for="x_item" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->item->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $tb_detail->item->CellAttributes() ?>>
-<span id="el_tb_detail_item">
-<input type="text" data-table="tb_detail" data-field="x_item" name="x_item" id="x_item" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->item->getPlaceHolder()) ?>" value="<?php echo $tb_detail->item->EditValue ?>"<?php echo $tb_detail->item->EditAttributes() ?>>
-</span>
-<?php echo $tb_detail->item->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 	<div id="r_akun_id" class="form-group">
 		<label id="elh_tb_detail_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
@@ -1397,7 +1247,7 @@ $wrkonchange = trim(" " . @$tb_detail->akun_id->EditAttrs["onchange"]);
 if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
 $tb_detail->akun_id->EditAttrs["onchange"] = "";
 ?>
-<span id="as_x_akun_id" style="white-space: nowrap; z-index: 8960">
+<span id="as_x_akun_id" style="white-space: nowrap; z-index: 8970">
 	<input type="text" name="sv_x_akun_id" id="sv_x_akun_id" value="<?php echo $tb_detail->akun_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
 </span>
 <input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x_akun_id" id="x_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
@@ -1411,24 +1261,14 @@ ftb_detailadd.CreateAutoSuggest({"id":"x_akun_id","forceSelect":true});
 <?php echo $tb_detail->akun_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($tb_detail->debet->Visible) { // debet ?>
-	<div id="r_debet" class="form-group">
-		<label id="elh_tb_detail_debet" for="x_debet" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->debet->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $tb_detail->debet->CellAttributes() ?>>
-<span id="el_tb_detail_debet">
-<input type="text" data-table="tb_detail" data-field="x_debet" name="x_debet" id="x_debet" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->debet->getPlaceHolder()) ?>" value="<?php echo $tb_detail->debet->EditValue ?>"<?php echo $tb_detail->debet->EditAttributes() ?>>
+<?php if ($tb_detail->nilai->Visible) { // nilai ?>
+	<div id="r_nilai" class="form-group">
+		<label id="elh_tb_detail_nilai" for="x_nilai" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->nilai->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_detail->nilai->CellAttributes() ?>>
+<span id="el_tb_detail_nilai">
+<input type="text" data-table="tb_detail" data-field="x_nilai" name="x_nilai" id="x_nilai" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->nilai->getPlaceHolder()) ?>" value="<?php echo $tb_detail->nilai->EditValue ?>"<?php echo $tb_detail->nilai->EditAttributes() ?>>
 </span>
-<?php echo $tb_detail->debet->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($tb_detail->kredit->Visible) { // kredit ?>
-	<div id="r_kredit" class="form-group">
-		<label id="elh_tb_detail_kredit" for="x_kredit" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->kredit->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $tb_detail->kredit->CellAttributes() ?>>
-<span id="el_tb_detail_kredit">
-<input type="text" data-table="tb_detail" data-field="x_kredit" name="x_kredit" id="x_kredit" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->kredit->getPlaceHolder()) ?>" value="<?php echo $tb_detail->kredit->EditValue ?>"<?php echo $tb_detail->kredit->EditAttributes() ?>>
-</span>
-<?php echo $tb_detail->kredit->CustomMsg ?></div></div>
+<?php echo $tb_detail->nilai->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($tb_detail->anggota_id->Visible) { // anggota_id ?>
@@ -1441,7 +1281,7 @@ $wrkonchange = trim(" " . @$tb_detail->anggota_id->EditAttrs["onchange"]);
 if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
 $tb_detail->anggota_id->EditAttrs["onchange"] = "";
 ?>
-<span id="as_x_anggota_id" style="white-space: nowrap; z-index: 8930">
+<span id="as_x_anggota_id" style="white-space: nowrap; z-index: 8950">
 	<input type="text" name="sv_x_anggota_id" id="sv_x_anggota_id" value="<?php echo $tb_detail->anggota_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
 </span>
 <input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x_anggota_id" id="x_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
@@ -1456,6 +1296,9 @@ ftb_detailadd.CreateAutoSuggest({"id":"x_anggota_id","forceSelect":true});
 	</div>
 <?php } ?>
 </div>
+<?php if (strval($tb_detail->jurnal_id->getSessionValue()) <> "") { ?>
+<input type="hidden" name="x_jurnal_id" id="x_jurnal_id" value="<?php echo ew_HtmlEncode(strval($tb_detail->jurnal_id->getSessionValue())) ?>">
+<?php } ?>
 <?php if (!$tb_detail_add->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">

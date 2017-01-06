@@ -287,13 +287,8 @@ class ctb_detail_delete extends ctb_detail {
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->detail_id->SetVisibility();
-		$this->detail_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
-		$this->jurnal_id->SetVisibility();
-		$this->item->SetVisibility();
 		$this->akun_id->SetVisibility();
-		$this->debet->SetVisibility();
-		$this->kredit->SetVisibility();
+		$this->nilai->SetVisibility();
 		$this->anggota_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
@@ -474,21 +469,20 @@ class ctb_detail_delete extends ctb_detail {
 		$this->Row_Selected($row);
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
-		$this->item->setDbValue($rs->fields('item'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
 		if (array_key_exists('EV__akun_id', $rs->fields)) {
 			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
 		} else {
 			$this->akun_id->VirtualValue = ""; // Clear value
 		}
-		$this->debet->setDbValue($rs->fields('debet'));
-		$this->kredit->setDbValue($rs->fields('kredit'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 		if (array_key_exists('EV__anggota_id', $rs->fields)) {
 			$this->anggota_id->VirtualValue = $rs->fields('EV__anggota_id'); // Set up virtual field value
 		} else {
 			$this->anggota_id->VirtualValue = ""; // Clear value
 		}
+		$this->dk->setDbValue($rs->fields('dk'));
 	}
 
 	// Load DbValue from recordset
@@ -497,11 +491,10 @@ class ctb_detail_delete extends ctb_detail {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->detail_id->DbValue = $row['detail_id'];
 		$this->jurnal_id->DbValue = $row['jurnal_id'];
-		$this->item->DbValue = $row['item'];
 		$this->akun_id->DbValue = $row['akun_id'];
-		$this->debet->DbValue = $row['debet'];
-		$this->kredit->DbValue = $row['kredit'];
+		$this->nilai->DbValue = $row['nilai'];
 		$this->anggota_id->DbValue = $row['anggota_id'];
+		$this->dk->DbValue = $row['dk'];
 	}
 
 	// Render row values based on field settings
@@ -516,11 +509,10 @@ class ctb_detail_delete extends ctb_detail {
 		// Common render codes for all row types
 		// detail_id
 		// jurnal_id
-		// item
 		// akun_id
-		// debet
-		// kredit
+		// nilai
 		// anggota_id
+		// dk
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -531,10 +523,6 @@ class ctb_detail_delete extends ctb_detail {
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
-
-		// item
-		$this->item->ViewValue = $this->item->CurrentValue;
-		$this->item->ViewCustomAttributes = "";
 
 		// akun_id
 		if ($this->akun_id->VirtualValue <> "") {
@@ -565,13 +553,9 @@ class ctb_detail_delete extends ctb_detail {
 		}
 		$this->akun_id->ViewCustomAttributes = "";
 
-		// debet
-		$this->debet->ViewValue = $this->debet->CurrentValue;
-		$this->debet->ViewCustomAttributes = "";
-
-		// kredit
-		$this->kredit->ViewValue = $this->kredit->CurrentValue;
-		$this->kredit->ViewCustomAttributes = "";
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id
 		if ($this->anggota_id->VirtualValue <> "") {
@@ -601,35 +585,15 @@ class ctb_detail_delete extends ctb_detail {
 		}
 		$this->anggota_id->ViewCustomAttributes = "";
 
-			// detail_id
-			$this->detail_id->LinkCustomAttributes = "";
-			$this->detail_id->HrefValue = "";
-			$this->detail_id->TooltipValue = "";
-
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
-
-			// item
-			$this->item->LinkCustomAttributes = "";
-			$this->item->HrefValue = "";
-			$this->item->TooltipValue = "";
-
 			// akun_id
 			$this->akun_id->LinkCustomAttributes = "";
 			$this->akun_id->HrefValue = "";
 			$this->akun_id->TooltipValue = "";
 
-			// debet
-			$this->debet->LinkCustomAttributes = "";
-			$this->debet->HrefValue = "";
-			$this->debet->TooltipValue = "";
-
-			// kredit
-			$this->kredit->LinkCustomAttributes = "";
-			$this->kredit->HrefValue = "";
-			$this->kredit->TooltipValue = "";
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 
 			// anggota_id
 			$this->anggota_id->LinkCustomAttributes = "";
@@ -996,23 +960,11 @@ $tb_detail_delete->ShowMessage();
 <?php echo $tb_detail->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($tb_detail->detail_id->Visible) { // detail_id ?>
-		<th><span id="elh_tb_detail_detail_id" class="tb_detail_detail_id"><?php echo $tb_detail->detail_id->FldCaption() ?></span></th>
-<?php } ?>
-<?php if ($tb_detail->jurnal_id->Visible) { // jurnal_id ?>
-		<th><span id="elh_tb_detail_jurnal_id" class="tb_detail_jurnal_id"><?php echo $tb_detail->jurnal_id->FldCaption() ?></span></th>
-<?php } ?>
-<?php if ($tb_detail->item->Visible) { // item ?>
-		<th><span id="elh_tb_detail_item" class="tb_detail_item"><?php echo $tb_detail->item->FldCaption() ?></span></th>
-<?php } ?>
 <?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 		<th><span id="elh_tb_detail_akun_id" class="tb_detail_akun_id"><?php echo $tb_detail->akun_id->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($tb_detail->debet->Visible) { // debet ?>
-		<th><span id="elh_tb_detail_debet" class="tb_detail_debet"><?php echo $tb_detail->debet->FldCaption() ?></span></th>
-<?php } ?>
-<?php if ($tb_detail->kredit->Visible) { // kredit ?>
-		<th><span id="elh_tb_detail_kredit" class="tb_detail_kredit"><?php echo $tb_detail->kredit->FldCaption() ?></span></th>
+<?php if ($tb_detail->nilai->Visible) { // nilai ?>
+		<th><span id="elh_tb_detail_nilai" class="tb_detail_nilai"><?php echo $tb_detail->nilai->FldCaption() ?></span></th>
 <?php } ?>
 <?php if ($tb_detail->anggota_id->Visible) { // anggota_id ?>
 		<th><span id="elh_tb_detail_anggota_id" class="tb_detail_anggota_id"><?php echo $tb_detail->anggota_id->FldCaption() ?></span></th>
@@ -1038,30 +990,6 @@ while (!$tb_detail_delete->Recordset->EOF) {
 	$tb_detail_delete->RenderRow();
 ?>
 	<tr<?php echo $tb_detail->RowAttributes() ?>>
-<?php if ($tb_detail->detail_id->Visible) { // detail_id ?>
-		<td<?php echo $tb_detail->detail_id->CellAttributes() ?>>
-<span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_detail_id" class="tb_detail_detail_id">
-<span<?php echo $tb_detail->detail_id->ViewAttributes() ?>>
-<?php echo $tb_detail->detail_id->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($tb_detail->jurnal_id->Visible) { // jurnal_id ?>
-		<td<?php echo $tb_detail->jurnal_id->CellAttributes() ?>>
-<span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_jurnal_id" class="tb_detail_jurnal_id">
-<span<?php echo $tb_detail->jurnal_id->ViewAttributes() ?>>
-<?php echo $tb_detail->jurnal_id->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($tb_detail->item->Visible) { // item ?>
-		<td<?php echo $tb_detail->item->CellAttributes() ?>>
-<span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_item" class="tb_detail_item">
-<span<?php echo $tb_detail->item->ViewAttributes() ?>>
-<?php echo $tb_detail->item->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 		<td<?php echo $tb_detail->akun_id->CellAttributes() ?>>
 <span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_akun_id" class="tb_detail_akun_id">
@@ -1070,19 +998,11 @@ while (!$tb_detail_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($tb_detail->debet->Visible) { // debet ?>
-		<td<?php echo $tb_detail->debet->CellAttributes() ?>>
-<span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_debet" class="tb_detail_debet">
-<span<?php echo $tb_detail->debet->ViewAttributes() ?>>
-<?php echo $tb_detail->debet->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($tb_detail->kredit->Visible) { // kredit ?>
-		<td<?php echo $tb_detail->kredit->CellAttributes() ?>>
-<span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_kredit" class="tb_detail_kredit">
-<span<?php echo $tb_detail->kredit->ViewAttributes() ?>>
-<?php echo $tb_detail->kredit->ListViewValue() ?></span>
+<?php if ($tb_detail->nilai->Visible) { // nilai ?>
+		<td<?php echo $tb_detail->nilai->CellAttributes() ?>>
+<span id="el<?php echo $tb_detail_delete->RowCnt ?>_tb_detail_nilai" class="tb_detail_nilai">
+<span<?php echo $tb_detail->nilai->ViewAttributes() ?>>
+<?php echo $tb_detail->nilai->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

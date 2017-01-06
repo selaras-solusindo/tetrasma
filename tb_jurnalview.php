@@ -385,8 +385,6 @@ class ctb_jurnal_view extends ctb_jurnal {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->jurnal_id->SetVisibility();
-		$this->jurnal_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -821,11 +819,6 @@ class ctb_jurnal_view extends ctb_jurnal {
 		// ket
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
-
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
 
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
@@ -1352,17 +1345,6 @@ $tb_jurnal_view->ShowMessage();
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <table class="table table-bordered table-striped ewViewTable">
-<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-	<tr id="r_jurnal_id">
-		<td><span id="elh_tb_jurnal_jurnal_id"><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></span></td>
-		<td data-name="jurnal_id"<?php echo $tb_jurnal->jurnal_id->CellAttributes() ?>>
-<span id="el_tb_jurnal_jurnal_id">
-<span<?php echo $tb_jurnal->jurnal_id->ViewAttributes() ?>>
-<?php echo $tb_jurnal->jurnal_id->ViewValue ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 	<tr id="r_jenis_jurnal">
 		<td><span id="elh_tb_jurnal_jenis_jurnal"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></span></td>

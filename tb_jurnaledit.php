@@ -287,8 +287,6 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->jurnal_id->SetVisibility();
-		$this->jurnal_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -520,8 +518,6 @@ class ctb_jurnal_edit extends ctb_jurnal {
 
 		// Load from form
 		global $objForm;
-		if (!$this->jurnal_id->FldIsDetailKey)
-			$this->jurnal_id->setFormValue($objForm->GetValue("x_jurnal_id"));
 		if (!$this->jenis_jurnal->FldIsDetailKey) {
 			$this->jenis_jurnal->setFormValue($objForm->GetValue("x_jenis_jurnal"));
 		}
@@ -535,6 +531,8 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		if (!$this->ket->FldIsDetailKey) {
 			$this->ket->setFormValue($objForm->GetValue("x_ket"));
 		}
+		if (!$this->jurnal_id->FldIsDetailKey)
+			$this->jurnal_id->setFormValue($objForm->GetValue("x_jurnal_id"));
 	}
 
 	// Restore form values
@@ -639,11 +637,6 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
 
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
-
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
 			$this->jenis_jurnal->HrefValue = "";
@@ -664,12 +657,6 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$this->ket->HrefValue = "";
 			$this->ket->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
-
-			// jurnal_id
-			$this->jurnal_id->EditAttrs["class"] = "form-control";
-			$this->jurnal_id->EditCustomAttributes = "";
-			$this->jurnal_id->EditValue = $this->jurnal_id->CurrentValue;
-			$this->jurnal_id->ViewCustomAttributes = "";
 
 			// jenis_jurnal
 			$this->jenis_jurnal->EditAttrs["class"] = "form-control";
@@ -695,12 +682,8 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$this->ket->PlaceHolder = ew_RemoveHtml($this->ket->FldCaption());
 
 			// Edit refer script
-			// jurnal_id
-
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-
 			// jenis_jurnal
+
 			$this->jenis_jurnal->LinkCustomAttributes = "";
 			$this->jenis_jurnal->HrefValue = "";
 
@@ -1162,18 +1145,6 @@ $tb_jurnal_edit->ShowMessage();
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <div>
-<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-	<div id="r_jurnal_id" class="form-group">
-		<label id="elh_tb_jurnal_jurnal_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></label>
-		<div class="col-sm-10"><div<?php echo $tb_jurnal->jurnal_id->CellAttributes() ?>>
-<span id="el_tb_jurnal_jurnal_id">
-<span<?php echo $tb_jurnal->jurnal_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $tb_jurnal->jurnal_id->EditValue ?></p></span>
-</span>
-<input type="hidden" data-table="tb_jurnal" data-field="x_jurnal_id" name="x_jurnal_id" id="x_jurnal_id" value="<?php echo ew_HtmlEncode($tb_jurnal->jurnal_id->CurrentValue) ?>">
-<?php echo $tb_jurnal->jurnal_id->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 	<div id="r_jenis_jurnal" class="form-group">
 		<label id="elh_tb_jurnal_jenis_jurnal" for="x_jenis_jurnal" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
@@ -1222,6 +1193,7 @@ ew_CreateCalendar("ftb_jurnaledit", "x_tgl", 0);
 	</div>
 <?php } ?>
 </div>
+<input type="hidden" data-table="tb_jurnal" data-field="x_jurnal_id" name="x_jurnal_id" id="x_jurnal_id" value="<?php echo ew_HtmlEncode($tb_jurnal->jurnal_id->CurrentValue) ?>">
 <?php
 	if (in_array("tb_detail", explode(",", $tb_jurnal->getCurrentDetailTable())) && $tb_detail->DetailEdit) {
 ?>

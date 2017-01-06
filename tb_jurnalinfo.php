@@ -723,7 +723,6 @@ class ctb_jurnal extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
 					if ($this->jenis_jurnal->Exportable) $Doc->ExportCaption($this->jenis_jurnal);
 					if ($this->no_bukti->Exportable) $Doc->ExportCaption($this->no_bukti);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
@@ -765,7 +764,6 @@ class ctb_jurnal extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
 						if ($this->jenis_jurnal->Exportable) $Doc->ExportField($this->jenis_jurnal);
 						if ($this->no_bukti->Exportable) $Doc->ExportField($this->no_bukti);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);

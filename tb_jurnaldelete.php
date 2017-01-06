@@ -283,8 +283,6 @@ class ctb_jurnal_delete extends ctb_jurnal {
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->jurnal_id->SetVisibility();
-		$this->jurnal_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -523,11 +521,6 @@ class ctb_jurnal_delete extends ctb_jurnal {
 		// ket
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
-
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
 
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
@@ -849,9 +842,6 @@ $tb_jurnal_delete->ShowMessage();
 <?php echo $tb_jurnal->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-		<th><span id="elh_tb_jurnal_jurnal_id" class="tb_jurnal_jurnal_id"><?php echo $tb_jurnal->jurnal_id->FldCaption() ?></span></th>
-<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<th><span id="elh_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></span></th>
 <?php } ?>
@@ -885,14 +875,6 @@ while (!$tb_jurnal_delete->Recordset->EOF) {
 	$tb_jurnal_delete->RenderRow();
 ?>
 	<tr<?php echo $tb_jurnal->RowAttributes() ?>>
-<?php if ($tb_jurnal->jurnal_id->Visible) { // jurnal_id ?>
-		<td<?php echo $tb_jurnal->jurnal_id->CellAttributes() ?>>
-<span id="el<?php echo $tb_jurnal_delete->RowCnt ?>_tb_jurnal_jurnal_id" class="tb_jurnal_jurnal_id">
-<span<?php echo $tb_jurnal->jurnal_id->ViewAttributes() ?>>
-<?php echo $tb_jurnal->jurnal_id->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<td<?php echo $tb_jurnal->jenis_jurnal->CellAttributes() ?>>
 <span id="el<?php echo $tb_jurnal_delete->RowCnt ?>_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal">

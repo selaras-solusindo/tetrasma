@@ -790,20 +790,17 @@
       <field id="jurnal_id">
         <phrase id="fldcaption" value="jurnal id" />
       </field>
-      <field id="item">
-        <phrase id="fldcaption" value="item" />
-      </field>
       <field id="akun_id">
-        <phrase id="fldcaption" value="akun id" />
+        <phrase id="fldcaption" value="Akun" />
       </field>
-      <field id="debet">
-        <phrase id="fldcaption" value="debet" />
-      </field>
-      <field id="kredit">
-        <phrase id="fldcaption" value="kredit" />
+      <field id="nilai">
+        <phrase id="fldcaption" value="Nilai" />
       </field>
       <field id="anggota_id">
-        <phrase id="fldcaption" value="anggota id" />
+        <phrase id="fldcaption" value="Anggota" />
+      </field>
+      <field id="dk">
+        <phrase id="fldcaption" value="dk" />
       </field>
     </table>
     <table id="tb_jurnal">
@@ -812,7 +809,7 @@
         <phrase id="fldcaption" value="jurnal id" />
       </field>
       <field id="jenis_jurnal">
-        <phrase id="fldcaption" value="jenis jurnal" />
+        <phrase id="fldcaption" value="Jurnal" />
         <phrase id="fldtagvalue1" value="KM" />
         <phrase id="fldtagcaption1" value="Kas Masuk" />
         <phrase id="fldtagvalue2" value="KK" />
@@ -823,13 +820,13 @@
         <phrase id="fldtagcaption4" value="Bank Keluar" />
       </field>
       <field id="no_bukti">
-        <phrase id="fldcaption" value="no bukti" />
+        <phrase id="fldcaption" value="No. Bukti" />
       </field>
       <field id="tgl">
-        <phrase id="fldcaption" value="tgl" />
+        <phrase id="fldcaption" value="Tanggal" />
       </field>
       <field id="ket">
-        <phrase id="fldcaption" value="ket" />
+        <phrase id="fldcaption" value="Keterangan" />
       </field>
     </table>
     <table id="home_php">

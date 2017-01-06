@@ -9,11 +9,10 @@ $tb_detail = NULL;
 class ctb_detail extends cTable {
 	var $detail_id;
 	var $jurnal_id;
-	var $item;
 	var $akun_id;
-	var $debet;
-	var $kredit;
+	var $nilai;
 	var $anggota_id;
+	var $dk;
 
 	//
 	// Table class constructor
@@ -57,35 +56,29 @@ class ctb_detail extends cTable {
 		$this->jurnal_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jurnal_id'] = &$this->jurnal_id;
 
-		// item
-		$this->item = new cField('tb_detail', 'tb_detail', 'x_item', 'item', '`item`', '`item`', 3, -1, FALSE, '`item`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->item->Sortable = TRUE; // Allow sort
-		$this->item->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['item'] = &$this->item;
-
 		// akun_id
 		$this->akun_id = new cField('tb_detail', 'tb_detail', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`EV__akun_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
 		$this->akun_id->Sortable = TRUE; // Allow sort
 		$this->akun_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['akun_id'] = &$this->akun_id;
 
-		// debet
-		$this->debet = new cField('tb_detail', 'tb_detail', 'x_debet', 'debet', '`debet`', '`debet`', 20, -1, FALSE, '`debet`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->debet->Sortable = TRUE; // Allow sort
-		$this->debet->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['debet'] = &$this->debet;
-
-		// kredit
-		$this->kredit = new cField('tb_detail', 'tb_detail', 'x_kredit', 'kredit', '`kredit`', '`kredit`', 20, -1, FALSE, '`kredit`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->kredit->Sortable = TRUE; // Allow sort
-		$this->kredit->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['kredit'] = &$this->kredit;
+		// nilai
+		$this->nilai = new cField('tb_detail', 'tb_detail', 'x_nilai', 'nilai', '`nilai`', '`nilai`', 20, -1, FALSE, '`nilai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->nilai->Sortable = TRUE; // Allow sort
+		$this->nilai->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['nilai'] = &$this->nilai;
 
 		// anggota_id
 		$this->anggota_id = new cField('tb_detail', 'tb_detail', 'x_anggota_id', 'anggota_id', '`anggota_id`', '`anggota_id`', 3, -1, FALSE, '`EV__anggota_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
 		$this->anggota_id->Sortable = TRUE; // Allow sort
 		$this->anggota_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['anggota_id'] = &$this->anggota_id;
+
+		// dk
+		$this->dk = new cField('tb_detail', 'tb_detail', 'x_dk', 'dk', '`dk`', '`dk`', 16, -1, FALSE, '`dk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->dk->Sortable = TRUE; // Allow sort
+		$this->dk->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['dk'] = &$this->dk;
 	}
 
 	// Set Field Visibility
@@ -678,11 +671,10 @@ class ctb_detail extends cTable {
 	function LoadListRowValues(&$rs) {
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
-		$this->item->setDbValue($rs->fields('item'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
-		$this->debet->setDbValue($rs->fields('debet'));
-		$this->kredit->setDbValue($rs->fields('kredit'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
+		$this->dk->setDbValue($rs->fields('dk'));
 	}
 
 	// Render list row values
@@ -695,11 +687,10 @@ class ctb_detail extends cTable {
    // Common render codes
 		// detail_id
 		// jurnal_id
-		// item
 		// akun_id
-		// debet
-		// kredit
+		// nilai
 		// anggota_id
+		// dk
 		// detail_id
 
 		$this->detail_id->ViewValue = $this->detail_id->CurrentValue;
@@ -708,10 +699,6 @@ class ctb_detail extends cTable {
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
-
-		// item
-		$this->item->ViewValue = $this->item->CurrentValue;
-		$this->item->ViewCustomAttributes = "";
 
 		// akun_id
 		if ($this->akun_id->VirtualValue <> "") {
@@ -742,13 +729,9 @@ class ctb_detail extends cTable {
 		}
 		$this->akun_id->ViewCustomAttributes = "";
 
-		// debet
-		$this->debet->ViewValue = $this->debet->CurrentValue;
-		$this->debet->ViewCustomAttributes = "";
-
-		// kredit
-		$this->kredit->ViewValue = $this->kredit->CurrentValue;
-		$this->kredit->ViewCustomAttributes = "";
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id
 		if ($this->anggota_id->VirtualValue <> "") {
@@ -778,6 +761,10 @@ class ctb_detail extends cTable {
 		}
 		$this->anggota_id->ViewCustomAttributes = "";
 
+		// dk
+		$this->dk->ViewValue = $this->dk->CurrentValue;
+		$this->dk->ViewCustomAttributes = "";
+
 		// detail_id
 		$this->detail_id->LinkCustomAttributes = "";
 		$this->detail_id->HrefValue = "";
@@ -788,30 +775,25 @@ class ctb_detail extends cTable {
 		$this->jurnal_id->HrefValue = "";
 		$this->jurnal_id->TooltipValue = "";
 
-		// item
-		$this->item->LinkCustomAttributes = "";
-		$this->item->HrefValue = "";
-		$this->item->TooltipValue = "";
-
 		// akun_id
 		$this->akun_id->LinkCustomAttributes = "";
 		$this->akun_id->HrefValue = "";
 		$this->akun_id->TooltipValue = "";
 
-		// debet
-		$this->debet->LinkCustomAttributes = "";
-		$this->debet->HrefValue = "";
-		$this->debet->TooltipValue = "";
-
-		// kredit
-		$this->kredit->LinkCustomAttributes = "";
-		$this->kredit->HrefValue = "";
-		$this->kredit->TooltipValue = "";
+		// nilai
+		$this->nilai->LinkCustomAttributes = "";
+		$this->nilai->HrefValue = "";
+		$this->nilai->TooltipValue = "";
 
 		// anggota_id
 		$this->anggota_id->LinkCustomAttributes = "";
 		$this->anggota_id->HrefValue = "";
 		$this->anggota_id->TooltipValue = "";
+
+		// dk
+		$this->dk->LinkCustomAttributes = "";
+		$this->dk->HrefValue = "";
+		$this->dk->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -842,35 +824,29 @@ class ctb_detail extends cTable {
 		$this->jurnal_id->PlaceHolder = ew_RemoveHtml($this->jurnal_id->FldCaption());
 		}
 
-		// item
-		$this->item->EditAttrs["class"] = "form-control";
-		$this->item->EditCustomAttributes = "";
-		$this->item->EditValue = $this->item->CurrentValue;
-		$this->item->PlaceHolder = ew_RemoveHtml($this->item->FldCaption());
-
 		// akun_id
 		$this->akun_id->EditAttrs["class"] = "form-control";
 		$this->akun_id->EditCustomAttributes = "";
 		$this->akun_id->EditValue = $this->akun_id->CurrentValue;
 		$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
-		// debet
-		$this->debet->EditAttrs["class"] = "form-control";
-		$this->debet->EditCustomAttributes = "";
-		$this->debet->EditValue = $this->debet->CurrentValue;
-		$this->debet->PlaceHolder = ew_RemoveHtml($this->debet->FldCaption());
-
-		// kredit
-		$this->kredit->EditAttrs["class"] = "form-control";
-		$this->kredit->EditCustomAttributes = "";
-		$this->kredit->EditValue = $this->kredit->CurrentValue;
-		$this->kredit->PlaceHolder = ew_RemoveHtml($this->kredit->FldCaption());
+		// nilai
+		$this->nilai->EditAttrs["class"] = "form-control";
+		$this->nilai->EditCustomAttributes = "";
+		$this->nilai->EditValue = $this->nilai->CurrentValue;
+		$this->nilai->PlaceHolder = ew_RemoveHtml($this->nilai->FldCaption());
 
 		// anggota_id
 		$this->anggota_id->EditAttrs["class"] = "form-control";
 		$this->anggota_id->EditCustomAttributes = "";
 		$this->anggota_id->EditValue = $this->anggota_id->CurrentValue;
 		$this->anggota_id->PlaceHolder = ew_RemoveHtml($this->anggota_id->FldCaption());
+
+		// dk
+		$this->dk->EditAttrs["class"] = "form-control";
+		$this->dk->EditCustomAttributes = "";
+		$this->dk->EditValue = $this->dk->CurrentValue;
+		$this->dk->PlaceHolder = ew_RemoveHtml($this->dk->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -899,20 +875,14 @@ class ctb_detail extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->detail_id->Exportable) $Doc->ExportCaption($this->detail_id);
-					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
-					if ($this->item->Exportable) $Doc->ExportCaption($this->item);
 					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
-					if ($this->debet->Exportable) $Doc->ExportCaption($this->debet);
-					if ($this->kredit->Exportable) $Doc->ExportCaption($this->kredit);
+					if ($this->nilai->Exportable) $Doc->ExportCaption($this->nilai);
 					if ($this->anggota_id->Exportable) $Doc->ExportCaption($this->anggota_id);
 				} else {
 					if ($this->detail_id->Exportable) $Doc->ExportCaption($this->detail_id);
 					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
-					if ($this->item->Exportable) $Doc->ExportCaption($this->item);
 					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
-					if ($this->debet->Exportable) $Doc->ExportCaption($this->debet);
-					if ($this->kredit->Exportable) $Doc->ExportCaption($this->kredit);
+					if ($this->nilai->Exportable) $Doc->ExportCaption($this->nilai);
 					if ($this->anggota_id->Exportable) $Doc->ExportCaption($this->anggota_id);
 				}
 				$Doc->EndExportRow();
@@ -945,20 +915,14 @@ class ctb_detail extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->detail_id->Exportable) $Doc->ExportField($this->detail_id);
-						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
-						if ($this->item->Exportable) $Doc->ExportField($this->item);
 						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
-						if ($this->debet->Exportable) $Doc->ExportField($this->debet);
-						if ($this->kredit->Exportable) $Doc->ExportField($this->kredit);
+						if ($this->nilai->Exportable) $Doc->ExportField($this->nilai);
 						if ($this->anggota_id->Exportable) $Doc->ExportField($this->anggota_id);
 					} else {
 						if ($this->detail_id->Exportable) $Doc->ExportField($this->detail_id);
 						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
-						if ($this->item->Exportable) $Doc->ExportField($this->item);
 						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
-						if ($this->debet->Exportable) $Doc->ExportField($this->debet);
-						if ($this->kredit->Exportable) $Doc->ExportField($this->kredit);
+						if ($this->nilai->Exportable) $Doc->ExportField($this->nilai);
 						if ($this->anggota_id->Exportable) $Doc->ExportField($this->anggota_id);
 					}
 					$Doc->EndExportRow();

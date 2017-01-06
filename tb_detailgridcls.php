@@ -313,13 +313,8 @@ class ctb_detail_grid extends ctb_detail {
 
 		// Set up list options
 		$this->SetupListOptions();
-		$this->detail_id->SetVisibility();
-		$this->detail_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
-		$this->jurnal_id->SetVisibility();
-		$this->item->SetVisibility();
 		$this->akun_id->SetVisibility();
-		$this->debet->SetVisibility();
-		$this->kredit->SetVisibility();
+		$this->nilai->SetVisibility();
 		$this->anggota_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
@@ -783,15 +778,9 @@ class ctb_detail_grid extends ctb_detail {
 	// Check if empty row
 	function EmptyRow() {
 		global $objForm;
-		if ($objForm->HasValue("x_jurnal_id") && $objForm->HasValue("o_jurnal_id") && $this->jurnal_id->CurrentValue <> $this->jurnal_id->OldValue)
-			return FALSE;
-		if ($objForm->HasValue("x_item") && $objForm->HasValue("o_item") && $this->item->CurrentValue <> $this->item->OldValue)
-			return FALSE;
 		if ($objForm->HasValue("x_akun_id") && $objForm->HasValue("o_akun_id") && $this->akun_id->CurrentValue <> $this->akun_id->OldValue)
 			return FALSE;
-		if ($objForm->HasValue("x_debet") && $objForm->HasValue("o_debet") && $this->debet->CurrentValue <> $this->debet->OldValue)
-			return FALSE;
-		if ($objForm->HasValue("x_kredit") && $objForm->HasValue("o_kredit") && $this->kredit->CurrentValue <> $this->kredit->OldValue)
+		if ($objForm->HasValue("x_nilai") && $objForm->HasValue("o_nilai") && $this->nilai->CurrentValue <> $this->nilai->OldValue)
 			return FALSE;
 		if ($objForm->HasValue("x_anggota_id") && $objForm->HasValue("o_anggota_id") && $this->anggota_id->CurrentValue <> $this->anggota_id->OldValue)
 			return FALSE;
@@ -1165,18 +1154,10 @@ class ctb_detail_grid extends ctb_detail {
 
 	// Load default values
 	function LoadDefaultValues() {
-		$this->detail_id->CurrentValue = NULL;
-		$this->detail_id->OldValue = $this->detail_id->CurrentValue;
-		$this->jurnal_id->CurrentValue = NULL;
-		$this->jurnal_id->OldValue = $this->jurnal_id->CurrentValue;
-		$this->item->CurrentValue = NULL;
-		$this->item->OldValue = $this->item->CurrentValue;
 		$this->akun_id->CurrentValue = NULL;
 		$this->akun_id->OldValue = $this->akun_id->CurrentValue;
-		$this->debet->CurrentValue = 0;
-		$this->debet->OldValue = $this->debet->CurrentValue;
-		$this->kredit->CurrentValue = 0;
-		$this->kredit->OldValue = $this->kredit->CurrentValue;
+		$this->nilai->CurrentValue = 0;
+		$this->nilai->OldValue = $this->nilai->CurrentValue;
 		$this->anggota_id->CurrentValue = NULL;
 		$this->anggota_id->OldValue = $this->anggota_id->CurrentValue;
 	}
@@ -1187,32 +1168,20 @@ class ctb_detail_grid extends ctb_detail {
 		// Load from form
 		global $objForm;
 		$objForm->FormName = $this->FormName;
-		if (!$this->detail_id->FldIsDetailKey && $this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
-			$this->detail_id->setFormValue($objForm->GetValue("x_detail_id"));
-		if (!$this->jurnal_id->FldIsDetailKey) {
-			$this->jurnal_id->setFormValue($objForm->GetValue("x_jurnal_id"));
-		}
-		$this->jurnal_id->setOldValue($objForm->GetValue("o_jurnal_id"));
-		if (!$this->item->FldIsDetailKey) {
-			$this->item->setFormValue($objForm->GetValue("x_item"));
-		}
-		$this->item->setOldValue($objForm->GetValue("o_item"));
 		if (!$this->akun_id->FldIsDetailKey) {
 			$this->akun_id->setFormValue($objForm->GetValue("x_akun_id"));
 		}
 		$this->akun_id->setOldValue($objForm->GetValue("o_akun_id"));
-		if (!$this->debet->FldIsDetailKey) {
-			$this->debet->setFormValue($objForm->GetValue("x_debet"));
+		if (!$this->nilai->FldIsDetailKey) {
+			$this->nilai->setFormValue($objForm->GetValue("x_nilai"));
 		}
-		$this->debet->setOldValue($objForm->GetValue("o_debet"));
-		if (!$this->kredit->FldIsDetailKey) {
-			$this->kredit->setFormValue($objForm->GetValue("x_kredit"));
-		}
-		$this->kredit->setOldValue($objForm->GetValue("o_kredit"));
+		$this->nilai->setOldValue($objForm->GetValue("o_nilai"));
 		if (!$this->anggota_id->FldIsDetailKey) {
 			$this->anggota_id->setFormValue($objForm->GetValue("x_anggota_id"));
 		}
 		$this->anggota_id->setOldValue($objForm->GetValue("o_anggota_id"));
+		if (!$this->detail_id->FldIsDetailKey && $this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
+			$this->detail_id->setFormValue($objForm->GetValue("x_detail_id"));
 	}
 
 	// Restore form values
@@ -1220,11 +1189,8 @@ class ctb_detail_grid extends ctb_detail {
 		global $objForm;
 		if ($this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
 			$this->detail_id->CurrentValue = $this->detail_id->FormValue;
-		$this->jurnal_id->CurrentValue = $this->jurnal_id->FormValue;
-		$this->item->CurrentValue = $this->item->FormValue;
 		$this->akun_id->CurrentValue = $this->akun_id->FormValue;
-		$this->debet->CurrentValue = $this->debet->FormValue;
-		$this->kredit->CurrentValue = $this->kredit->FormValue;
+		$this->nilai->CurrentValue = $this->nilai->FormValue;
 		$this->anggota_id->CurrentValue = $this->anggota_id->FormValue;
 	}
 
@@ -1285,21 +1251,20 @@ class ctb_detail_grid extends ctb_detail {
 		$this->Row_Selected($row);
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
-		$this->item->setDbValue($rs->fields('item'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
 		if (array_key_exists('EV__akun_id', $rs->fields)) {
 			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
 		} else {
 			$this->akun_id->VirtualValue = ""; // Clear value
 		}
-		$this->debet->setDbValue($rs->fields('debet'));
-		$this->kredit->setDbValue($rs->fields('kredit'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 		if (array_key_exists('EV__anggota_id', $rs->fields)) {
 			$this->anggota_id->VirtualValue = $rs->fields('EV__anggota_id'); // Set up virtual field value
 		} else {
 			$this->anggota_id->VirtualValue = ""; // Clear value
 		}
+		$this->dk->setDbValue($rs->fields('dk'));
 	}
 
 	// Load DbValue from recordset
@@ -1308,11 +1273,10 @@ class ctb_detail_grid extends ctb_detail {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->detail_id->DbValue = $row['detail_id'];
 		$this->jurnal_id->DbValue = $row['jurnal_id'];
-		$this->item->DbValue = $row['item'];
 		$this->akun_id->DbValue = $row['akun_id'];
-		$this->debet->DbValue = $row['debet'];
-		$this->kredit->DbValue = $row['kredit'];
+		$this->nilai->DbValue = $row['nilai'];
 		$this->anggota_id->DbValue = $row['anggota_id'];
+		$this->dk->DbValue = $row['dk'];
 	}
 
 	// Load old record
@@ -1360,11 +1324,10 @@ class ctb_detail_grid extends ctb_detail {
 		// Common render codes for all row types
 		// detail_id
 		// jurnal_id
-		// item
 		// akun_id
-		// debet
-		// kredit
+		// nilai
 		// anggota_id
+		// dk
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1375,10 +1338,6 @@ class ctb_detail_grid extends ctb_detail {
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
-
-		// item
-		$this->item->ViewValue = $this->item->CurrentValue;
-		$this->item->ViewCustomAttributes = "";
 
 		// akun_id
 		if ($this->akun_id->VirtualValue <> "") {
@@ -1409,13 +1368,9 @@ class ctb_detail_grid extends ctb_detail {
 		}
 		$this->akun_id->ViewCustomAttributes = "";
 
-		// debet
-		$this->debet->ViewValue = $this->debet->CurrentValue;
-		$this->debet->ViewCustomAttributes = "";
-
-		// kredit
-		$this->kredit->ViewValue = $this->kredit->CurrentValue;
-		$this->kredit->ViewCustomAttributes = "";
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id
 		if ($this->anggota_id->VirtualValue <> "") {
@@ -1445,62 +1400,21 @@ class ctb_detail_grid extends ctb_detail {
 		}
 		$this->anggota_id->ViewCustomAttributes = "";
 
-			// detail_id
-			$this->detail_id->LinkCustomAttributes = "";
-			$this->detail_id->HrefValue = "";
-			$this->detail_id->TooltipValue = "";
-
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-			$this->jurnal_id->TooltipValue = "";
-
-			// item
-			$this->item->LinkCustomAttributes = "";
-			$this->item->HrefValue = "";
-			$this->item->TooltipValue = "";
-
 			// akun_id
 			$this->akun_id->LinkCustomAttributes = "";
 			$this->akun_id->HrefValue = "";
 			$this->akun_id->TooltipValue = "";
 
-			// debet
-			$this->debet->LinkCustomAttributes = "";
-			$this->debet->HrefValue = "";
-			$this->debet->TooltipValue = "";
-
-			// kredit
-			$this->kredit->LinkCustomAttributes = "";
-			$this->kredit->HrefValue = "";
-			$this->kredit->TooltipValue = "";
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 
 			// anggota_id
 			$this->anggota_id->LinkCustomAttributes = "";
 			$this->anggota_id->HrefValue = "";
 			$this->anggota_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
-
-			// detail_id
-			// jurnal_id
-
-			$this->jurnal_id->EditAttrs["class"] = "form-control";
-			$this->jurnal_id->EditCustomAttributes = "";
-			if ($this->jurnal_id->getSessionValue() <> "") {
-				$this->jurnal_id->CurrentValue = $this->jurnal_id->getSessionValue();
-				$this->jurnal_id->OldValue = $this->jurnal_id->CurrentValue;
-			$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
-			$this->jurnal_id->ViewCustomAttributes = "";
-			} else {
-			$this->jurnal_id->EditValue = ew_HtmlEncode($this->jurnal_id->CurrentValue);
-			$this->jurnal_id->PlaceHolder = ew_RemoveHtml($this->jurnal_id->FldCaption());
-			}
-
-			// item
-			$this->item->EditAttrs["class"] = "form-control";
-			$this->item->EditCustomAttributes = "";
-			$this->item->EditValue = ew_HtmlEncode($this->item->CurrentValue);
-			$this->item->PlaceHolder = ew_RemoveHtml($this->item->FldCaption());
 
 			// akun_id
 			$this->akun_id->EditAttrs["class"] = "form-control";
@@ -1529,17 +1443,11 @@ class ctb_detail_grid extends ctb_detail {
 			}
 			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
-			// debet
-			$this->debet->EditAttrs["class"] = "form-control";
-			$this->debet->EditCustomAttributes = "";
-			$this->debet->EditValue = ew_HtmlEncode($this->debet->CurrentValue);
-			$this->debet->PlaceHolder = ew_RemoveHtml($this->debet->FldCaption());
-
-			// kredit
-			$this->kredit->EditAttrs["class"] = "form-control";
-			$this->kredit->EditCustomAttributes = "";
-			$this->kredit->EditValue = ew_HtmlEncode($this->kredit->CurrentValue);
-			$this->kredit->PlaceHolder = ew_RemoveHtml($this->kredit->FldCaption());
+			// nilai
+			$this->nilai->EditAttrs["class"] = "form-control";
+			$this->nilai->EditCustomAttributes = "";
+			$this->nilai->EditValue = ew_HtmlEncode($this->nilai->CurrentValue);
+			$this->nilai->PlaceHolder = ew_RemoveHtml($this->nilai->FldCaption());
 
 			// anggota_id
 			$this->anggota_id->EditAttrs["class"] = "form-control";
@@ -1568,60 +1476,19 @@ class ctb_detail_grid extends ctb_detail {
 			$this->anggota_id->PlaceHolder = ew_RemoveHtml($this->anggota_id->FldCaption());
 
 			// Add refer script
-			// detail_id
-
-			$this->detail_id->LinkCustomAttributes = "";
-			$this->detail_id->HrefValue = "";
-
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-
-			// item
-			$this->item->LinkCustomAttributes = "";
-			$this->item->HrefValue = "";
-
 			// akun_id
+
 			$this->akun_id->LinkCustomAttributes = "";
 			$this->akun_id->HrefValue = "";
 
-			// debet
-			$this->debet->LinkCustomAttributes = "";
-			$this->debet->HrefValue = "";
-
-			// kredit
-			$this->kredit->LinkCustomAttributes = "";
-			$this->kredit->HrefValue = "";
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
 
 			// anggota_id
 			$this->anggota_id->LinkCustomAttributes = "";
 			$this->anggota_id->HrefValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
-
-			// detail_id
-			$this->detail_id->EditAttrs["class"] = "form-control";
-			$this->detail_id->EditCustomAttributes = "";
-			$this->detail_id->EditValue = $this->detail_id->CurrentValue;
-			$this->detail_id->ViewCustomAttributes = "";
-
-			// jurnal_id
-			$this->jurnal_id->EditAttrs["class"] = "form-control";
-			$this->jurnal_id->EditCustomAttributes = "";
-			if ($this->jurnal_id->getSessionValue() <> "") {
-				$this->jurnal_id->CurrentValue = $this->jurnal_id->getSessionValue();
-				$this->jurnal_id->OldValue = $this->jurnal_id->CurrentValue;
-			$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
-			$this->jurnal_id->ViewCustomAttributes = "";
-			} else {
-			$this->jurnal_id->EditValue = ew_HtmlEncode($this->jurnal_id->CurrentValue);
-			$this->jurnal_id->PlaceHolder = ew_RemoveHtml($this->jurnal_id->FldCaption());
-			}
-
-			// item
-			$this->item->EditAttrs["class"] = "form-control";
-			$this->item->EditCustomAttributes = "";
-			$this->item->EditValue = ew_HtmlEncode($this->item->CurrentValue);
-			$this->item->PlaceHolder = ew_RemoveHtml($this->item->FldCaption());
 
 			// akun_id
 			$this->akun_id->EditAttrs["class"] = "form-control";
@@ -1650,17 +1517,11 @@ class ctb_detail_grid extends ctb_detail {
 			}
 			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
-			// debet
-			$this->debet->EditAttrs["class"] = "form-control";
-			$this->debet->EditCustomAttributes = "";
-			$this->debet->EditValue = ew_HtmlEncode($this->debet->CurrentValue);
-			$this->debet->PlaceHolder = ew_RemoveHtml($this->debet->FldCaption());
-
-			// kredit
-			$this->kredit->EditAttrs["class"] = "form-control";
-			$this->kredit->EditCustomAttributes = "";
-			$this->kredit->EditValue = ew_HtmlEncode($this->kredit->CurrentValue);
-			$this->kredit->PlaceHolder = ew_RemoveHtml($this->kredit->FldCaption());
+			// nilai
+			$this->nilai->EditAttrs["class"] = "form-control";
+			$this->nilai->EditCustomAttributes = "";
+			$this->nilai->EditValue = ew_HtmlEncode($this->nilai->CurrentValue);
+			$this->nilai->PlaceHolder = ew_RemoveHtml($this->nilai->FldCaption());
 
 			// anggota_id
 			$this->anggota_id->EditAttrs["class"] = "form-control";
@@ -1689,30 +1550,14 @@ class ctb_detail_grid extends ctb_detail {
 			$this->anggota_id->PlaceHolder = ew_RemoveHtml($this->anggota_id->FldCaption());
 
 			// Edit refer script
-			// detail_id
-
-			$this->detail_id->LinkCustomAttributes = "";
-			$this->detail_id->HrefValue = "";
-
-			// jurnal_id
-			$this->jurnal_id->LinkCustomAttributes = "";
-			$this->jurnal_id->HrefValue = "";
-
-			// item
-			$this->item->LinkCustomAttributes = "";
-			$this->item->HrefValue = "";
-
 			// akun_id
+
 			$this->akun_id->LinkCustomAttributes = "";
 			$this->akun_id->HrefValue = "";
 
-			// debet
-			$this->debet->LinkCustomAttributes = "";
-			$this->debet->HrefValue = "";
-
-			// kredit
-			$this->kredit->LinkCustomAttributes = "";
-			$this->kredit->HrefValue = "";
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
 
 			// anggota_id
 			$this->anggota_id->LinkCustomAttributes = "";
@@ -1736,32 +1581,14 @@ class ctb_detail_grid extends ctb_detail {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
-		if (!$this->jurnal_id->FldIsDetailKey && !is_null($this->jurnal_id->FormValue) && $this->jurnal_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->jurnal_id->FldCaption(), $this->jurnal_id->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->jurnal_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->jurnal_id->FldErrMsg());
-		}
-		if (!$this->item->FldIsDetailKey && !is_null($this->item->FormValue) && $this->item->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->item->FldCaption(), $this->item->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->item->FormValue)) {
-			ew_AddMessage($gsFormError, $this->item->FldErrMsg());
-		}
 		if (!$this->akun_id->FldIsDetailKey && !is_null($this->akun_id->FormValue) && $this->akun_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->akun_id->FldCaption(), $this->akun_id->ReqErrMsg));
 		}
-		if (!$this->debet->FldIsDetailKey && !is_null($this->debet->FormValue) && $this->debet->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->debet->FldCaption(), $this->debet->ReqErrMsg));
+		if (!$this->nilai->FldIsDetailKey && !is_null($this->nilai->FormValue) && $this->nilai->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->nilai->FldCaption(), $this->nilai->ReqErrMsg));
 		}
-		if (!ew_CheckInteger($this->debet->FormValue)) {
-			ew_AddMessage($gsFormError, $this->debet->FldErrMsg());
-		}
-		if (!$this->kredit->FldIsDetailKey && !is_null($this->kredit->FormValue) && $this->kredit->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->kredit->FldCaption(), $this->kredit->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->kredit->FormValue)) {
-			ew_AddMessage($gsFormError, $this->kredit->FldErrMsg());
+		if (!ew_CheckInteger($this->nilai->FormValue)) {
+			ew_AddMessage($gsFormError, $this->nilai->FldErrMsg());
 		}
 
 		// Return validate result
@@ -1885,20 +1712,11 @@ class ctb_detail_grid extends ctb_detail {
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
 
-			// jurnal_id
-			$this->jurnal_id->SetDbValueDef($rsnew, $this->jurnal_id->CurrentValue, 0, $this->jurnal_id->ReadOnly);
-
-			// item
-			$this->item->SetDbValueDef($rsnew, $this->item->CurrentValue, 0, $this->item->ReadOnly);
-
 			// akun_id
 			$this->akun_id->SetDbValueDef($rsnew, $this->akun_id->CurrentValue, 0, $this->akun_id->ReadOnly);
 
-			// debet
-			$this->debet->SetDbValueDef($rsnew, $this->debet->CurrentValue, 0, $this->debet->ReadOnly);
-
-			// kredit
-			$this->kredit->SetDbValueDef($rsnew, $this->kredit->CurrentValue, 0, $this->kredit->ReadOnly);
+			// nilai
+			$this->nilai->SetDbValueDef($rsnew, $this->nilai->CurrentValue, 0, $this->nilai->ReadOnly);
 
 			// anggota_id
 			$this->anggota_id->SetDbValueDef($rsnew, $this->anggota_id->CurrentValue, NULL, $this->anggota_id->ReadOnly);
@@ -1954,23 +1772,19 @@ class ctb_detail_grid extends ctb_detail {
 		}
 		$rsnew = array();
 
-		// jurnal_id
-		$this->jurnal_id->SetDbValueDef($rsnew, $this->jurnal_id->CurrentValue, 0, FALSE);
-
-		// item
-		$this->item->SetDbValueDef($rsnew, $this->item->CurrentValue, 0, FALSE);
-
 		// akun_id
 		$this->akun_id->SetDbValueDef($rsnew, $this->akun_id->CurrentValue, 0, FALSE);
 
-		// debet
-		$this->debet->SetDbValueDef($rsnew, $this->debet->CurrentValue, 0, strval($this->debet->CurrentValue) == "");
-
-		// kredit
-		$this->kredit->SetDbValueDef($rsnew, $this->kredit->CurrentValue, 0, strval($this->kredit->CurrentValue) == "");
+		// nilai
+		$this->nilai->SetDbValueDef($rsnew, $this->nilai->CurrentValue, 0, strval($this->nilai->CurrentValue) == "");
 
 		// anggota_id
 		$this->anggota_id->SetDbValueDef($rsnew, $this->anggota_id->CurrentValue, NULL, FALSE);
+
+		// jurnal_id
+		if ($this->jurnal_id->getSessionValue() <> "") {
+			$rsnew['jurnal_id'] = $this->jurnal_id->getSessionValue();
+		}
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
