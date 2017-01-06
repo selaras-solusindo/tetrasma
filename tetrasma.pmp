@@ -325,10 +325,21 @@ function GetNextNoBukti() {
 //	 alert(elm_name);alert("x");
 //}
 
+//$("#x_no_bukti").readonly(true);
+
 $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 	//alert(this.value);
 	//alert("xxx");
-	ambil_no_bukti(this.value);
+	//ambil_no_bukti(this.value);
+	if (this.value == "KM" || this.value == "KK" || this.value == "BM" || this.value == "BK") {
+		ambil_no_bukti(this.value);
+	}
+	else {
+		//$(this).fields("no_bukti").value(" "); // Set value to FieldA
+		//$(this).fields("no_bukti").value(""); // Set value to FieldA
+		$("#x_no_bukti").val("");
+	}
+	
 	/*if (this.value == "1") {
 		$(this).fields("no_bukti").value("KM"); // Set value to FieldA
 	}
@@ -380,14 +391,14 @@ function stateChanged() {
 	if (ajaxku.readyState==4) {
 		data=ajaxku.responseText;
 		if(data.length>0) {
-			//$("#x_no_bukti").value(data);
+			$("#x_no_bukti").val(data);
 			//$(this).fields("no_bukti").value(data); // Set value to FieldA
-			document.getElementById("x_no_bukti").value = data
+			//document.getElementById("x_no_bukti").value = data
 		}
 		else {
-			//$("#x_no_bukti").value("");
+			$("#x_no_bukti").val("");
 			//$(this).fields("no_bukti").value("");
-			document.getElementById("x_no_bukti").value = "";
+			//document.getElementById("x_no_bukti").value = "";
 		}
 	}
 }
@@ -410,6 +421,13 @@ if ($kode) {
 echo $hasil;
 
 ?>
+]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Row_Rendered" ScriptCtrlID="" ScriptL1Key="tb_jurnal" ScriptL2Key=""><![CDATA[// Row Rendered event
+function Row_Rendered() {
+	// To view properties of field class, use:
+	//var_dump($this-><FieldName>);
+	$this->no_bukti->ReadOnly = true;
+}
 ]]></CustomScript>
   <Menu MenuID="23" MenuText="" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="ambildata.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="1" MenuDisplayOrder="-1" />
   <Menu MenuID="22" MenuText="Home" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="home.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="1" MenuDisplayOrder="100" />

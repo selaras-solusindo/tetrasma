@@ -1221,13 +1221,24 @@ if (EW_DEBUG_ENABLED)
 //	 var elm_name = $(event.target).attr('name');
 //	 alert(elm_name);alert("x");
 //}
+//$("#x_no_bukti").readonly(true);
 
 $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 
 	//alert(this.value);
 	//alert("xxx");
+	//ambil_no_bukti(this.value);
 
-	ambil_no_bukti(this.value);
+	if (this.value == "KM" || this.value == "KK" || this.value == "BM" || this.value == "BK") {
+		ambil_no_bukti(this.value);
+	}
+	else {
+
+		//$(this).fields("no_bukti").value(" "); // Set value to FieldA
+		//$(this).fields("no_bukti").value(""); // Set value to FieldA
+
+		$("#x_no_bukti").val("");
+	}
 	/*if (this.value == "1") {
 		$(this).fields("no_bukti").value("KM"); // Set value to FieldA
 	}
@@ -1278,18 +1289,18 @@ function stateChanged() {
 	if (ajaxku.readyState==4) {
 		data=ajaxku.responseText;
 		if(data.length>0) {
+			$("#x_no_bukti").val(data);
 
-			//$("#x_no_bukti").value(data);
 			//$(this).fields("no_bukti").value(data); // Set value to FieldA
+			//document.getElementById("x_no_bukti").value = data
 
-			document.getElementById("x_no_bukti").value = data
 		}
 		else {
+			$("#x_no_bukti").val("");
 
-			//$("#x_no_bukti").value("");
 			//$(this).fields("no_bukti").value("");
+			//document.getElementById("x_no_bukti").value = "";
 
-			document.getElementById("x_no_bukti").value = "";
 		}
 	}
 }

@@ -965,8 +965,9 @@ class ctb_jurnal extends cTable {
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
+		$this->no_bukti->ReadOnly = true;
 	}
 
 	// User ID Filtering event
