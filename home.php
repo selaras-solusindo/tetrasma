@@ -310,7 +310,7 @@ Page_Rendering();
 	<head>
 	</head>
 	<body>
-&copy;2017 Tetrasma. Powered by Selaras Solusindo. All rights reserved.
+&copy; 2017 Tetrasma. Dibuat oleh Selaras Solusindo. Hak cipta dilindungi Undang-undang.
 	</body>
 </html>
 

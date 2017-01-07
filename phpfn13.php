@@ -4728,9 +4728,9 @@ function Database_Connecting(&$info) {
 		$info["db"] = "db_tetrasma"; // sesuaikan dengan nama database di komputer localhost
 	} else { // setting koneksi database untuk komputer server
 		$info["host"] = "mysql.idhostinger.com";  // sesuaikan dengan ip address atau hostname komputer server
-		$info["user"] = "u691571103_tetra"; // sesuaikan dengan username database di komputer server
+		$info["user"] = "u643488767_tetra"; // sesuaikan dengan username database di komputer server
 		$info["pass"] = "PresarioCQ43"; // sesuaikan deengan password database di komputer server
-		$info["db"] = "u691571103_tetra"; // sesuaikan dengan nama database di komputer server
+		$info["db"] = "u643488767_tetra"; // sesuaikan dengan nama database di komputer server
 	}
 }
 

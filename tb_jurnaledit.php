@@ -1347,7 +1347,123 @@ if (EW_DEBUG_ENABLED)
 
 // Write your table-specific startup script here
 // document.write("page loaded");
+// Write your table-specific startup script here
+// document.write("page loaded");
+//function MyEvent(event) {
+//	 var elm_name = $(event.target).attr('name');
+//	 alert(elm_name);alert("x");
+//}
 
+$("#x_akun_id").change(function() {
+	jurnal_kode = "";
+	$("#x_jenis_jurnal").val("");
+	$("#x_no_bukti").val("");
+	if (this.value!="") { //alert("kosong"); 
+		ambil_jurnal_kode(this.value);
+	}
+	else {
+
+		//$("#x_jenis_jurnal").val("");
+		//$("#x_no_bukti").val("");
+
+	}
+});
+$("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
+
+	//$("#x_jenis_jurnal").val("");
+	$("#x_no_bukti").val("");
+	if (this.value!="") {
+		ambil_no_bukti(jurnal_kode+this.value);
+	}
+
+	//else
+		//$("#x_no_bukti").val("");
+
+	/*if (this.value == "KM" || this.value == "KK" || this.value == "BM" || this.value == "BK") {
+		ambil_no_bukti(this.value);
+	}
+	else {
+		$("#x_no_bukti").val("");
+	}*/
+});
+var ajaxku;
+var ajax_jurnal_kode;
+
+function ambil_jurnal_kode(akun_id) {
+	ajax_jurnal_kode = buatajax();
+	var url="ambiljurnalkode.php";
+	url=url+"?q="+akun_id;
+	url=url+"&sid="+Math.random();
+	ajax_jurnal_kode.onreadystatechange=stateChanged_jurnal_kode;
+	ajax_jurnal_kode.open("GET",url,true);
+	ajax_jurnal_kode.send(null);
+}
+
+function ambil_no_bukti(kode) {
+	ajaxku = buatajax();
+	var url="ambildata.php";
+	url=url+"?q="+kode;
+	url=url+"&sid="+Math.random();
+	ajaxku.onreadystatechange=stateChanged;
+	ajaxku.open("GET",url,true);
+	ajaxku.send(null);
+}
+
+function ambildata(nip) {
+	ajaxku = buatajax();
+	var url="ambildata.php";
+	url=url+"?q="+nip;
+	url=url+"&sid="+Math.random();
+	ajaxku.onreadystatechange=stateChanged;
+	ajaxku.open("GET",url,true);
+	ajaxku.send(null);
+}
+
+function buatajax() {
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	}
+	if (window.ActiveXObject) {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	return null;
+}
+
+function stateChanged() {
+	var data;
+	if (ajaxku.readyState==4) {
+		data=ajaxku.responseText;
+		if(data.length>0) {
+			$("#x_no_bukti").val(data);
+
+			//$(this).fields("no_bukti").value(data); // Set value to FieldA
+			//document.getElementById("x_no_bukti").value = data
+
+		}
+		else {
+			$("#x_no_bukti").val("");
+
+			//$(this).fields("no_bukti").value("");
+			//document.getElementById("x_no_bukti").value = "";
+
+		}
+	}
+}
+
+function stateChanged_jurnal_kode() {
+	var data;
+	if (ajax_jurnal_kode.readyState==4) {
+		data=ajax_jurnal_kode.responseText;
+		if(data.length>0) {
+			jurnal_kode = data;
+		}
+		else {
+			jurnal_kode = "";
+		}
+	}
+
+	//alert(jurnal_kode);
+}
 </script>
 <?php include_once "footer.php" ?>
 <?php
