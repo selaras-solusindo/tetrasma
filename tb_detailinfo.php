@@ -57,7 +57,7 @@ class ctb_detail extends cTable {
 		$this->fields['jurnal_id'] = &$this->jurnal_id;
 
 		// akun_id
-		$this->akun_id = new cField('tb_detail', 'tb_detail', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`EV__akun_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->akun_id = new cField('tb_detail', 'tb_detail', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`akun_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->akun_id->Sortable = TRUE; // Allow sort
 		$this->akun_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['akun_id'] = &$this->akun_id;
@@ -194,7 +194,7 @@ class ctb_detail extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT CONCAT(`akun`,'" . ew_ValueSeparator(1, $this->akun_id) . "',`level4_nama`) FROM `view_akun_jurnal` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level4_id` = `tb_detail`.`akun_id` LIMIT 1) AS `EV__akun_id`, (SELECT `nama` FROM `tb_anggota` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`anggota_id` = `tb_detail`.`anggota_id` LIMIT 1) AS `EV__anggota_id` FROM `tb_detail`" .
+			"SELECT *, (SELECT `nama` FROM `tb_anggota` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`anggota_id` = `tb_detail`.`anggota_id` LIMIT 1) AS `EV__anggota_id` FROM `tb_detail`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -342,12 +342,6 @@ class ctb_detail extends cTable {
 			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
 		if ($sOrderBy <> "")
 			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
-		if ($this->akun_id->AdvancedSearch->SearchValue <> "" ||
-			$this->akun_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->akun_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if (strpos($sOrderBy, " " . $this->akun_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
 		if ($this->anggota_id->AdvancedSearch->SearchValue <> "" ||
 			$this->anggota_id->AdvancedSearch->SearchValue2 <> "" ||
 			strpos($sWhere, " " . $this->anggota_id->FldVirtualExpression . " ") !== FALSE)
@@ -701,32 +695,7 @@ class ctb_detail extends cTable {
 		$this->jurnal_id->ViewCustomAttributes = "";
 
 		// akun_id
-		if ($this->akun_id->VirtualValue <> "") {
-			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
-		} else {
-			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
-		if (strval($this->akun_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level4_id`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
-			}
-		} else {
-			$this->akun_id->ViewValue = NULL;
-		}
-		}
+		$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		$this->akun_id->ViewCustomAttributes = "";
 
 		// nilai
@@ -742,7 +711,7 @@ class ctb_detail extends cTable {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;

@@ -8,8 +8,8 @@ $view_akun_jurnal = NULL;
 //
 class cview_akun_jurnal extends cTable {
 	var $level4_id;
-	var $akun;
-	var $level4_nama;
+	var $no_nama_akun;
+	var $jurnal;
 
 	//
 	// Table class constructor
@@ -47,15 +47,16 @@ class cview_akun_jurnal extends cTable {
 		$this->level4_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['level4_id'] = &$this->level4_id;
 
-		// akun
-		$this->akun = new cField('view_akun_jurnal', 'view_akun_jurnal', 'x_akun', 'akun', '`akun`', '`akun`', 200, -1, FALSE, '`akun`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->akun->Sortable = TRUE; // Allow sort
-		$this->fields['akun'] = &$this->akun;
+		// no_nama_akun
+		$this->no_nama_akun = new cField('view_akun_jurnal', 'view_akun_jurnal', 'x_no_nama_akun', 'no_nama_akun', '`no_nama_akun`', '`no_nama_akun`', 200, -1, FALSE, '`no_nama_akun`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->no_nama_akun->Sortable = TRUE; // Allow sort
+		$this->fields['no_nama_akun'] = &$this->no_nama_akun;
 
-		// level4_nama
-		$this->level4_nama = new cField('view_akun_jurnal', 'view_akun_jurnal', 'x_level4_nama', 'level4_nama', '`level4_nama`', '`level4_nama`', 200, -1, FALSE, '`level4_nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->level4_nama->Sortable = TRUE; // Allow sort
-		$this->fields['level4_nama'] = &$this->level4_nama;
+		// jurnal
+		$this->jurnal = new cField('view_akun_jurnal', 'view_akun_jurnal', 'x_jurnal', 'jurnal', '`jurnal`', '`jurnal`', 16, -1, FALSE, '`jurnal`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->jurnal->Sortable = TRUE; // Allow sort
+		$this->jurnal->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['jurnal'] = &$this->jurnal;
 	}
 
 	// Set Field Visibility
@@ -539,8 +540,8 @@ class cview_akun_jurnal extends cTable {
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
 		$this->level4_id->setDbValue($rs->fields('level4_id'));
-		$this->akun->setDbValue($rs->fields('akun'));
-		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
+		$this->no_nama_akun->setDbValue($rs->fields('no_nama_akun'));
+		$this->jurnal->setDbValue($rs->fields('jurnal'));
 	}
 
 	// Render list row values
@@ -552,35 +553,35 @@ class cview_akun_jurnal extends cTable {
 
    // Common render codes
 		// level4_id
-		// akun
-		// level4_nama
+		// no_nama_akun
+		// jurnal
 		// level4_id
 
 		$this->level4_id->ViewValue = $this->level4_id->CurrentValue;
 		$this->level4_id->ViewCustomAttributes = "";
 
-		// akun
-		$this->akun->ViewValue = $this->akun->CurrentValue;
-		$this->akun->ViewCustomAttributes = "";
+		// no_nama_akun
+		$this->no_nama_akun->ViewValue = $this->no_nama_akun->CurrentValue;
+		$this->no_nama_akun->ViewCustomAttributes = "";
 
-		// level4_nama
-		$this->level4_nama->ViewValue = $this->level4_nama->CurrentValue;
-		$this->level4_nama->ViewCustomAttributes = "";
+		// jurnal
+		$this->jurnal->ViewValue = $this->jurnal->CurrentValue;
+		$this->jurnal->ViewCustomAttributes = "";
 
 		// level4_id
 		$this->level4_id->LinkCustomAttributes = "";
 		$this->level4_id->HrefValue = "";
 		$this->level4_id->TooltipValue = "";
 
-		// akun
-		$this->akun->LinkCustomAttributes = "";
-		$this->akun->HrefValue = "";
-		$this->akun->TooltipValue = "";
+		// no_nama_akun
+		$this->no_nama_akun->LinkCustomAttributes = "";
+		$this->no_nama_akun->HrefValue = "";
+		$this->no_nama_akun->TooltipValue = "";
 
-		// level4_nama
-		$this->level4_nama->LinkCustomAttributes = "";
-		$this->level4_nama->HrefValue = "";
-		$this->level4_nama->TooltipValue = "";
+		// jurnal
+		$this->jurnal->LinkCustomAttributes = "";
+		$this->jurnal->HrefValue = "";
+		$this->jurnal->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -599,17 +600,17 @@ class cview_akun_jurnal extends cTable {
 		$this->level4_id->EditValue = $this->level4_id->CurrentValue;
 		$this->level4_id->ViewCustomAttributes = "";
 
-		// akun
-		$this->akun->EditAttrs["class"] = "form-control";
-		$this->akun->EditCustomAttributes = "";
-		$this->akun->EditValue = $this->akun->CurrentValue;
-		$this->akun->PlaceHolder = ew_RemoveHtml($this->akun->FldCaption());
+		// no_nama_akun
+		$this->no_nama_akun->EditAttrs["class"] = "form-control";
+		$this->no_nama_akun->EditCustomAttributes = "";
+		$this->no_nama_akun->EditValue = $this->no_nama_akun->CurrentValue;
+		$this->no_nama_akun->PlaceHolder = ew_RemoveHtml($this->no_nama_akun->FldCaption());
 
-		// level4_nama
-		$this->level4_nama->EditAttrs["class"] = "form-control";
-		$this->level4_nama->EditCustomAttributes = "";
-		$this->level4_nama->EditValue = $this->level4_nama->CurrentValue;
-		$this->level4_nama->PlaceHolder = ew_RemoveHtml($this->level4_nama->FldCaption());
+		// jurnal
+		$this->jurnal->EditAttrs["class"] = "form-control";
+		$this->jurnal->EditCustomAttributes = "";
+		$this->jurnal->EditValue = $this->jurnal->CurrentValue;
+		$this->jurnal->PlaceHolder = ew_RemoveHtml($this->jurnal->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -638,11 +639,11 @@ class cview_akun_jurnal extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->akun->Exportable) $Doc->ExportCaption($this->akun);
-					if ($this->level4_nama->Exportable) $Doc->ExportCaption($this->level4_nama);
+					if ($this->no_nama_akun->Exportable) $Doc->ExportCaption($this->no_nama_akun);
+					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
 				} else {
-					if ($this->akun->Exportable) $Doc->ExportCaption($this->akun);
-					if ($this->level4_nama->Exportable) $Doc->ExportCaption($this->level4_nama);
+					if ($this->no_nama_akun->Exportable) $Doc->ExportCaption($this->no_nama_akun);
+					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
 				}
 				$Doc->EndExportRow();
 			}
@@ -674,11 +675,11 @@ class cview_akun_jurnal extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->akun->Exportable) $Doc->ExportField($this->akun);
-						if ($this->level4_nama->Exportable) $Doc->ExportField($this->level4_nama);
+						if ($this->no_nama_akun->Exportable) $Doc->ExportField($this->no_nama_akun);
+						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
 					} else {
-						if ($this->akun->Exportable) $Doc->ExportField($this->akun);
-						if ($this->level4_nama->Exportable) $Doc->ExportField($this->level4_nama);
+						if ($this->no_nama_akun->Exportable) $Doc->ExportField($this->no_nama_akun);
+						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
 					}
 					$Doc->EndExportRow();
 				}

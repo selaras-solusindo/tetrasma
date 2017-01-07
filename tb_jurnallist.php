@@ -412,6 +412,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 
 		// Setup export options
 		$this->SetupExportOptions();
+		$this->akun_id->SetVisibility();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -750,10 +751,12 @@ class ctb_jurnal_list extends ctb_jurnal {
 		// Initialize
 		$sFilterList = "";
 		$sFilterList = ew_Concat($sFilterList, $this->jurnal_id->AdvancedSearch->ToJSON(), ","); // Field jurnal_id
+		$sFilterList = ew_Concat($sFilterList, $this->akun_id->AdvancedSearch->ToJSON(), ","); // Field akun_id
 		$sFilterList = ew_Concat($sFilterList, $this->jenis_jurnal->AdvancedSearch->ToJSON(), ","); // Field jenis_jurnal
 		$sFilterList = ew_Concat($sFilterList, $this->no_bukti->AdvancedSearch->ToJSON(), ","); // Field no_bukti
 		$sFilterList = ew_Concat($sFilterList, $this->tgl->AdvancedSearch->ToJSON(), ","); // Field tgl
 		$sFilterList = ew_Concat($sFilterList, $this->ket->AdvancedSearch->ToJSON(), ","); // Field ket
+		$sFilterList = ew_Concat($sFilterList, $this->nilai->AdvancedSearch->ToJSON(), ","); // Field nilai
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -774,16 +777,9 @@ class ctb_jurnal_list extends ctb_jurnal {
 	// Process filter list
 	function ProcessFilterList() {
 		global $UserProfile;
-		if (@$_POST["ajax"] == "savefilters") { // Save filter request (Ajax)
+		if (@$_POST["cmd"] == "savefilters") {
 			$filters = ew_StripSlashes(@$_POST["filters"]);
 			$UserProfile->SetSearchFilters(CurrentUserName(), "ftb_jurnallistsrch", $filters);
-
-			// Clean output buffer
-			if (!EW_DEBUG_ENABLED && ob_get_length())
-				ob_end_clean();
-			echo ew_ArrayToJson(array(array("success" => TRUE))); // Success
-			$this->Page_Terminate();
-			exit();
 		} elseif (@$_POST["cmd"] == "resetfilter") {
 			$this->RestoreFilterList();
 		}
@@ -805,6 +801,14 @@ class ctb_jurnal_list extends ctb_jurnal {
 		$this->jurnal_id->AdvancedSearch->SearchValue2 = @$filter["y_jurnal_id"];
 		$this->jurnal_id->AdvancedSearch->SearchOperator2 = @$filter["w_jurnal_id"];
 		$this->jurnal_id->AdvancedSearch->Save();
+
+		// Field akun_id
+		$this->akun_id->AdvancedSearch->SearchValue = @$filter["x_akun_id"];
+		$this->akun_id->AdvancedSearch->SearchOperator = @$filter["z_akun_id"];
+		$this->akun_id->AdvancedSearch->SearchCondition = @$filter["v_akun_id"];
+		$this->akun_id->AdvancedSearch->SearchValue2 = @$filter["y_akun_id"];
+		$this->akun_id->AdvancedSearch->SearchOperator2 = @$filter["w_akun_id"];
+		$this->akun_id->AdvancedSearch->Save();
 
 		// Field jenis_jurnal
 		$this->jenis_jurnal->AdvancedSearch->SearchValue = @$filter["x_jenis_jurnal"];
@@ -837,6 +841,14 @@ class ctb_jurnal_list extends ctb_jurnal {
 		$this->ket->AdvancedSearch->SearchValue2 = @$filter["y_ket"];
 		$this->ket->AdvancedSearch->SearchOperator2 = @$filter["w_ket"];
 		$this->ket->AdvancedSearch->Save();
+
+		// Field nilai
+		$this->nilai->AdvancedSearch->SearchValue = @$filter["x_nilai"];
+		$this->nilai->AdvancedSearch->SearchOperator = @$filter["z_nilai"];
+		$this->nilai->AdvancedSearch->SearchCondition = @$filter["v_nilai"];
+		$this->nilai->AdvancedSearch->SearchValue2 = @$filter["y_nilai"];
+		$this->nilai->AdvancedSearch->SearchOperator2 = @$filter["w_nilai"];
+		$this->nilai->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -850,7 +862,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 	}
 
 	// Build basic search SQL
-	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+	function BuildBasicSearchSql(&$Where, &$Fld, $arKeywords, $type) {
 		$sDefCond = ($type == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
 		$arCond = array(); // Array for search conditions
@@ -875,7 +887,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 						$sWrk = $Fld->FldExpression . " IS NULL";
 					} elseif ($Keyword == EW_NOT_NULL_VALUE) {
 						$sWrk = $Fld->FldExpression . " IS NOT NULL";
-					} elseif ($Fld->FldIsVirtual) {
+					} elseif ($Fld->FldIsVirtual && $Fld->FldVirtualSearch) {
 						$sWrk = $Fld->FldVirtualExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
 					} elseif ($Fld->FldDataType != EW_DATATYPE_NUMBER || is_numeric($Keyword)) {
 						$sWrk = $Fld->FldBasicSearchExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
@@ -1010,6 +1022,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
+			$this->UpdateSort($this->akun_id); // akun_id
 			$this->UpdateSort($this->jenis_jurnal); // jenis_jurnal
 			$this->UpdateSort($this->no_bukti); // no_bukti
 			$this->UpdateSort($this->tgl); // tgl
@@ -1046,6 +1059,8 @@ class ctb_jurnal_list extends ctb_jurnal {
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
+				$this->setSessionOrderByList($sOrderBy);
+				$this->akun_id->setSort("");
 				$this->jenis_jurnal->setSort("");
 				$this->no_bukti->setSort("");
 				$this->tgl->setSort("");
@@ -1570,7 +1585,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -1614,10 +1629,17 @@ class ctb_jurnal_list extends ctb_jurnal {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
+		$this->akun_id->setDbValue($rs->fields('akun_id'));
+		if (array_key_exists('EV__akun_id', $rs->fields)) {
+			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
+		} else {
+			$this->akun_id->VirtualValue = ""; // Clear value
+		}
 		$this->jenis_jurnal->setDbValue($rs->fields('jenis_jurnal'));
 		$this->no_bukti->setDbValue($rs->fields('no_bukti'));
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->ket->setDbValue($rs->fields('ket'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 	}
 
 	// Load DbValue from recordset
@@ -1625,10 +1647,12 @@ class ctb_jurnal_list extends ctb_jurnal {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->jurnal_id->DbValue = $row['jurnal_id'];
+		$this->akun_id->DbValue = $row['akun_id'];
 		$this->jenis_jurnal->DbValue = $row['jenis_jurnal'];
 		$this->no_bukti->DbValue = $row['no_bukti'];
 		$this->tgl->DbValue = $row['tgl'];
 		$this->ket->DbValue = $row['ket'];
+		$this->nilai->DbValue = $row['nilai'];
 	}
 
 	// Load old record
@@ -1671,16 +1695,48 @@ class ctb_jurnal_list extends ctb_jurnal {
 
 		// Common render codes for all row types
 		// jurnal_id
+		// akun_id
 		// jenis_jurnal
 		// no_bukti
 		// tgl
 		// ket
+		// nilai
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// akun_id
+		if ($this->akun_id->VirtualValue <> "") {
+			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
+		} else {
+			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if (strval($this->akun_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+		$sWhereWrk = "";
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$lookuptblfilter = "`jurnal` = 1";
+		ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+			}
+		} else {
+			$this->akun_id->ViewValue = NULL;
+		}
+		}
+		$this->akun_id->ViewCustomAttributes = "";
 
 		// jenis_jurnal
 		if (strval($this->jenis_jurnal->CurrentValue) <> "") {
@@ -1702,6 +1758,15 @@ class ctb_jurnal_list extends ctb_jurnal {
 		// ket
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
+
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
+
+			// akun_id
+			$this->akun_id->LinkCustomAttributes = "";
+			$this->akun_id->HrefValue = "";
+			$this->akun_id->TooltipValue = "";
 
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
@@ -2198,6 +2263,7 @@ ftb_jurnallist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+ftb_jurnallist.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_no_nama_akun","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 ftb_jurnallist.Lists["x_jenis_jurnal"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
 ftb_jurnallist.Lists["x_jenis_jurnal"].Options = <?php echo json_encode($tb_jurnal->jenis_jurnal->Options()) ?>;
 
@@ -2321,6 +2387,15 @@ $tb_jurnal_list->RenderListOptions();
 // Render list options (header, left)
 $tb_jurnal_list->ListOptions->Render("header", "left");
 ?>
+<?php if ($tb_jurnal->akun_id->Visible) { // akun_id ?>
+	<?php if ($tb_jurnal->SortUrl($tb_jurnal->akun_id) == "") { ?>
+		<th data-name="akun_id"><div id="elh_tb_jurnal_akun_id" class="tb_jurnal_akun_id"><div class="ewTableHeaderCaption"><?php echo $tb_jurnal->akun_id->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="akun_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $tb_jurnal->SortUrl($tb_jurnal->akun_id) ?>',1);"><div id="elh_tb_jurnal_akun_id" class="tb_jurnal_akun_id">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_jurnal->akun_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_jurnal->akun_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_jurnal->akun_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 	<?php if ($tb_jurnal->SortUrl($tb_jurnal->jenis_jurnal) == "") { ?>
 		<th data-name="jenis_jurnal"><div id="elh_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal"><div class="ewTableHeaderCaption"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></div></div></th>
@@ -2422,13 +2497,21 @@ while ($tb_jurnal_list->RecCnt < $tb_jurnal_list->StopRec) {
 // Render list options (body, left)
 $tb_jurnal_list->ListOptions->Render("body", "left", $tb_jurnal_list->RowCnt);
 ?>
+	<?php if ($tb_jurnal->akun_id->Visible) { // akun_id ?>
+		<td data-name="akun_id"<?php echo $tb_jurnal->akun_id->CellAttributes() ?>>
+<span id="el<?php echo $tb_jurnal_list->RowCnt ?>_tb_jurnal_akun_id" class="tb_jurnal_akun_id">
+<span<?php echo $tb_jurnal->akun_id->ViewAttributes() ?>>
+<?php echo $tb_jurnal->akun_id->ListViewValue() ?></span>
+</span>
+<a id="<?php echo $tb_jurnal_list->PageObjName . "_row_" . $tb_jurnal_list->RowCnt ?>"></a></td>
+	<?php } ?>
 	<?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<td data-name="jenis_jurnal"<?php echo $tb_jurnal->jenis_jurnal->CellAttributes() ?>>
 <span id="el<?php echo $tb_jurnal_list->RowCnt ?>_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal">
 <span<?php echo $tb_jurnal->jenis_jurnal->ViewAttributes() ?>>
 <?php echo $tb_jurnal->jenis_jurnal->ListViewValue() ?></span>
 </span>
-<a id="<?php echo $tb_jurnal_list->PageObjName . "_row_" . $tb_jurnal_list->RowCnt ?>"></a></td>
+</td>
 	<?php } ?>
 	<?php if ($tb_jurnal->no_bukti->Visible) { // no_bukti ?>
 		<td data-name="no_bukti"<?php echo $tb_jurnal->no_bukti->CellAttributes() ?>>

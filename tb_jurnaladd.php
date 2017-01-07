@@ -287,6 +287,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
+		$this->akun_id->SetVisibility();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -497,6 +498,8 @@ class ctb_jurnal_add extends ctb_jurnal {
 
 	// Load default values
 	function LoadDefaultValues() {
+		$this->akun_id->CurrentValue = NULL;
+		$this->akun_id->OldValue = $this->akun_id->CurrentValue;
 		$this->jenis_jurnal->CurrentValue = NULL;
 		$this->jenis_jurnal->OldValue = $this->jenis_jurnal->CurrentValue;
 		$this->no_bukti->CurrentValue = NULL;
@@ -512,6 +515,9 @@ class ctb_jurnal_add extends ctb_jurnal {
 
 		// Load from form
 		global $objForm;
+		if (!$this->akun_id->FldIsDetailKey) {
+			$this->akun_id->setFormValue($objForm->GetValue("x_akun_id"));
+		}
 		if (!$this->jenis_jurnal->FldIsDetailKey) {
 			$this->jenis_jurnal->setFormValue($objForm->GetValue("x_jenis_jurnal"));
 		}
@@ -531,6 +537,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadOldRecord();
+		$this->akun_id->CurrentValue = $this->akun_id->FormValue;
 		$this->jenis_jurnal->CurrentValue = $this->jenis_jurnal->FormValue;
 		$this->no_bukti->CurrentValue = $this->no_bukti->FormValue;
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
@@ -568,10 +575,17 @@ class ctb_jurnal_add extends ctb_jurnal {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
+		$this->akun_id->setDbValue($rs->fields('akun_id'));
+		if (array_key_exists('EV__akun_id', $rs->fields)) {
+			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
+		} else {
+			$this->akun_id->VirtualValue = ""; // Clear value
+		}
 		$this->jenis_jurnal->setDbValue($rs->fields('jenis_jurnal'));
 		$this->no_bukti->setDbValue($rs->fields('no_bukti'));
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->ket->setDbValue($rs->fields('ket'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 	}
 
 	// Load DbValue from recordset
@@ -579,10 +593,12 @@ class ctb_jurnal_add extends ctb_jurnal {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->jurnal_id->DbValue = $row['jurnal_id'];
+		$this->akun_id->DbValue = $row['akun_id'];
 		$this->jenis_jurnal->DbValue = $row['jenis_jurnal'];
 		$this->no_bukti->DbValue = $row['no_bukti'];
 		$this->tgl->DbValue = $row['tgl'];
 		$this->ket->DbValue = $row['ket'];
+		$this->nilai->DbValue = $row['nilai'];
 	}
 
 	// Load old record
@@ -619,16 +635,48 @@ class ctb_jurnal_add extends ctb_jurnal {
 
 		// Common render codes for all row types
 		// jurnal_id
+		// akun_id
 		// jenis_jurnal
 		// no_bukti
 		// tgl
 		// ket
+		// nilai
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// akun_id
+		if ($this->akun_id->VirtualValue <> "") {
+			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
+		} else {
+			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if (strval($this->akun_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+		$sWhereWrk = "";
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$lookuptblfilter = "`jurnal` = 1";
+		ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+			}
+		} else {
+			$this->akun_id->ViewValue = NULL;
+		}
+		}
+		$this->akun_id->ViewCustomAttributes = "";
 
 		// jenis_jurnal
 		if (strval($this->jenis_jurnal->CurrentValue) <> "") {
@@ -651,6 +699,15 @@ class ctb_jurnal_add extends ctb_jurnal {
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
 
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
+
+			// akun_id
+			$this->akun_id->LinkCustomAttributes = "";
+			$this->akun_id->HrefValue = "";
+			$this->akun_id->TooltipValue = "";
+
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
 			$this->jenis_jurnal->HrefValue = "";
@@ -671,6 +728,34 @@ class ctb_jurnal_add extends ctb_jurnal {
 			$this->ket->HrefValue = "";
 			$this->ket->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
+
+			// akun_id
+			$this->akun_id->EditAttrs["class"] = "form-control";
+			$this->akun_id->EditCustomAttributes = "";
+			$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
+			if (strval($this->akun_id->CurrentValue) <> "") {
+				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$lookuptblfilter = "`jurnal` = 1";
+			ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+					$this->akun_id->EditValue = $this->akun_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
+				}
+			} else {
+				$this->akun_id->EditValue = NULL;
+			}
+			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
 			// jenis_jurnal
 			$this->jenis_jurnal->EditAttrs["class"] = "form-control";
@@ -696,8 +781,12 @@ class ctb_jurnal_add extends ctb_jurnal {
 			$this->ket->PlaceHolder = ew_RemoveHtml($this->ket->FldCaption());
 
 			// Add refer script
-			// jenis_jurnal
+			// akun_id
 
+			$this->akun_id->LinkCustomAttributes = "";
+			$this->akun_id->HrefValue = "";
+
+			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
 			$this->jenis_jurnal->HrefValue = "";
 
@@ -734,6 +823,9 @@ class ctb_jurnal_add extends ctb_jurnal {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
+		if (!$this->akun_id->FldIsDetailKey && !is_null($this->akun_id->FormValue) && $this->akun_id->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->akun_id->FldCaption(), $this->akun_id->ReqErrMsg));
+		}
 		if (!$this->jenis_jurnal->FldIsDetailKey && !is_null($this->jenis_jurnal->FormValue) && $this->jenis_jurnal->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->jenis_jurnal->FldCaption(), $this->jenis_jurnal->ReqErrMsg));
 		}
@@ -783,6 +875,9 @@ class ctb_jurnal_add extends ctb_jurnal {
 			$this->LoadDbValues($rsold);
 		}
 		$rsnew = array();
+
+		// akun_id
+		$this->akun_id->SetDbValueDef($rsnew, $this->akun_id->CurrentValue, 0, FALSE);
 
 		// jenis_jurnal
 		$this->jenis_jurnal->SetDbValueDef($rsnew, $this->jenis_jurnal->CurrentValue, "", FALSE);
@@ -902,6 +997,20 @@ class ctb_jurnal_add extends ctb_jurnal {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
+		case "x_akun_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "{filter}";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$lookuptblfilter = "`jurnal` = 1";
+			ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
 		}
 	}
 
@@ -910,6 +1019,21 @@ class ctb_jurnal_add extends ctb_jurnal {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
+		case "x_akun_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "`no_nama_akun` LIKE '{query_value}%'";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$lookuptblfilter = "`jurnal` = 1";
+			ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " LIMIT " . EW_AUTO_SUGGEST_MAX_ENTRIES;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
 		}
 	}
 
@@ -1062,6 +1186,9 @@ ftb_jurnaladd.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
+			elm = this.GetElements("x" + infix + "_akun_id");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_jurnal->akun_id->FldCaption(), $tb_jurnal->akun_id->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_jenis_jurnal");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_jurnal->jenis_jurnal->FldCaption(), $tb_jurnal->jenis_jurnal->ReqErrMsg)) ?>");
@@ -1110,6 +1237,7 @@ ftb_jurnaladd.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+ftb_jurnaladd.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_no_nama_akun","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 ftb_jurnaladd.Lists["x_jenis_jurnal"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
 ftb_jurnaladd.Lists["x_jenis_jurnal"].Options = <?php echo json_encode($tb_jurnal->jenis_jurnal->Options()) ?>;
 
@@ -1140,6 +1268,21 @@ $tb_jurnal_add->ShowMessage();
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <div>
+<?php if ($tb_jurnal->akun_id->Visible) { // akun_id ?>
+	<div id="r_akun_id" class="form-group">
+		<label id="elh_tb_jurnal_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_jurnal->akun_id->CellAttributes() ?>>
+<span id="el_tb_jurnal_akun_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_akun_id"><?php echo (strval($tb_jurnal->akun_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_jurnal->akun_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_jurnal->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akun_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="tb_jurnal" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_jurnal->akun_id->DisplayValueSeparatorAttribute() ?>" name="x_akun_id" id="x_akun_id" value="<?php echo $tb_jurnal->akun_id->CurrentValue ?>"<?php echo $tb_jurnal->akun_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_akun_id" id="s_x_akun_id" value="<?php echo $tb_jurnal->akun_id->LookupFilterQuery() ?>">
+</span>
+<?php echo $tb_jurnal->akun_id->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 	<div id="r_jenis_jurnal" class="form-group">
 		<label id="elh_tb_jurnal_jenis_jurnal" for="x_jenis_jurnal" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>

@@ -55,7 +55,7 @@ class caudittrail extends cTable {
 		$this->fields['id'] = &$this->id;
 
 		// datetime
-		$this->datetime = new cField('audittrail', 'audittrail', 'x_datetime', 'datetime', '`datetime`', ew_CastDateFieldForLike('`datetime`', 0, "DB"), 135, 0, FALSE, '`datetime`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->datetime = new cField('audittrail', 'audittrail', 'x_datetime', 'datetime', '`datetime`', 'DATE_FORMAT(`datetime`, \'%Y/%m/%d\')', 135, 0, FALSE, '`datetime`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datetime->Sortable = TRUE; // Allow sort
 		$this->datetime->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['datetime'] = &$this->datetime;

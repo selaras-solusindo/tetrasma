@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 06, 2017 at 05:20 PM
+-- Generation Time: Jan 07, 2017 at 12:58 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=151 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=161 ;
 
 --
 -- Dumping data for table `audittrail`
@@ -193,7 +193,17 @@ INSERT INTO `audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table`,
 (147, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '3', '', 'KM201701003'),
 (148, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '3', '', '2017-01-06'),
 (149, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '3', '', 'tes5'),
-(150, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '3', '', '3');
+(150, '2017-01-06 09:49:07', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '3', '', '3'),
+(151, '2017-01-06 10:48:45', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(152, '2017-01-06 15:33:25', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(153, '2017-01-06 15:33:30', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(154, '2017-01-07 00:18:59', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(155, '2017-01-07 01:59:06', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal', '1', '0', '1'),
+(156, '2017-01-07 03:10:13', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '1', 'K', NULL),
+(157, '2017-01-07 03:10:26', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '2', 'K', NULL),
+(158, '2017-01-07 03:11:00', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '1', NULL, 'K,B'),
+(159, '2017-01-07 03:11:23', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '2', NULL, 'B'),
+(160, '2017-01-07 05:26:57', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -481,7 +491,7 @@ CREATE TABLE IF NOT EXISTS `tb_detail` (
   `jurnal_id` int(11) NOT NULL,
   `akun_id` int(11) NOT NULL,
   `dk` tinyint(1) NOT NULL DEFAULT '0',
-  `nilai` bigint(20) NOT NULL DEFAULT '0',
+  `nilai` bigint(20) NOT NULL,
   `anggota_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`detail_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
@@ -510,6 +520,8 @@ CREATE TABLE IF NOT EXISTS `tb_jurnal` (
   `tgl` date NOT NULL,
   `ket` text NOT NULL,
   `jenis_jurnal` varchar(2) NOT NULL,
+  `akun_id` int(11) NOT NULL,
+  `nilai` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`jurnal_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
@@ -517,10 +529,10 @@ CREATE TABLE IF NOT EXISTS `tb_jurnal` (
 -- Dumping data for table `tb_jurnal`
 --
 
-INSERT INTO `tb_jurnal` (`jurnal_id`, `no_bukti`, `tgl`, `ket`, `jenis_jurnal`) VALUES
-(1, 'KM201701001', '2017-01-06', 'tes3', 'KM'),
-(2, 'KM201701002', '2017-01-06', 'tes4', 'KM'),
-(3, 'KM201701003', '2017-01-06', 'tes5', 'KM');
+INSERT INTO `tb_jurnal` (`jurnal_id`, `no_bukti`, `tgl`, `ket`, `jenis_jurnal`, `akun_id`, `nilai`) VALUES
+(1, 'KM201701001', '2017-01-06', 'tes3', 'KM', 0, 0),
+(2, 'KM201701002', '2017-01-06', 'tes4', 'KM', 0, 0),
+(3, 'KM201701003', '2017-01-06', 'tes5', 'KM', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -602,6 +614,8 @@ CREATE TABLE IF NOT EXISTS `tb_level4` (
   `level4_nama` varchar(50) NOT NULL,
   `saldo_awal` bigint(20) DEFAULT NULL,
   `saldo` bigint(20) DEFAULT NULL,
+  `jurnal` tinyint(1) DEFAULT '0',
+  `jurnal_kode` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`level4_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -609,9 +623,9 @@ CREATE TABLE IF NOT EXISTS `tb_level4` (
 -- Dumping data for table `tb_level4`
 --
 
-INSERT INTO `tb_level4` (`level4_id`, `level1_id`, `level2_id`, `level3_id`, `level4_no`, `level4_nama`, `saldo_awal`, `saldo`) VALUES
-(1, 1, 1, 1, '01', 'Kas', NULL, NULL),
-(2, 1, 1, 1, '02', 'Bank BCA', NULL, NULL);
+INSERT INTO `tb_level4` (`level4_id`, `level1_id`, `level2_id`, `level3_id`, `level4_no`, `level4_nama`, `saldo_awal`, `saldo`, `jurnal`, `jurnal_kode`) VALUES
+(1, 1, 1, 1, '01', 'Kas', NULL, NULL, 1, 'K'),
+(2, 1, 1, 1, '02', 'Bank BCA', NULL, NULL, 0, 'B');
 
 -- --------------------------------------------------------
 
@@ -640,15 +654,15 @@ INSERT INTO `tb_user` (`user_id`, `username`, `password`, `userlevel`) VALUES
 -- Table structure for table `view_akun_jurnal`
 --
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`view_akun_jurnal` AS select `db_tetrasma`.`tb_level4`.`level4_id` AS `level4_id`,concat(`db_tetrasma`.`tb_level1`.`level1_no`,'.',`db_tetrasma`.`tb_level2`.`level2_no`,'.',`db_tetrasma`.`tb_level3`.`level3_no`,'.',`db_tetrasma`.`tb_level4`.`level4_no`) AS `akun`,`db_tetrasma`.`tb_level4`.`level4_nama` AS `level4_nama` from (((`db_tetrasma`.`tb_level4` join `db_tetrasma`.`tb_level1` on((`db_tetrasma`.`tb_level4`.`level1_id` = `db_tetrasma`.`tb_level1`.`level1_id`))) join `db_tetrasma`.`tb_level2` on((`db_tetrasma`.`tb_level4`.`level2_id` = `db_tetrasma`.`tb_level2`.`level2_id`))) join `db_tetrasma`.`tb_level3` on((`db_tetrasma`.`tb_level4`.`level3_id` = `db_tetrasma`.`tb_level3`.`level3_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`view_akun_jurnal` AS select `db_tetrasma`.`tb_level4`.`level4_id` AS `level4_id`,concat(`db_tetrasma`.`tb_level1`.`level1_no`,'.',`db_tetrasma`.`tb_level2`.`level2_no`,'.',`db_tetrasma`.`tb_level3`.`level3_no`,'.',`db_tetrasma`.`tb_level4`.`level4_no`,' - ',`db_tetrasma`.`tb_level4`.`level4_nama`) AS `no_nama_akun`,`db_tetrasma`.`tb_level4`.`jurnal` AS `jurnal` from (((`db_tetrasma`.`tb_level4` join `db_tetrasma`.`tb_level1` on((`db_tetrasma`.`tb_level4`.`level1_id` = `db_tetrasma`.`tb_level1`.`level1_id`))) join `db_tetrasma`.`tb_level2` on((`db_tetrasma`.`tb_level4`.`level2_id` = `db_tetrasma`.`tb_level2`.`level2_id`))) join `db_tetrasma`.`tb_level3` on((`db_tetrasma`.`tb_level4`.`level3_id` = `db_tetrasma`.`tb_level3`.`level3_id`)));
 
 --
 -- Dumping data for table `view_akun_jurnal`
 --
 
-INSERT INTO `view_akun_jurnal` (`level4_id`, `akun`, `level4_nama`) VALUES
-(1, '1.1.1.01', 'Kas'),
-(2, '1.1.1.02', 'Bank BCA');
+INSERT INTO `view_akun_jurnal` (`level4_id`, `no_nama_akun`, `jurnal`) VALUES
+(1, '1.1.1.01 - Kas', 1),
+(2, '1.1.1.02 - Bank BCA', 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

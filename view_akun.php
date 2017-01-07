@@ -392,6 +392,8 @@ $mquery_level1 = mysql_query($msql_level1);
 		</table>
 	</body>
 </html>
+
+
 <?php if (EW_DEBUG_ENABLED) echo ew_DebugMsg(); ?>
 <?php include_once "footer.php" ?>
 <?php

@@ -470,11 +470,6 @@ class ctb_detail_delete extends ctb_detail {
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
-		if (array_key_exists('EV__akun_id', $rs->fields)) {
-			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
-		} else {
-			$this->akun_id->VirtualValue = ""; // Clear value
-		}
 		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 		if (array_key_exists('EV__anggota_id', $rs->fields)) {
@@ -525,32 +520,7 @@ class ctb_detail_delete extends ctb_detail {
 		$this->jurnal_id->ViewCustomAttributes = "";
 
 		// akun_id
-		if ($this->akun_id->VirtualValue <> "") {
-			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
-		} else {
-			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
-		if (strval($this->akun_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level4_id`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
-			}
-		} else {
-			$this->akun_id->ViewValue = NULL;
-		}
-		}
+		$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		$this->akun_id->ViewCustomAttributes = "";
 
 		// nilai
@@ -566,7 +536,7 @@ class ctb_detail_delete extends ctb_detail {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -926,7 +896,6 @@ ftb_detaildelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-ftb_detaildelete.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_akun","x_level4_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 ftb_detaildelete.Lists["x_anggota_id"] = {"LinkField":"x_anggota_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_anggota"};
 
 // Form object for search

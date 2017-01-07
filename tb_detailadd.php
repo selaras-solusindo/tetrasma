@@ -546,11 +546,6 @@ class ctb_detail_add extends ctb_detail {
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
-		if (array_key_exists('EV__akun_id', $rs->fields)) {
-			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
-		} else {
-			$this->akun_id->VirtualValue = ""; // Clear value
-		}
 		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 		if (array_key_exists('EV__anggota_id', $rs->fields)) {
@@ -624,32 +619,7 @@ class ctb_detail_add extends ctb_detail {
 		$this->jurnal_id->ViewCustomAttributes = "";
 
 		// akun_id
-		if ($this->akun_id->VirtualValue <> "") {
-			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
-		} else {
-			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
-		if (strval($this->akun_id->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level4_id`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$arwrk[2] = $rswrk->fields('Disp2Fld');
-				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
-			}
-		} else {
-			$this->akun_id->ViewValue = NULL;
-		}
-		}
+		$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		$this->akun_id->ViewCustomAttributes = "";
 
 		// nilai
@@ -665,7 +635,7 @@ class ctb_detail_add extends ctb_detail {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -704,27 +674,6 @@ class ctb_detail_add extends ctb_detail {
 			$this->akun_id->EditAttrs["class"] = "form-control";
 			$this->akun_id->EditCustomAttributes = "";
 			$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
-			if (strval($this->akun_id->CurrentValue) <> "") {
-				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-			$sSqlWrk = "SELECT `level4_id`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
-			ew_AddFilter($sWhereWrk, $sFilterWrk);
-			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-				$rswrk = Conn()->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
-					$arwrk[2] = ew_HtmlEncode($rswrk->fields('Disp2Fld'));
-					$this->akun_id->EditValue = $this->akun_id->DisplayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
-				}
-			} else {
-				$this->akun_id->EditValue = NULL;
-			}
 			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
 			// nilai
@@ -741,7 +690,7 @@ class ctb_detail_add extends ctb_detail {
 				$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -797,6 +746,9 @@ class ctb_detail_add extends ctb_detail {
 		if (!$this->akun_id->FldIsDetailKey && !is_null($this->akun_id->FormValue) && $this->akun_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->akun_id->FldCaption(), $this->akun_id->ReqErrMsg));
 		}
+		if (!ew_CheckInteger($this->akun_id->FormValue)) {
+			ew_AddMessage($gsFormError, $this->akun_id->FldErrMsg());
+		}
 		if (!$this->nilai->FldIsDetailKey && !is_null($this->nilai->FormValue) && $this->nilai->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->nilai->FldCaption(), $this->nilai->ReqErrMsg));
 		}
@@ -831,7 +783,7 @@ class ctb_detail_add extends ctb_detail {
 		$this->akun_id->SetDbValueDef($rsnew, $this->akun_id->CurrentValue, 0, FALSE);
 
 		// nilai
-		$this->nilai->SetDbValueDef($rsnew, $this->nilai->CurrentValue, 0, strval($this->nilai->CurrentValue) == "");
+		$this->nilai->SetDbValueDef($rsnew, $this->nilai->CurrentValue, 0, FALSE);
 
 		// anggota_id
 		$this->anggota_id->SetDbValueDef($rsnew, $this->anggota_id->CurrentValue, NULL, FALSE);
@@ -951,24 +903,12 @@ class ctb_detail_add extends ctb_detail {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		case "x_akun_id":
-			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-			$sWhereWrk = "{filter}";
-			$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
-			$sSqlWrk = "";
-			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			if ($sSqlWrk <> "")
-				$fld->LookupFilters["s"] .= $sSqlWrk;
-			break;
 		case "x_anggota_id":
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id` AS `LinkFld`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "{filter}";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`anggota_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`anggota_id` = {filter_value}", "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -983,24 +923,11 @@ class ctb_detail_add extends ctb_detail {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		case "x_akun_id":
-			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level4_id`, `akun` AS `DispFld`, `level4_nama` AS `Disp2Fld` FROM `view_akun_jurnal`";
-			$sWhereWrk = "`akun` LIKE '{query_value}%' OR CONCAT(`akun`,'" . ew_ValueSeparator(1, $this->akun_id) . "',`level4_nama`) LIKE '{query_value}%'";
-			$this->akun_id->LookupFilters = array("dx1" => '`akun`', "dx2" => '`level4_nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
-			$sSqlWrk = "";
-			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " LIMIT " . EW_AUTO_SUGGEST_MAX_ENTRIES;
-			if ($sSqlWrk <> "")
-				$fld->LookupFilters["s"] .= $sSqlWrk;
-			break;
 		case "x_anggota_id":
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld` FROM `tb_anggota`";
 			$sWhereWrk = "`nama` LIKE '{query_value}%'";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
@@ -1164,6 +1091,9 @@ ftb_detailadd.Validate = function() {
 			elm = this.GetElements("x" + infix + "_akun_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->akun_id->FldCaption(), $tb_detail->akun_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_akun_id");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_detail->akun_id->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_nilai");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_detail->nilai->FldCaption(), $tb_detail->nilai->ReqErrMsg)) ?>");
@@ -1203,7 +1133,6 @@ ftb_detailadd.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-ftb_detailadd.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_akun","x_level4_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 ftb_detailadd.Lists["x_anggota_id"] = {"LinkField":"x_anggota_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_anggota"};
 
 // Form object for search
@@ -1239,24 +1168,10 @@ $tb_detail_add->ShowMessage();
 <div>
 <?php if ($tb_detail->akun_id->Visible) { // akun_id ?>
 	<div id="r_akun_id" class="form-group">
-		<label id="elh_tb_detail_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<label id="elh_tb_detail_akun_id" for="x_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_detail->akun_id->CellAttributes() ?>>
 <span id="el_tb_detail_akun_id">
-<?php
-$wrkonchange = trim(" " . @$tb_detail->akun_id->EditAttrs["onchange"]);
-if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
-$tb_detail->akun_id->EditAttrs["onchange"] = "";
-?>
-<span id="as_x_akun_id" style="white-space: nowrap; z-index: 8970">
-	<input type="text" name="sv_x_akun_id" id="sv_x_akun_id" value="<?php echo $tb_detail->akun_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
-</span>
-<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x_akun_id" id="x_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<input type="hidden" name="q_x_akun_id" id="q_x_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(true) ?>">
-<script type="text/javascript">
-ftb_detailadd.CreateAutoSuggest({"id":"x_akun_id","forceSelect":true});
-</script>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akun_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" name="s_x_akun_id" id="s_x_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(false) ?>">
+<input type="text" data-table="tb_detail" data-field="x_akun_id" name="x_akun_id" id="x_akun_id" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" value="<?php echo $tb_detail->akun_id->EditValue ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
 </span>
 <?php echo $tb_detail->akun_id->CustomMsg ?></div></div>
 	</div>
@@ -1276,21 +1191,12 @@ ftb_detailadd.CreateAutoSuggest({"id":"x_akun_id","forceSelect":true});
 		<label id="elh_tb_detail_anggota_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_detail->anggota_id->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_detail->anggota_id->CellAttributes() ?>>
 <span id="el_tb_detail_anggota_id">
-<?php
-$wrkonchange = trim(" " . @$tb_detail->anggota_id->EditAttrs["onchange"]);
-if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
-$tb_detail->anggota_id->EditAttrs["onchange"] = "";
-?>
-<span id="as_x_anggota_id" style="white-space: nowrap; z-index: 8950">
-	<input type="text" name="sv_x_anggota_id" id="sv_x_anggota_id" value="<?php echo $tb_detail->anggota_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_anggota_id"><?php echo (strval($tb_detail->anggota_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->anggota_id->ViewValue); ?></span>
 </span>
-<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x_anggota_id" id="x_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<input type="hidden" name="q_x_anggota_id" id="q_x_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(true) ?>">
-<script type="text/javascript">
-ftb_detailadd.CreateAutoSuggest({"id":"x_anggota_id","forceSelect":true});
-</script>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_anggota_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" name="s_x_anggota_id" id="s_x_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(false) ?>">
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_anggota_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x_anggota_id" id="x_anggota_id" value="<?php echo $tb_detail->anggota_id->CurrentValue ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_anggota_id" id="s_x_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $tb_detail->anggota_id->CustomMsg ?></div></div>
 	</div>

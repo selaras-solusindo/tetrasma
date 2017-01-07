@@ -15,6 +15,8 @@ class ctb_level4 extends cTable {
 	var $level4_nama;
 	var $saldo_awal;
 	var $saldo;
+	var $jurnal;
+	var $jurnal_kode;
 
 	//
 	// Table class constructor
@@ -91,6 +93,19 @@ class ctb_level4 extends cTable {
 		$this->saldo->Sortable = FALSE; // Allow sort
 		$this->saldo->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['saldo'] = &$this->saldo;
+
+		// jurnal
+		$this->jurnal = new cField('tb_level4', 'tb_level4', 'x_jurnal', 'jurnal', '`jurnal`', '`jurnal`', 16, -1, FALSE, '`jurnal`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'RADIO');
+		$this->jurnal->Sortable = TRUE; // Allow sort
+		$this->jurnal->OptionCount = 2;
+		$this->jurnal->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['jurnal'] = &$this->jurnal;
+
+		// jurnal_kode
+		$this->jurnal_kode = new cField('tb_level4', 'tb_level4', 'x_jurnal_kode', 'jurnal_kode', '`jurnal_kode`', '`jurnal_kode`', 200, -1, FALSE, '`jurnal_kode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'RADIO');
+		$this->jurnal_kode->Sortable = TRUE; // Allow sort
+		$this->jurnal_kode->OptionCount = 2;
+		$this->fields['jurnal_kode'] = &$this->jurnal_kode;
 	}
 
 	// Set Field Visibility
@@ -644,6 +659,8 @@ class ctb_level4 extends cTable {
 		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
 		$this->saldo_awal->setDbValue($rs->fields('saldo_awal'));
 		$this->saldo->setDbValue($rs->fields('saldo'));
+		$this->jurnal->setDbValue($rs->fields('jurnal'));
+		$this->jurnal_kode->setDbValue($rs->fields('jurnal_kode'));
 	}
 
 	// Render list row values
@@ -662,6 +679,8 @@ class ctb_level4 extends cTable {
 		// level4_nama
 		// saldo_awal
 		// saldo
+		// jurnal
+		// jurnal_kode
 		// level4_id
 
 		$this->level4_id->ViewValue = $this->level4_id->CurrentValue;
@@ -676,7 +695,7 @@ class ctb_level4 extends cTable {
 			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
 		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
+		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -705,7 +724,7 @@ class ctb_level4 extends cTable {
 			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
 		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => '`level2_no`', "dx2" => '`level2_nama`');
+		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -734,7 +753,7 @@ class ctb_level4 extends cTable {
 			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
 		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => '`level3_no`', "dx2" => '`level3_nama`');
+		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -773,6 +792,22 @@ class ctb_level4 extends cTable {
 		$this->saldo->ViewValue = ew_FormatNumber($this->saldo->ViewValue, 0, -2, -2, -1);
 		$this->saldo->CellCssStyle .= "text-align: right;";
 		$this->saldo->ViewCustomAttributes = "";
+
+		// jurnal
+		if (strval($this->jurnal->CurrentValue) <> "") {
+			$this->jurnal->ViewValue = $this->jurnal->OptionCaption($this->jurnal->CurrentValue);
+		} else {
+			$this->jurnal->ViewValue = NULL;
+		}
+		$this->jurnal->ViewCustomAttributes = "";
+
+		// jurnal_kode
+		if (strval($this->jurnal_kode->CurrentValue) <> "") {
+			$this->jurnal_kode->ViewValue = $this->jurnal_kode->OptionCaption($this->jurnal_kode->CurrentValue);
+		} else {
+			$this->jurnal_kode->ViewValue = NULL;
+		}
+		$this->jurnal_kode->ViewCustomAttributes = "";
 
 		// level4_id
 		$this->level4_id->LinkCustomAttributes = "";
@@ -813,6 +848,16 @@ class ctb_level4 extends cTable {
 		$this->saldo->LinkCustomAttributes = "";
 		$this->saldo->HrefValue = "";
 		$this->saldo->TooltipValue = "";
+
+		// jurnal
+		$this->jurnal->LinkCustomAttributes = "";
+		$this->jurnal->HrefValue = "";
+		$this->jurnal->TooltipValue = "";
+
+		// jurnal_kode
+		$this->jurnal_kode->LinkCustomAttributes = "";
+		$this->jurnal_kode->HrefValue = "";
+		$this->jurnal_kode->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -873,6 +918,14 @@ class ctb_level4 extends cTable {
 		$this->saldo->EditValue = $this->saldo->CurrentValue;
 		$this->saldo->PlaceHolder = ew_RemoveHtml($this->saldo->FldCaption());
 
+		// jurnal
+		$this->jurnal->EditCustomAttributes = "";
+		$this->jurnal->EditValue = $this->jurnal->Options(FALSE);
+
+		// jurnal_kode
+		$this->jurnal_kode->EditCustomAttributes = "";
+		$this->jurnal_kode->EditValue = $this->jurnal_kode->Options(FALSE);
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -906,6 +959,8 @@ class ctb_level4 extends cTable {
 					if ($this->level4_no->Exportable) $Doc->ExportCaption($this->level4_no);
 					if ($this->level4_nama->Exportable) $Doc->ExportCaption($this->level4_nama);
 					if ($this->saldo_awal->Exportable) $Doc->ExportCaption($this->saldo_awal);
+					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
+					if ($this->jurnal_kode->Exportable) $Doc->ExportCaption($this->jurnal_kode);
 				} else {
 					if ($this->level1_id->Exportable) $Doc->ExportCaption($this->level1_id);
 					if ($this->level2_id->Exportable) $Doc->ExportCaption($this->level2_id);
@@ -913,6 +968,8 @@ class ctb_level4 extends cTable {
 					if ($this->level4_no->Exportable) $Doc->ExportCaption($this->level4_no);
 					if ($this->level4_nama->Exportable) $Doc->ExportCaption($this->level4_nama);
 					if ($this->saldo_awal->Exportable) $Doc->ExportCaption($this->saldo_awal);
+					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
+					if ($this->jurnal_kode->Exportable) $Doc->ExportCaption($this->jurnal_kode);
 				}
 				$Doc->EndExportRow();
 			}
@@ -950,6 +1007,8 @@ class ctb_level4 extends cTable {
 						if ($this->level4_no->Exportable) $Doc->ExportField($this->level4_no);
 						if ($this->level4_nama->Exportable) $Doc->ExportField($this->level4_nama);
 						if ($this->saldo_awal->Exportable) $Doc->ExportField($this->saldo_awal);
+						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
+						if ($this->jurnal_kode->Exportable) $Doc->ExportField($this->jurnal_kode);
 					} else {
 						if ($this->level1_id->Exportable) $Doc->ExportField($this->level1_id);
 						if ($this->level2_id->Exportable) $Doc->ExportField($this->level2_id);
@@ -957,6 +1016,8 @@ class ctb_level4 extends cTable {
 						if ($this->level4_no->Exportable) $Doc->ExportField($this->level4_no);
 						if ($this->level4_nama->Exportable) $Doc->ExportField($this->level4_nama);
 						if ($this->saldo_awal->Exportable) $Doc->ExportField($this->saldo_awal);
+						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
+						if ($this->jurnal_kode->Exportable) $Doc->ExportField($this->jurnal_kode);
 					}
 					$Doc->EndExportRow();
 				}

@@ -292,6 +292,8 @@ class ctb_level4_add extends ctb_level4 {
 		$this->level4_no->SetVisibility();
 		$this->level4_nama->SetVisibility();
 		$this->saldo_awal->SetVisibility();
+		$this->jurnal->SetVisibility();
+		$this->jurnal_kode->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -490,6 +492,9 @@ class ctb_level4_add extends ctb_level4 {
 		$this->level4_nama->OldValue = $this->level4_nama->CurrentValue;
 		$this->saldo_awal->CurrentValue = NULL;
 		$this->saldo_awal->OldValue = $this->saldo_awal->CurrentValue;
+		$this->jurnal->CurrentValue = 0;
+		$this->jurnal_kode->CurrentValue = NULL;
+		$this->jurnal_kode->OldValue = $this->jurnal_kode->CurrentValue;
 	}
 
 	// Load form values
@@ -515,6 +520,12 @@ class ctb_level4_add extends ctb_level4 {
 		if (!$this->saldo_awal->FldIsDetailKey) {
 			$this->saldo_awal->setFormValue($objForm->GetValue("x_saldo_awal"));
 		}
+		if (!$this->jurnal->FldIsDetailKey) {
+			$this->jurnal->setFormValue($objForm->GetValue("x_jurnal"));
+		}
+		if (!$this->jurnal_kode->FldIsDetailKey) {
+			$this->jurnal_kode->setFormValue($objForm->GetValue("x_jurnal_kode"));
+		}
 	}
 
 	// Restore form values
@@ -527,6 +538,8 @@ class ctb_level4_add extends ctb_level4 {
 		$this->level4_no->CurrentValue = $this->level4_no->FormValue;
 		$this->level4_nama->CurrentValue = $this->level4_nama->FormValue;
 		$this->saldo_awal->CurrentValue = $this->saldo_awal->FormValue;
+		$this->jurnal->CurrentValue = $this->jurnal->FormValue;
+		$this->jurnal_kode->CurrentValue = $this->jurnal_kode->FormValue;
 	}
 
 	// Load row based on key values
@@ -581,6 +594,8 @@ class ctb_level4_add extends ctb_level4 {
 		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
 		$this->saldo_awal->setDbValue($rs->fields('saldo_awal'));
 		$this->saldo->setDbValue($rs->fields('saldo'));
+		$this->jurnal->setDbValue($rs->fields('jurnal'));
+		$this->jurnal_kode->setDbValue($rs->fields('jurnal_kode'));
 	}
 
 	// Load DbValue from recordset
@@ -595,6 +610,8 @@ class ctb_level4_add extends ctb_level4 {
 		$this->level4_nama->DbValue = $row['level4_nama'];
 		$this->saldo_awal->DbValue = $row['saldo_awal'];
 		$this->saldo->DbValue = $row['saldo'];
+		$this->jurnal->DbValue = $row['jurnal'];
+		$this->jurnal_kode->DbValue = $row['jurnal_kode'];
 	}
 
 	// Load old record
@@ -638,6 +655,8 @@ class ctb_level4_add extends ctb_level4 {
 		// level4_nama
 		// saldo_awal
 		// saldo
+		// jurnal
+		// jurnal_kode
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -650,7 +669,7 @@ class ctb_level4_add extends ctb_level4 {
 			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
 		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
+		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -679,7 +698,7 @@ class ctb_level4_add extends ctb_level4 {
 			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
 		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => '`level2_no`', "dx2" => '`level2_nama`');
+		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -708,7 +727,7 @@ class ctb_level4_add extends ctb_level4 {
 			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
 		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => '`level3_no`', "dx2" => '`level3_nama`');
+		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -742,6 +761,22 @@ class ctb_level4_add extends ctb_level4 {
 		$this->saldo_awal->CellCssStyle .= "text-align: right;";
 		$this->saldo_awal->ViewCustomAttributes = "";
 
+		// jurnal
+		if (strval($this->jurnal->CurrentValue) <> "") {
+			$this->jurnal->ViewValue = $this->jurnal->OptionCaption($this->jurnal->CurrentValue);
+		} else {
+			$this->jurnal->ViewValue = NULL;
+		}
+		$this->jurnal->ViewCustomAttributes = "";
+
+		// jurnal_kode
+		if (strval($this->jurnal_kode->CurrentValue) <> "") {
+			$this->jurnal_kode->ViewValue = $this->jurnal_kode->OptionCaption($this->jurnal_kode->CurrentValue);
+		} else {
+			$this->jurnal_kode->ViewValue = NULL;
+		}
+		$this->jurnal_kode->ViewCustomAttributes = "";
+
 			// level1_id
 			$this->level1_id->LinkCustomAttributes = "";
 			$this->level1_id->HrefValue = "";
@@ -771,6 +806,16 @@ class ctb_level4_add extends ctb_level4 {
 			$this->saldo_awal->LinkCustomAttributes = "";
 			$this->saldo_awal->HrefValue = "";
 			$this->saldo_awal->TooltipValue = "";
+
+			// jurnal
+			$this->jurnal->LinkCustomAttributes = "";
+			$this->jurnal->HrefValue = "";
+			$this->jurnal->TooltipValue = "";
+
+			// jurnal_kode
+			$this->jurnal_kode->LinkCustomAttributes = "";
+			$this->jurnal_kode->HrefValue = "";
+			$this->jurnal_kode->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// level1_id
@@ -781,7 +826,7 @@ class ctb_level4_add extends ctb_level4 {
 				$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
 			$sWhereWrk = "";
-			$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
+			$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -808,7 +853,7 @@ class ctb_level4_add extends ctb_level4 {
 				$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
 			$sWhereWrk = "";
-			$this->level2_id->LookupFilters = array("dx1" => '`level2_no`', "dx2" => '`level2_nama`');
+			$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -835,7 +880,7 @@ class ctb_level4_add extends ctb_level4 {
 				$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
 			$sWhereWrk = "";
-			$this->level3_id->LookupFilters = array("dx1" => '`level3_no`', "dx2" => '`level3_nama`');
+			$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -872,6 +917,14 @@ class ctb_level4_add extends ctb_level4 {
 			$this->saldo_awal->EditValue = ew_HtmlEncode($this->saldo_awal->CurrentValue);
 			$this->saldo_awal->PlaceHolder = ew_RemoveHtml($this->saldo_awal->FldCaption());
 
+			// jurnal
+			$this->jurnal->EditCustomAttributes = "";
+			$this->jurnal->EditValue = $this->jurnal->Options(FALSE);
+
+			// jurnal_kode
+			$this->jurnal_kode->EditCustomAttributes = "";
+			$this->jurnal_kode->EditValue = $this->jurnal_kode->Options(FALSE);
+
 			// Add refer script
 			// level1_id
 
@@ -897,6 +950,14 @@ class ctb_level4_add extends ctb_level4 {
 			// saldo_awal
 			$this->saldo_awal->LinkCustomAttributes = "";
 			$this->saldo_awal->HrefValue = "";
+
+			// jurnal
+			$this->jurnal->LinkCustomAttributes = "";
+			$this->jurnal->HrefValue = "";
+
+			// jurnal_kode
+			$this->jurnal_kode->LinkCustomAttributes = "";
+			$this->jurnal_kode->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -979,6 +1040,12 @@ class ctb_level4_add extends ctb_level4 {
 		// saldo_awal
 		$this->saldo_awal->SetDbValueDef($rsnew, $this->saldo_awal->CurrentValue, NULL, FALSE);
 
+		// jurnal
+		$this->jurnal->SetDbValueDef($rsnew, $this->jurnal->CurrentValue, NULL, strval($this->jurnal->CurrentValue) == "");
+
+		// jurnal_kode
+		$this->jurnal_kode->SetDbValueDef($rsnew, $this->jurnal_kode->CurrentValue, NULL, FALSE);
+
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
 		$bInsertRow = $this->Row_Inserting($rs, $rsnew);
@@ -1033,8 +1100,8 @@ class ctb_level4_add extends ctb_level4 {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level1_id` AS `LinkFld`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
 			$sWhereWrk = "{filter}";
-			$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level1_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level1_id` = {filter_value}", "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1045,8 +1112,8 @@ class ctb_level4_add extends ctb_level4 {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level2_id` AS `LinkFld`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
 			$sWhereWrk = "{filter}";
-			$this->level2_id->LookupFilters = array("dx1" => '`level2_no`', "dx2" => '`level2_nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level2_id` = {filter_value}', "t0" => "3", "fn0" => "", "f1" => '`level1_id` IN ({filter_value})', "t1" => "3", "fn1" => "");
+			$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level2_id` = {filter_value}", "t0" => "3", "fn0" => "", "f1" => "`level1_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1057,8 +1124,8 @@ class ctb_level4_add extends ctb_level4 {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level3_id` AS `LinkFld`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
 			$sWhereWrk = "{filter}";
-			$this->level3_id->LookupFilters = array("dx1" => '`level3_no`', "dx2" => '`level3_nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level3_id` = {filter_value}', "t0" => "3", "fn0" => "", "f1" => '`level2_id` IN ({filter_value})', "t1" => "3", "fn1" => "");
+			$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level3_id` = {filter_value}", "t0" => "3", "fn0" => "", "f1" => "`level2_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1077,7 +1144,7 @@ class ctb_level4_add extends ctb_level4 {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld` FROM `tb_level1`";
 			$sWhereWrk = "`level1_no` LIKE '{query_value}%' OR CONCAT(`level1_no`,'" . ew_ValueSeparator(1, $this->level1_id) . "',`level1_nama`) LIKE '{query_value}%'";
-			$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
+			$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
@@ -1090,7 +1157,7 @@ class ctb_level4_add extends ctb_level4 {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld` FROM `tb_level2`";
 			$sWhereWrk = "(`level2_no` LIKE '{query_value}%' OR CONCAT(`level2_no`,'" . ew_ValueSeparator(1, $this->level2_id) . "',`level2_nama`) LIKE '{query_value}%') AND ({filter})";
-			$this->level2_id->LookupFilters = array("dx1" => '`level2_no`', "dx2" => '`level2_nama`');
+			$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f1" => "`level1_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
@@ -1103,7 +1170,7 @@ class ctb_level4_add extends ctb_level4 {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld` FROM `tb_level3`";
 			$sWhereWrk = "(`level3_no` LIKE '{query_value}%' OR CONCAT(`level3_no`,'" . ew_ValueSeparator(1, $this->level3_id) . "',`level3_nama`) LIKE '{query_value}%') AND ({filter})";
-			$this->level3_id->LookupFilters = array("dx1" => '`level3_no`', "dx2" => '`level3_nama`');
+			$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f1" => "`level2_id` IN ({filter_value})", "t1" => "3", "fn1" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
@@ -1318,6 +1385,10 @@ ftb_level4add.ValidateRequired = false;
 ftb_level4add.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_no","x_level1_nama","",""],"ParentFields":[],"ChildFields":["x_level2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level1"};
 ftb_level4add.Lists["x_level2_id"] = {"LinkField":"x_level2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level2_no","x_level2_nama","",""],"ParentFields":["x_level1_id"],"ChildFields":["x_level3_id"],"FilterFields":["x_level1_id"],"Options":[],"Template":"","LinkTable":"tb_level2"};
 ftb_level4add.Lists["x_level3_id"] = {"LinkField":"x_level3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level3_no","x_level3_nama","",""],"ParentFields":["x_level2_id"],"ChildFields":[],"FilterFields":["x_level2_id"],"Options":[],"Template":"","LinkTable":"tb_level3"};
+ftb_level4add.Lists["x_jurnal"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_level4add.Lists["x_jurnal"].Options = <?php echo json_encode($tb_level4->jurnal->Options()) ?>;
+ftb_level4add.Lists["x_jurnal_kode"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_level4add.Lists["x_jurnal_kode"].Options = <?php echo json_encode($tb_level4->jurnal_kode->Options()) ?>;
 
 // Form object for search
 </script>
@@ -1351,21 +1422,13 @@ $tb_level4_add->ShowMessage();
 		<label id="elh_tb_level4_level1_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_level4->level1_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_level4->level1_id->CellAttributes() ?>>
 <span id="el_tb_level4_level1_id">
-<?php
-$wrkonchange = trim("ew_UpdateOpt.call(this); " . @$tb_level4->level1_id->EditAttrs["onchange"]);
-if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
-$tb_level4->level1_id->EditAttrs["onchange"] = "";
-?>
-<span id="as_x_level1_id" style="white-space: nowrap; z-index: 8980">
-	<input type="text" name="sv_x_level1_id" id="sv_x_level1_id" value="<?php echo $tb_level4->level1_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_level4->level1_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_level4->level1_id->getPlaceHolder()) ?>"<?php echo $tb_level4->level1_id->EditAttributes() ?>>
+<?php $tb_level4->level1_id->EditAttrs["onchange"] = "ew_UpdateOpt.call(this); " . @$tb_level4->level1_id->EditAttrs["onchange"]; ?>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_level1_id"><?php echo (strval($tb_level4->level1_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_level4->level1_id->ViewValue); ?></span>
 </span>
-<input type="hidden" data-table="tb_level4" data-field="x_level1_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_level4->level1_id->DisplayValueSeparatorAttribute() ?>" name="x_level1_id" id="x_level1_id" value="<?php echo ew_HtmlEncode($tb_level4->level1_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<input type="hidden" name="q_x_level1_id" id="q_x_level1_id" value="<?php echo $tb_level4->level1_id->LookupFilterQuery(true) ?>">
-<script type="text/javascript">
-ftb_level4add.CreateAutoSuggest({"id":"x_level1_id","forceSelect":true});
-</script>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_level4->level1_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_level1_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" name="s_x_level1_id" id="s_x_level1_id" value="<?php echo $tb_level4->level1_id->LookupFilterQuery(false) ?>">
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_level4->level1_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_level1_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="tb_level4" data-field="x_level1_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_level4->level1_id->DisplayValueSeparatorAttribute() ?>" name="x_level1_id" id="x_level1_id" value="<?php echo $tb_level4->level1_id->CurrentValue ?>"<?php echo $tb_level4->level1_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_level1_id" id="s_x_level1_id" value="<?php echo $tb_level4->level1_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $tb_level4->level1_id->CustomMsg ?></div></div>
 	</div>
@@ -1375,21 +1438,13 @@ ftb_level4add.CreateAutoSuggest({"id":"x_level1_id","forceSelect":true});
 		<label id="elh_tb_level4_level2_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_level4->level2_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_level4->level2_id->CellAttributes() ?>>
 <span id="el_tb_level4_level2_id">
-<?php
-$wrkonchange = trim("ew_UpdateOpt.call(this); " . @$tb_level4->level2_id->EditAttrs["onchange"]);
-if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
-$tb_level4->level2_id->EditAttrs["onchange"] = "";
-?>
-<span id="as_x_level2_id" style="white-space: nowrap; z-index: 8970">
-	<input type="text" name="sv_x_level2_id" id="sv_x_level2_id" value="<?php echo $tb_level4->level2_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_level4->level2_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_level4->level2_id->getPlaceHolder()) ?>"<?php echo $tb_level4->level2_id->EditAttributes() ?>>
+<?php $tb_level4->level2_id->EditAttrs["onchange"] = "ew_UpdateOpt.call(this); " . @$tb_level4->level2_id->EditAttrs["onchange"]; ?>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_level2_id"><?php echo (strval($tb_level4->level2_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_level4->level2_id->ViewValue); ?></span>
 </span>
-<input type="hidden" data-table="tb_level4" data-field="x_level2_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_level4->level2_id->DisplayValueSeparatorAttribute() ?>" name="x_level2_id" id="x_level2_id" value="<?php echo ew_HtmlEncode($tb_level4->level2_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<input type="hidden" name="q_x_level2_id" id="q_x_level2_id" value="<?php echo $tb_level4->level2_id->LookupFilterQuery(true) ?>">
-<script type="text/javascript">
-ftb_level4add.CreateAutoSuggest({"id":"x_level2_id","forceSelect":true});
-</script>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_level4->level2_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_level2_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" name="s_x_level2_id" id="s_x_level2_id" value="<?php echo $tb_level4->level2_id->LookupFilterQuery(false) ?>">
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_level4->level2_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_level2_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="tb_level4" data-field="x_level2_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_level4->level2_id->DisplayValueSeparatorAttribute() ?>" name="x_level2_id" id="x_level2_id" value="<?php echo $tb_level4->level2_id->CurrentValue ?>"<?php echo $tb_level4->level2_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_level2_id" id="s_x_level2_id" value="<?php echo $tb_level4->level2_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $tb_level4->level2_id->CustomMsg ?></div></div>
 	</div>
@@ -1399,21 +1454,12 @@ ftb_level4add.CreateAutoSuggest({"id":"x_level2_id","forceSelect":true});
 		<label id="elh_tb_level4_level3_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_level4->level3_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_level4->level3_id->CellAttributes() ?>>
 <span id="el_tb_level4_level3_id">
-<?php
-$wrkonchange = trim(" " . @$tb_level4->level3_id->EditAttrs["onchange"]);
-if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
-$tb_level4->level3_id->EditAttrs["onchange"] = "";
-?>
-<span id="as_x_level3_id" style="white-space: nowrap; z-index: 8960">
-	<input type="text" name="sv_x_level3_id" id="sv_x_level3_id" value="<?php echo $tb_level4->level3_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_level4->level3_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_level4->level3_id->getPlaceHolder()) ?>"<?php echo $tb_level4->level3_id->EditAttributes() ?>>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_level3_id"><?php echo (strval($tb_level4->level3_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_level4->level3_id->ViewValue); ?></span>
 </span>
-<input type="hidden" data-table="tb_level4" data-field="x_level3_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_level4->level3_id->DisplayValueSeparatorAttribute() ?>" name="x_level3_id" id="x_level3_id" value="<?php echo ew_HtmlEncode($tb_level4->level3_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<input type="hidden" name="q_x_level3_id" id="q_x_level3_id" value="<?php echo $tb_level4->level3_id->LookupFilterQuery(true) ?>">
-<script type="text/javascript">
-ftb_level4add.CreateAutoSuggest({"id":"x_level3_id","forceSelect":true});
-</script>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_level4->level3_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_level3_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" name="s_x_level3_id" id="s_x_level3_id" value="<?php echo $tb_level4->level3_id->LookupFilterQuery(false) ?>">
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_level4->level3_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_level3_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="tb_level4" data-field="x_level3_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_level4->level3_id->DisplayValueSeparatorAttribute() ?>" name="x_level3_id" id="x_level3_id" value="<?php echo $tb_level4->level3_id->CurrentValue ?>"<?php echo $tb_level4->level3_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_level3_id" id="s_x_level3_id" value="<?php echo $tb_level4->level3_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $tb_level4->level3_id->CustomMsg ?></div></div>
 	</div>
@@ -1448,6 +1494,32 @@ ftb_level4add.CreateAutoSuggest({"id":"x_level3_id","forceSelect":true});
 <?php echo $tb_level4->saldo_awal->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+<?php if ($tb_level4->jurnal->Visible) { // jurnal ?>
+	<div id="r_jurnal" class="form-group">
+		<label id="elh_tb_level4_jurnal" class="col-sm-2 control-label ewLabel"><?php echo $tb_level4->jurnal->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_level4->jurnal->CellAttributes() ?>>
+<span id="el_tb_level4_jurnal">
+<div id="tp_x_jurnal" class="ewTemplate"><input type="radio" data-table="tb_level4" data-field="x_jurnal" data-value-separator="<?php echo $tb_level4->jurnal->DisplayValueSeparatorAttribute() ?>" name="x_jurnal" id="x_jurnal" value="{value}"<?php echo $tb_level4->jurnal->EditAttributes() ?>></div>
+<div id="dsl_x_jurnal" data-repeatcolumn="5" class="ewItemList" style="display: none;"><div>
+<?php echo $tb_level4->jurnal->RadioButtonListHtml(FALSE, "x_jurnal") ?>
+</div></div>
+</span>
+<?php echo $tb_level4->jurnal->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_level4->jurnal_kode->Visible) { // jurnal_kode ?>
+	<div id="r_jurnal_kode" class="form-group">
+		<label id="elh_tb_level4_jurnal_kode" class="col-sm-2 control-label ewLabel"><?php echo $tb_level4->jurnal_kode->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_level4->jurnal_kode->CellAttributes() ?>>
+<span id="el_tb_level4_jurnal_kode">
+<div id="tp_x_jurnal_kode" class="ewTemplate"><input type="radio" data-table="tb_level4" data-field="x_jurnal_kode" data-value-separator="<?php echo $tb_level4->jurnal_kode->DisplayValueSeparatorAttribute() ?>" name="x_jurnal_kode" id="x_jurnal_kode" value="{value}"<?php echo $tb_level4->jurnal_kode->EditAttributes() ?>></div>
+<div id="dsl_x_jurnal_kode" data-repeatcolumn="5" class="ewItemList" style="display: none;"><div>
+<?php echo $tb_level4->jurnal_kode->RadioButtonListHtml(FALSE, "x_jurnal_kode") ?>
+</div></div>
+</span>
+<?php echo $tb_level4->jurnal_kode->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
 </div>
 <?php if (!$tb_level4_add->IsModal) { ?>
 <div class="form-group">
@@ -1471,6 +1543,26 @@ if (EW_DEBUG_ENABLED)
 // Write your table-specific startup script here
 // document.write("page loaded");
 
+$(document).ready(function() {
+
+	// Kondisi saat Form di-load
+	if($('input[name=x_jurnal]:radio:checked').val()=="1"){
+		$('#r_jurnal_kode').show();
+	} else {
+		$('#r_jurnal_kode').hide();
+	}
+
+	// Kondisi saat Radio Button diklik
+	$('input[name=x_jurnal]:radio').click(function(){
+		if($(this).attr("value")=="0"){
+			$('#x_jurnal_kode').val('');
+			$('#r_jurnal_kode').hide();
+		} else {
+			$('#r_jurnal_kode').show();
+			$('#x_jurnal_kode').focus();
+		}
+	});
+});
 </script>
 <?php include_once "footer.php" ?>
 <?php

@@ -417,6 +417,8 @@ class ctb_level4_list extends ctb_level4 {
 		$this->level4_no->SetVisibility();
 		$this->level4_nama->SetVisibility();
 		$this->saldo_awal->SetVisibility();
+		$this->jurnal->SetVisibility();
+		$this->jurnal_kode->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -750,6 +752,8 @@ class ctb_level4_list extends ctb_level4 {
 		$sFilterList = ew_Concat($sFilterList, $this->level4_nama->AdvancedSearch->ToJSON(), ","); // Field level4_nama
 		$sFilterList = ew_Concat($sFilterList, $this->saldo_awal->AdvancedSearch->ToJSON(), ","); // Field saldo_awal
 		$sFilterList = ew_Concat($sFilterList, $this->saldo->AdvancedSearch->ToJSON(), ","); // Field saldo
+		$sFilterList = ew_Concat($sFilterList, $this->jurnal->AdvancedSearch->ToJSON(), ","); // Field jurnal
+		$sFilterList = ew_Concat($sFilterList, $this->jurnal_kode->AdvancedSearch->ToJSON(), ","); // Field jurnal_kode
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -770,16 +774,9 @@ class ctb_level4_list extends ctb_level4 {
 	// Process filter list
 	function ProcessFilterList() {
 		global $UserProfile;
-		if (@$_POST["ajax"] == "savefilters") { // Save filter request (Ajax)
+		if (@$_POST["cmd"] == "savefilters") {
 			$filters = ew_StripSlashes(@$_POST["filters"]);
 			$UserProfile->SetSearchFilters(CurrentUserName(), "ftb_level4listsrch", $filters);
-
-			// Clean output buffer
-			if (!EW_DEBUG_ENABLED && ob_get_length())
-				ob_end_clean();
-			echo ew_ArrayToJson(array(array("success" => TRUE))); // Success
-			$this->Page_Terminate();
-			exit();
 		} elseif (@$_POST["cmd"] == "resetfilter") {
 			$this->RestoreFilterList();
 		}
@@ -857,6 +854,22 @@ class ctb_level4_list extends ctb_level4 {
 		$this->saldo->AdvancedSearch->SearchValue2 = @$filter["y_saldo"];
 		$this->saldo->AdvancedSearch->SearchOperator2 = @$filter["w_saldo"];
 		$this->saldo->AdvancedSearch->Save();
+
+		// Field jurnal
+		$this->jurnal->AdvancedSearch->SearchValue = @$filter["x_jurnal"];
+		$this->jurnal->AdvancedSearch->SearchOperator = @$filter["z_jurnal"];
+		$this->jurnal->AdvancedSearch->SearchCondition = @$filter["v_jurnal"];
+		$this->jurnal->AdvancedSearch->SearchValue2 = @$filter["y_jurnal"];
+		$this->jurnal->AdvancedSearch->SearchOperator2 = @$filter["w_jurnal"];
+		$this->jurnal->AdvancedSearch->Save();
+
+		// Field jurnal_kode
+		$this->jurnal_kode->AdvancedSearch->SearchValue = @$filter["x_jurnal_kode"];
+		$this->jurnal_kode->AdvancedSearch->SearchOperator = @$filter["z_jurnal_kode"];
+		$this->jurnal_kode->AdvancedSearch->SearchCondition = @$filter["v_jurnal_kode"];
+		$this->jurnal_kode->AdvancedSearch->SearchValue2 = @$filter["y_jurnal_kode"];
+		$this->jurnal_kode->AdvancedSearch->SearchOperator2 = @$filter["w_jurnal_kode"];
+		$this->jurnal_kode->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -866,11 +879,12 @@ class ctb_level4_list extends ctb_level4 {
 		$sWhere = "";
 		$this->BuildBasicSearchSQL($sWhere, $this->level4_no, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->level4_nama, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->jurnal_kode, $arKeywords, $type);
 		return $sWhere;
 	}
 
 	// Build basic search SQL
-	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+	function BuildBasicSearchSql(&$Where, &$Fld, $arKeywords, $type) {
 		$sDefCond = ($type == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
 		$arCond = array(); // Array for search conditions
@@ -895,7 +909,7 @@ class ctb_level4_list extends ctb_level4 {
 						$sWrk = $Fld->FldExpression . " IS NULL";
 					} elseif ($Keyword == EW_NOT_NULL_VALUE) {
 						$sWrk = $Fld->FldExpression . " IS NOT NULL";
-					} elseif ($Fld->FldIsVirtual) {
+					} elseif ($Fld->FldIsVirtual && $Fld->FldVirtualSearch) {
 						$sWrk = $Fld->FldVirtualExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
 					} elseif ($Fld->FldDataType != EW_DATATYPE_NUMBER || is_numeric($Keyword)) {
 						$sWrk = $Fld->FldBasicSearchExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
@@ -1036,6 +1050,8 @@ class ctb_level4_list extends ctb_level4 {
 			$this->UpdateSort($this->level4_no); // level4_no
 			$this->UpdateSort($this->level4_nama); // level4_nama
 			$this->UpdateSort($this->saldo_awal); // saldo_awal
+			$this->UpdateSort($this->jurnal); // jurnal
+			$this->UpdateSort($this->jurnal_kode); // jurnal_kode
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1075,6 +1091,8 @@ class ctb_level4_list extends ctb_level4 {
 				$this->level4_no->setSort("");
 				$this->level4_nama->setSort("");
 				$this->saldo_awal->setSort("");
+				$this->jurnal->setSort("");
+				$this->jurnal_kode->setSort("");
 			}
 
 			// Reset start position
@@ -1544,6 +1562,8 @@ class ctb_level4_list extends ctb_level4 {
 		$this->level4_nama->setDbValue($rs->fields('level4_nama'));
 		$this->saldo_awal->setDbValue($rs->fields('saldo_awal'));
 		$this->saldo->setDbValue($rs->fields('saldo'));
+		$this->jurnal->setDbValue($rs->fields('jurnal'));
+		$this->jurnal_kode->setDbValue($rs->fields('jurnal_kode'));
 	}
 
 	// Load DbValue from recordset
@@ -1558,6 +1578,8 @@ class ctb_level4_list extends ctb_level4 {
 		$this->level4_nama->DbValue = $row['level4_nama'];
 		$this->saldo_awal->DbValue = $row['saldo_awal'];
 		$this->saldo->DbValue = $row['saldo'];
+		$this->jurnal->DbValue = $row['jurnal'];
+		$this->jurnal_kode->DbValue = $row['jurnal_kode'];
 	}
 
 	// Load old record
@@ -1607,6 +1629,8 @@ class ctb_level4_list extends ctb_level4 {
 		// level4_nama
 		// saldo_awal
 		// saldo
+		// jurnal
+		// jurnal_kode
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1619,7 +1643,7 @@ class ctb_level4_list extends ctb_level4 {
 			$sFilterWrk = "`level1_id`" . ew_SearchString("=", $this->level1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level1_id`, `level1_no` AS `DispFld`, `level1_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level1`";
 		$sWhereWrk = "";
-		$this->level1_id->LookupFilters = array("dx1" => '`level1_no`', "dx2" => '`level1_nama`');
+		$this->level1_id->LookupFilters = array("dx1" => "`level1_no`", "dx2" => "`level1_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1648,7 +1672,7 @@ class ctb_level4_list extends ctb_level4 {
 			$sFilterWrk = "`level2_id`" . ew_SearchString("=", $this->level2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level2_id`, `level2_no` AS `DispFld`, `level2_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level2`";
 		$sWhereWrk = "";
-		$this->level2_id->LookupFilters = array("dx1" => '`level2_no`', "dx2" => '`level2_nama`');
+		$this->level2_id->LookupFilters = array("dx1" => "`level2_no`", "dx2" => "`level2_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level2_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1677,7 +1701,7 @@ class ctb_level4_list extends ctb_level4 {
 			$sFilterWrk = "`level3_id`" . ew_SearchString("=", $this->level3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level3_id`, `level3_no` AS `DispFld`, `level3_nama` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_level3`";
 		$sWhereWrk = "";
-		$this->level3_id->LookupFilters = array("dx1" => '`level3_no`', "dx2" => '`level3_nama`');
+		$this->level3_id->LookupFilters = array("dx1" => "`level3_no`", "dx2" => "`level3_nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level3_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1711,6 +1735,22 @@ class ctb_level4_list extends ctb_level4 {
 		$this->saldo_awal->CellCssStyle .= "text-align: right;";
 		$this->saldo_awal->ViewCustomAttributes = "";
 
+		// jurnal
+		if (strval($this->jurnal->CurrentValue) <> "") {
+			$this->jurnal->ViewValue = $this->jurnal->OptionCaption($this->jurnal->CurrentValue);
+		} else {
+			$this->jurnal->ViewValue = NULL;
+		}
+		$this->jurnal->ViewCustomAttributes = "";
+
+		// jurnal_kode
+		if (strval($this->jurnal_kode->CurrentValue) <> "") {
+			$this->jurnal_kode->ViewValue = $this->jurnal_kode->OptionCaption($this->jurnal_kode->CurrentValue);
+		} else {
+			$this->jurnal_kode->ViewValue = NULL;
+		}
+		$this->jurnal_kode->ViewCustomAttributes = "";
+
 			// level1_id
 			$this->level1_id->LinkCustomAttributes = "";
 			$this->level1_id->HrefValue = "";
@@ -1740,6 +1780,16 @@ class ctb_level4_list extends ctb_level4 {
 			$this->saldo_awal->LinkCustomAttributes = "";
 			$this->saldo_awal->HrefValue = "";
 			$this->saldo_awal->TooltipValue = "";
+
+			// jurnal
+			$this->jurnal->LinkCustomAttributes = "";
+			$this->jurnal->HrefValue = "";
+			$this->jurnal->TooltipValue = "";
+
+			// jurnal_kode
+			$this->jurnal_kode->LinkCustomAttributes = "";
+			$this->jurnal_kode->HrefValue = "";
+			$this->jurnal_kode->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2219,6 +2269,10 @@ ftb_level4list.ValidateRequired = false;
 ftb_level4list.Lists["x_level1_id"] = {"LinkField":"x_level1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level1_no","x_level1_nama","",""],"ParentFields":[],"ChildFields":["x_level2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level1"};
 ftb_level4list.Lists["x_level2_id"] = {"LinkField":"x_level2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level2_no","x_level2_nama","",""],"ParentFields":[],"ChildFields":["x_level3_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level2"};
 ftb_level4list.Lists["x_level3_id"] = {"LinkField":"x_level3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_level3_no","x_level3_nama","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"tb_level3"};
+ftb_level4list.Lists["x_jurnal"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_level4list.Lists["x_jurnal"].Options = <?php echo json_encode($tb_level4->jurnal->Options()) ?>;
+ftb_level4list.Lists["x_jurnal_kode"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ftb_level4list.Lists["x_jurnal_kode"].Options = <?php echo json_encode($tb_level4->jurnal_kode->Options()) ?>;
 
 // Form object for search
 var CurrentSearchForm = ftb_level4listsrch = new ew_Form("ftb_level4listsrch");
@@ -2394,6 +2448,24 @@ $tb_level4_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($tb_level4->jurnal->Visible) { // jurnal ?>
+	<?php if ($tb_level4->SortUrl($tb_level4->jurnal) == "") { ?>
+		<th data-name="jurnal"><div id="elh_tb_level4_jurnal" class="tb_level4_jurnal"><div class="ewTableHeaderCaption"><?php echo $tb_level4->jurnal->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="jurnal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $tb_level4->SortUrl($tb_level4->jurnal) ?>',1);"><div id="elh_tb_level4_jurnal" class="tb_level4_jurnal">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_level4->jurnal->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_level4->jurnal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_level4->jurnal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($tb_level4->jurnal_kode->Visible) { // jurnal_kode ?>
+	<?php if ($tb_level4->SortUrl($tb_level4->jurnal_kode) == "") { ?>
+		<th data-name="jurnal_kode"><div id="elh_tb_level4_jurnal_kode" class="tb_level4_jurnal_kode"><div class="ewTableHeaderCaption"><?php echo $tb_level4->jurnal_kode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="jurnal_kode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $tb_level4->SortUrl($tb_level4->jurnal_kode) ?>',1);"><div id="elh_tb_level4_jurnal_kode" class="tb_level4_jurnal_kode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_level4->jurnal_kode->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_level4->jurnal_kode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_level4->jurnal_kode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2504,6 +2576,22 @@ $tb_level4_list->ListOptions->Render("body", "left", $tb_level4_list->RowCnt);
 <span id="el<?php echo $tb_level4_list->RowCnt ?>_tb_level4_saldo_awal" class="tb_level4_saldo_awal">
 <span<?php echo $tb_level4->saldo_awal->ViewAttributes() ?>>
 <?php echo $tb_level4->saldo_awal->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($tb_level4->jurnal->Visible) { // jurnal ?>
+		<td data-name="jurnal"<?php echo $tb_level4->jurnal->CellAttributes() ?>>
+<span id="el<?php echo $tb_level4_list->RowCnt ?>_tb_level4_jurnal" class="tb_level4_jurnal">
+<span<?php echo $tb_level4->jurnal->ViewAttributes() ?>>
+<?php echo $tb_level4->jurnal->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($tb_level4->jurnal_kode->Visible) { // jurnal_kode ?>
+		<td data-name="jurnal_kode"<?php echo $tb_level4->jurnal_kode->CellAttributes() ?>>
+<span id="el<?php echo $tb_level4_list->RowCnt ?>_tb_level4_jurnal_kode" class="tb_level4_jurnal_kode">
+<span<?php echo $tb_level4->jurnal_kode->ViewAttributes() ?>>
+<?php echo $tb_level4->jurnal_kode->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

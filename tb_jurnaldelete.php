@@ -283,6 +283,7 @@ class ctb_jurnal_delete extends ctb_jurnal {
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
+		$this->akun_id->SetVisibility();
 		$this->jenis_jurnal->SetVisibility();
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
@@ -418,7 +419,7 @@ class ctb_jurnal_delete extends ctb_jurnal {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -462,10 +463,17 @@ class ctb_jurnal_delete extends ctb_jurnal {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
+		$this->akun_id->setDbValue($rs->fields('akun_id'));
+		if (array_key_exists('EV__akun_id', $rs->fields)) {
+			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
+		} else {
+			$this->akun_id->VirtualValue = ""; // Clear value
+		}
 		$this->jenis_jurnal->setDbValue($rs->fields('jenis_jurnal'));
 		$this->no_bukti->setDbValue($rs->fields('no_bukti'));
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->ket->setDbValue($rs->fields('ket'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 	}
 
 	// Load DbValue from recordset
@@ -473,10 +481,12 @@ class ctb_jurnal_delete extends ctb_jurnal {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->jurnal_id->DbValue = $row['jurnal_id'];
+		$this->akun_id->DbValue = $row['akun_id'];
 		$this->jenis_jurnal->DbValue = $row['jenis_jurnal'];
 		$this->no_bukti->DbValue = $row['no_bukti'];
 		$this->tgl->DbValue = $row['tgl'];
 		$this->ket->DbValue = $row['ket'];
+		$this->nilai->DbValue = $row['nilai'];
 	}
 
 	// Render row values based on field settings
@@ -490,16 +500,48 @@ class ctb_jurnal_delete extends ctb_jurnal {
 
 		// Common render codes for all row types
 		// jurnal_id
+		// akun_id
 		// jenis_jurnal
 		// no_bukti
 		// tgl
 		// ket
+		// nilai
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 		// jurnal_id
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// akun_id
+		if ($this->akun_id->VirtualValue <> "") {
+			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
+		} else {
+			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if (strval($this->akun_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+		$sWhereWrk = "";
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$lookuptblfilter = "`jurnal` = 1";
+		ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+			}
+		} else {
+			$this->akun_id->ViewValue = NULL;
+		}
+		}
+		$this->akun_id->ViewCustomAttributes = "";
 
 		// jenis_jurnal
 		if (strval($this->jenis_jurnal->CurrentValue) <> "") {
@@ -521,6 +563,15 @@ class ctb_jurnal_delete extends ctb_jurnal {
 		// ket
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
+
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
+
+			// akun_id
+			$this->akun_id->LinkCustomAttributes = "";
+			$this->akun_id->HrefValue = "";
+			$this->akun_id->TooltipValue = "";
 
 			// jenis_jurnal
 			$this->jenis_jurnal->LinkCustomAttributes = "";
@@ -808,6 +859,7 @@ ftb_jurnaldelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+ftb_jurnaldelete.Lists["x_akun_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_no_nama_akun","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 ftb_jurnaldelete.Lists["x_jenis_jurnal"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
 ftb_jurnaldelete.Lists["x_jenis_jurnal"].Options = <?php echo json_encode($tb_jurnal->jenis_jurnal->Options()) ?>;
 
@@ -842,6 +894,9 @@ $tb_jurnal_delete->ShowMessage();
 <?php echo $tb_jurnal->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
+<?php if ($tb_jurnal->akun_id->Visible) { // akun_id ?>
+		<th><span id="elh_tb_jurnal_akun_id" class="tb_jurnal_akun_id"><?php echo $tb_jurnal->akun_id->FldCaption() ?></span></th>
+<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<th><span id="elh_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal"><?php echo $tb_jurnal->jenis_jurnal->FldCaption() ?></span></th>
 <?php } ?>
@@ -875,6 +930,14 @@ while (!$tb_jurnal_delete->Recordset->EOF) {
 	$tb_jurnal_delete->RenderRow();
 ?>
 	<tr<?php echo $tb_jurnal->RowAttributes() ?>>
+<?php if ($tb_jurnal->akun_id->Visible) { // akun_id ?>
+		<td<?php echo $tb_jurnal->akun_id->CellAttributes() ?>>
+<span id="el<?php echo $tb_jurnal_delete->RowCnt ?>_tb_jurnal_akun_id" class="tb_jurnal_akun_id">
+<span<?php echo $tb_jurnal->akun_id->ViewAttributes() ?>>
+<?php echo $tb_jurnal->akun_id->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
 <?php if ($tb_jurnal->jenis_jurnal->Visible) { // jenis_jurnal ?>
 		<td<?php echo $tb_jurnal->jenis_jurnal->CellAttributes() ?>>
 <span id="el<?php echo $tb_jurnal_delete->RowCnt ?>_tb_jurnal_jenis_jurnal" class="tb_jurnal_jenis_jurnal">

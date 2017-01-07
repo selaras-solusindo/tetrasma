@@ -8,10 +8,12 @@ $tb_jurnal = NULL;
 //
 class ctb_jurnal extends cTable {
 	var $jurnal_id;
+	var $akun_id;
 	var $jenis_jurnal;
 	var $no_bukti;
 	var $tgl;
 	var $ket;
+	var $nilai;
 
 	//
 	// Table class constructor
@@ -49,12 +51,18 @@ class ctb_jurnal extends cTable {
 		$this->jurnal_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jurnal_id'] = &$this->jurnal_id;
 
+		// akun_id
+		$this->akun_id = new cField('tb_jurnal', 'tb_jurnal', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`EV__akun_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->akun_id->Sortable = TRUE; // Allow sort
+		$this->akun_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['akun_id'] = &$this->akun_id;
+
 		// jenis_jurnal
 		$this->jenis_jurnal = new cField('tb_jurnal', 'tb_jurnal', 'x_jenis_jurnal', 'jenis_jurnal', '`jenis_jurnal`', '`jenis_jurnal`', 200, -1, FALSE, '`jenis_jurnal`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
 		$this->jenis_jurnal->Sortable = TRUE; // Allow sort
 		$this->jenis_jurnal->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->jenis_jurnal->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
-		$this->jenis_jurnal->OptionCount = 4;
+		$this->jenis_jurnal->OptionCount = 2;
 		$this->jenis_jurnal->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jenis_jurnal'] = &$this->jenis_jurnal;
 
@@ -64,7 +72,7 @@ class ctb_jurnal extends cTable {
 		$this->fields['no_bukti'] = &$this->no_bukti;
 
 		// tgl
-		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 7, "DB"), 133, 7, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', 'DATE_FORMAT(`tgl`, \'%Y/%m/%d\')', 133, 7, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
 		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['tgl'] = &$this->tgl;
@@ -73,6 +81,12 @@ class ctb_jurnal extends cTable {
 		$this->ket = new cField('tb_jurnal', 'tb_jurnal', 'x_ket', 'ket', '`ket`', '`ket`', 201, -1, FALSE, '`ket`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
 		$this->ket->Sortable = TRUE; // Allow sort
 		$this->fields['ket'] = &$this->ket;
+
+		// nilai
+		$this->nilai = new cField('tb_jurnal', 'tb_jurnal', 'x_nilai', 'nilai', '`nilai`', '`nilai`', 20, -1, FALSE, '`nilai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->nilai->Sortable = TRUE; // Allow sort
+		$this->nilai->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['nilai'] = &$this->nilai;
 	}
 
 	// Set Field Visibility
@@ -93,9 +107,20 @@ class ctb_jurnal extends cTable {
 			}
 			$ofld->setSort($sThisSort);
 			$this->setSessionOrderBy($sSortField . " " . $sThisSort); // Save to Session
+			$sSortFieldList = ($ofld->FldVirtualExpression <> "") ? $ofld->FldVirtualExpression : $sSortField;
+			$this->setSessionOrderByList($sSortFieldList . " " . $sThisSort); // Save to Session
 		} else {
 			$ofld->setSort("");
 		}
+	}
+
+	// Session ORDER BY for List page
+	function getSessionOrderByList() {
+		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST];
+	}
+
+	function setSessionOrderByList($v) {
+		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST] = $v;
 	}
 
 	// Current detail table name
@@ -148,6 +173,23 @@ class ctb_jurnal extends cTable {
 
 	function setSqlSelect($v) {
 		$this->_SqlSelect = $v;
+	}
+	var $_SqlSelectList = "";
+
+	function getSqlSelectList() { // Select for List page
+		$select = "";
+		$select = "SELECT * FROM (" .
+			"SELECT *, (SELECT `no_nama_akun` FROM `view_akun_jurnal` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level4_id` = `tb_jurnal`.`akun_id` LIMIT 1) AS `EV__akun_id` FROM `tb_jurnal`" .
+			") `EW_TMP_TABLE`";
+		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
+	}
+
+	function SqlSelectList() { // For backward compatibility
+		return $this->getSqlSelectList();
+	}
+
+	function setSqlSelectList($v) {
+		$this->_SqlSelectList = $v;
 	}
 	var $_SqlWhere = "";
 
@@ -260,15 +302,38 @@ class ctb_jurnal extends cTable {
 		ew_AddFilter($sFilter, $this->CurrentFilter);
 		$sFilter = $this->ApplyUserIDFilters($sFilter);
 		$this->Recordset_Selecting($sFilter);
-		$sSort = $this->getSessionOrderBy();
-		return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-			$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		if ($this->UseVirtualFields()) {
+			$sSort = $this->getSessionOrderByList();
+			return ew_BuildSelectSql($this->getSqlSelectList(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		} else {
+			$sSort = $this->getSessionOrderBy();
+			return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		}
 	}
 
 	// Get ORDER BY clause
 	function GetOrderBy() {
-		$sSort = $this->getSessionOrderBy();
+		$sSort = ($this->UseVirtualFields()) ? $this->getSessionOrderByList() : $this->getSessionOrderBy();
 		return ew_BuildSelectSql("", "", "", "", $this->getSqlOrderBy(), "", $sSort);
+	}
+
+	// Check if virtual fields is used in SQL
+	function UseVirtualFields() {
+		$sWhere = $this->getSessionWhere();
+		$sOrderBy = $this->getSessionOrderByList();
+		if ($sWhere <> "")
+			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
+		if ($sOrderBy <> "")
+			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
+		if ($this->akun_id->AdvancedSearch->SearchValue <> "" ||
+			$this->akun_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->akun_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->akun_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		return FALSE;
 	}
 
 	// Try to get record count
@@ -586,10 +651,12 @@ class ctb_jurnal extends cTable {
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
+		$this->akun_id->setDbValue($rs->fields('akun_id'));
 		$this->jenis_jurnal->setDbValue($rs->fields('jenis_jurnal'));
 		$this->no_bukti->setDbValue($rs->fields('no_bukti'));
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->ket->setDbValue($rs->fields('ket'));
+		$this->nilai->setDbValue($rs->fields('nilai'));
 	}
 
 	// Render list row values
@@ -601,14 +668,46 @@ class ctb_jurnal extends cTable {
 
    // Common render codes
 		// jurnal_id
+		// akun_id
 		// jenis_jurnal
 		// no_bukti
 		// tgl
 		// ket
+		// nilai
 		// jurnal_id
 
 		$this->jurnal_id->ViewValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// akun_id
+		if ($this->akun_id->VirtualValue <> "") {
+			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
+		} else {
+			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if (strval($this->akun_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+		$sWhereWrk = "";
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$lookuptblfilter = "`jurnal` = 1";
+		ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+			}
+		} else {
+			$this->akun_id->ViewValue = NULL;
+		}
+		}
+		$this->akun_id->ViewCustomAttributes = "";
 
 		// jenis_jurnal
 		if (strval($this->jenis_jurnal->CurrentValue) <> "") {
@@ -631,10 +730,19 @@ class ctb_jurnal extends cTable {
 		$this->ket->ViewValue = $this->ket->CurrentValue;
 		$this->ket->ViewCustomAttributes = "";
 
+		// nilai
+		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewCustomAttributes = "";
+
 		// jurnal_id
 		$this->jurnal_id->LinkCustomAttributes = "";
 		$this->jurnal_id->HrefValue = "";
 		$this->jurnal_id->TooltipValue = "";
+
+		// akun_id
+		$this->akun_id->LinkCustomAttributes = "";
+		$this->akun_id->HrefValue = "";
+		$this->akun_id->TooltipValue = "";
 
 		// jenis_jurnal
 		$this->jenis_jurnal->LinkCustomAttributes = "";
@@ -656,6 +764,11 @@ class ctb_jurnal extends cTable {
 		$this->ket->HrefValue = "";
 		$this->ket->TooltipValue = "";
 
+		// nilai
+		$this->nilai->LinkCustomAttributes = "";
+		$this->nilai->HrefValue = "";
+		$this->nilai->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -672,6 +785,12 @@ class ctb_jurnal extends cTable {
 		$this->jurnal_id->EditCustomAttributes = "";
 		$this->jurnal_id->EditValue = $this->jurnal_id->CurrentValue;
 		$this->jurnal_id->ViewCustomAttributes = "";
+
+		// akun_id
+		$this->akun_id->EditAttrs["class"] = "form-control";
+		$this->akun_id->EditCustomAttributes = "";
+		$this->akun_id->EditValue = $this->akun_id->CurrentValue;
+		$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
 		// jenis_jurnal
 		$this->jenis_jurnal->EditAttrs["class"] = "form-control";
@@ -695,6 +814,12 @@ class ctb_jurnal extends cTable {
 		$this->ket->EditCustomAttributes = "";
 		$this->ket->EditValue = $this->ket->CurrentValue;
 		$this->ket->PlaceHolder = ew_RemoveHtml($this->ket->FldCaption());
+
+		// nilai
+		$this->nilai->EditAttrs["class"] = "form-control";
+		$this->nilai->EditCustomAttributes = "";
+		$this->nilai->EditValue = $this->nilai->CurrentValue;
+		$this->nilai->PlaceHolder = ew_RemoveHtml($this->nilai->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -723,16 +848,19 @@ class ctb_jurnal extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
+					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
 					if ($this->jenis_jurnal->Exportable) $Doc->ExportCaption($this->jenis_jurnal);
 					if ($this->no_bukti->Exportable) $Doc->ExportCaption($this->no_bukti);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->ket->Exportable) $Doc->ExportCaption($this->ket);
 				} else {
 					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
+					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
 					if ($this->jenis_jurnal->Exportable) $Doc->ExportCaption($this->jenis_jurnal);
 					if ($this->no_bukti->Exportable) $Doc->ExportCaption($this->no_bukti);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->ket->Exportable) $Doc->ExportCaption($this->ket);
+					if ($this->nilai->Exportable) $Doc->ExportCaption($this->nilai);
 				}
 				$Doc->EndExportRow();
 			}
@@ -764,16 +892,19 @@ class ctb_jurnal extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
+						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
 						if ($this->jenis_jurnal->Exportable) $Doc->ExportField($this->jenis_jurnal);
 						if ($this->no_bukti->Exportable) $Doc->ExportField($this->no_bukti);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->ket->Exportable) $Doc->ExportField($this->ket);
 					} else {
 						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
+						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
 						if ($this->jenis_jurnal->Exportable) $Doc->ExportField($this->jenis_jurnal);
 						if ($this->no_bukti->Exportable) $Doc->ExportField($this->no_bukti);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->ket->Exportable) $Doc->ExportField($this->ket);
+						if ($this->nilai->Exportable) $Doc->ExportField($this->nilai);
 					}
 					$Doc->EndExportRow();
 				}
