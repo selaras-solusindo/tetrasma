@@ -404,6 +404,9 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$this->jurnal_id->setQueryStringValue($_GET["jurnal_id"]);
 		}
 
+		// Set up Breadcrumb
+		$this->SetupBreadcrumb();
+
 		// Process form if post back
 		if (@$_POST["a_edit"] <> "") {
 			$this->CurrentAction = $_POST["a_edit"]; // Get action code
@@ -461,9 +464,6 @@ class ctb_jurnal_edit extends ctb_jurnal {
 					$this->SetUpDetailParms();
 				}
 		}
-
-		// Set up Breadcrumb
-		$this->SetupBreadcrumb();
 
 		// Render the record
 		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
@@ -640,7 +640,7 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
 		$lookuptblfilter = "`jurnal` = 1";
 		ew_AddFilter($sWhereWrk, $lookuptblfilter);
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -721,7 +721,7 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			}
 			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_akun_jurnal`";
 			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
 			$lookuptblfilter = "`jurnal` = 1";
 			ew_AddFilter($sWhereWrk, $lookuptblfilter);
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -989,10 +989,10 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "{filter}";
-			$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
 			$lookuptblfilter = "`jurnal` = 1";
 			ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;

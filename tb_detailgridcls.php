@@ -1252,6 +1252,11 @@ class ctb_detail_grid extends ctb_detail {
 		$this->detail_id->setDbValue($rs->fields('detail_id'));
 		$this->jurnal_id->setDbValue($rs->fields('jurnal_id'));
 		$this->akun_id->setDbValue($rs->fields('akun_id'));
+		if (array_key_exists('EV__akun_id', $rs->fields)) {
+			$this->akun_id->VirtualValue = $rs->fields('EV__akun_id'); // Set up virtual field value
+		} else {
+			$this->akun_id->VirtualValue = ""; // Clear value
+		}
 		$this->nilai->setDbValue($rs->fields('nilai'));
 		$this->anggota_id->setDbValue($rs->fields('anggota_id'));
 		if (array_key_exists('EV__anggota_id', $rs->fields)) {
@@ -1335,7 +1340,31 @@ class ctb_detail_grid extends ctb_detail {
 		$this->jurnal_id->ViewCustomAttributes = "";
 
 		// akun_id
-		$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if ($this->akun_id->VirtualValue <> "") {
+			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
+		} else {
+			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+		if (strval($this->akun_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+		$sWhereWrk = "";
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
+			}
+		} else {
+			$this->akun_id->ViewValue = NULL;
+		}
+		}
 		$this->akun_id->ViewCustomAttributes = "";
 
 		// nilai
@@ -1351,7 +1380,7 @@ class ctb_detail_grid extends ctb_detail {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1390,6 +1419,26 @@ class ctb_detail_grid extends ctb_detail {
 			$this->akun_id->EditAttrs["class"] = "form-control";
 			$this->akun_id->EditCustomAttributes = "";
 			$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
+			if (strval($this->akun_id->CurrentValue) <> "") {
+				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+					$this->akun_id->EditValue = $this->akun_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
+				}
+			} else {
+				$this->akun_id->EditValue = NULL;
+			}
 			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
 			// nilai
@@ -1406,7 +1455,7 @@ class ctb_detail_grid extends ctb_detail {
 				$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1443,6 +1492,26 @@ class ctb_detail_grid extends ctb_detail {
 			$this->akun_id->EditAttrs["class"] = "form-control";
 			$this->akun_id->EditCustomAttributes = "";
 			$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
+			if (strval($this->akun_id->CurrentValue) <> "") {
+				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+					$this->akun_id->EditValue = $this->akun_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
+				}
+			} else {
+				$this->akun_id->EditValue = NULL;
+			}
 			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
 			// nilai
@@ -1459,7 +1528,7 @@ class ctb_detail_grid extends ctb_detail {
 				$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1511,9 +1580,6 @@ class ctb_detail_grid extends ctb_detail {
 			return ($gsFormError == "");
 		if (!$this->akun_id->FldIsDetailKey && !is_null($this->akun_id->FormValue) && $this->akun_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->akun_id->FldCaption(), $this->akun_id->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->akun_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->akun_id->FldErrMsg());
 		}
 		if (!$this->nilai->FldIsDetailKey && !is_null($this->nilai->FormValue) && $this->nilai->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->nilai->FldCaption(), $this->nilai->ReqErrMsg));
@@ -1770,12 +1836,24 @@ class ctb_detail_grid extends ctb_detail {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
+		case "x_akun_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "{filter}";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
 		case "x_anggota_id":
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id` AS `LinkFld`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 			$sWhereWrk = "{filter}";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`anggota_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`anggota_id` = {filter_value}", "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1790,11 +1868,24 @@ class ctb_detail_grid extends ctb_detail {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
+		case "x_akun_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld` FROM `view_akun_jurnal`";
+			$sWhereWrk = "`no_nama_akun` LIKE '{query_value}%'";
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " LIMIT " . EW_AUTO_SUGGEST_MAX_ENTRIES;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
 		case "x_anggota_id":
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld` FROM `tb_anggota`";
 			$sWhereWrk = "`nama` LIKE '{query_value}%'";
-			$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
+			$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting

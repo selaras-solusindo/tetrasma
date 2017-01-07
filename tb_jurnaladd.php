@@ -656,7 +656,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
+		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
 		$lookuptblfilter = "`jurnal` = 1";
 		ew_AddFilter($sWhereWrk, $lookuptblfilter);
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -737,7 +737,7 @@ class ctb_jurnal_add extends ctb_jurnal {
 			}
 			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_akun_jurnal`";
 			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
 			$lookuptblfilter = "`jurnal` = 1";
 			ew_AddFilter($sWhereWrk, $lookuptblfilter);
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -999,10 +999,10 @@ class ctb_jurnal_add extends ctb_jurnal {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "{filter}";
-			$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
+			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
 			$lookuptblfilter = "`jurnal` = 1";
 			ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1347,44 +1347,39 @@ if (EW_DEBUG_ENABLED)
 //	 var elm_name = $(event.target).attr('name');
 //	 alert(elm_name);alert("x");
 //}
-//$("#x_no_bukti").readonly(true);
 
 $("#x_akun_id").change(function() {
+	jurnal_kode = "";
+	$("#x_jenis_jurnal").val("");
+	$("#x_no_bukti").val("");
 	if (this.value!="") { //alert("kosong"); 
-
-	//alert(this.value);
 		ambil_jurnal_kode(this.value);
+	}
+	else {
+
+		//$("#x_jenis_jurnal").val("");
+		//$("#x_no_bukti").val("");
+
 	}
 });
 $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 
-	//alert(this.value);
-	//alert("xxx");
-	//ambil_no_bukti(this.value);
+	//$("#x_jenis_jurnal").val("");
+	$("#x_no_bukti").val("");
+	if (this.value!="") {
+		ambil_no_bukti(jurnal_kode+this.value);
+	}
 
-	if (this.value == "KM" || this.value == "KK" || this.value == "BM" || this.value == "BK") {
+	//else
+		//$("#x_no_bukti").val("");
+
+	/*if (this.value == "KM" || this.value == "KK" || this.value == "BM" || this.value == "BK") {
 		ambil_no_bukti(this.value);
 	}
 	else {
-
-		//$(this).fields("no_bukti").value(" "); // Set value to FieldA
-		//$(this).fields("no_bukti").value(""); // Set value to FieldA
-
 		$("#x_no_bukti").val("");
-	}
-	/*if (this.value == "1") {
-		$(this).fields("no_bukti").value("KM"); // Set value to FieldA
-	}
-	else if (this.value == "2") {
-		$(this).fields("no_bukti").value("KK"); // Set value to FieldA
-	}
-	else if (this.value == "3") {
-		$(this).fields("no_bukti").value("BM"); // Set value to FieldA
-	}
-	else {
-		$(this).fields("no_bukti").value("BK"); // Set value to FieldA
 	}*/
- });
+});
 var ajaxku;
 var ajax_jurnal_kode;
 
@@ -1455,22 +1450,13 @@ function stateChanged_jurnal_kode() {
 		data=ajax_jurnal_kode.responseText;
 		if(data.length>0) {
 			jurnal_kode = data;
-
-			//$("#x_no_bukti").val(data);
-			//$(this).fields("no_bukti").value(data); // Set value to FieldA
-			//document.getElementById("x_no_bukti").value = data
-
 		}
 		else {
 			jurnal_kode = "";
-
-			//$("#x_no_bukti").val("");
-			//$(this).fields("no_bukti").value("");
-			//document.getElementById("x_no_bukti").value = "";
-
 		}
 	}
-	alert(jurnal_kode);
+
+	//alert(jurnal_kode);
 }
 </script>
 <?php include_once "footer.php" ?>
