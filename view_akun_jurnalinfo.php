@@ -10,6 +10,7 @@ class cview_akun_jurnal extends cTable {
 	var $level4_id;
 	var $no_nama_akun;
 	var $jurnal;
+	var $jurnal_kode;
 
 	//
 	// Table class constructor
@@ -57,6 +58,11 @@ class cview_akun_jurnal extends cTable {
 		$this->jurnal->Sortable = TRUE; // Allow sort
 		$this->jurnal->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jurnal'] = &$this->jurnal;
+
+		// jurnal_kode
+		$this->jurnal_kode = new cField('view_akun_jurnal', 'view_akun_jurnal', 'x_jurnal_kode', 'jurnal_kode', '`jurnal_kode`', '`jurnal_kode`', 200, -1, FALSE, '`jurnal_kode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->jurnal_kode->Sortable = TRUE; // Allow sort
+		$this->fields['jurnal_kode'] = &$this->jurnal_kode;
 	}
 
 	// Set Field Visibility
@@ -542,6 +548,7 @@ class cview_akun_jurnal extends cTable {
 		$this->level4_id->setDbValue($rs->fields('level4_id'));
 		$this->no_nama_akun->setDbValue($rs->fields('no_nama_akun'));
 		$this->jurnal->setDbValue($rs->fields('jurnal'));
+		$this->jurnal_kode->setDbValue($rs->fields('jurnal_kode'));
 	}
 
 	// Render list row values
@@ -555,6 +562,7 @@ class cview_akun_jurnal extends cTable {
 		// level4_id
 		// no_nama_akun
 		// jurnal
+		// jurnal_kode
 		// level4_id
 
 		$this->level4_id->ViewValue = $this->level4_id->CurrentValue;
@@ -567,6 +575,10 @@ class cview_akun_jurnal extends cTable {
 		// jurnal
 		$this->jurnal->ViewValue = $this->jurnal->CurrentValue;
 		$this->jurnal->ViewCustomAttributes = "";
+
+		// jurnal_kode
+		$this->jurnal_kode->ViewValue = $this->jurnal_kode->CurrentValue;
+		$this->jurnal_kode->ViewCustomAttributes = "";
 
 		// level4_id
 		$this->level4_id->LinkCustomAttributes = "";
@@ -582,6 +594,11 @@ class cview_akun_jurnal extends cTable {
 		$this->jurnal->LinkCustomAttributes = "";
 		$this->jurnal->HrefValue = "";
 		$this->jurnal->TooltipValue = "";
+
+		// jurnal_kode
+		$this->jurnal_kode->LinkCustomAttributes = "";
+		$this->jurnal_kode->HrefValue = "";
+		$this->jurnal_kode->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -612,6 +629,12 @@ class cview_akun_jurnal extends cTable {
 		$this->jurnal->EditValue = $this->jurnal->CurrentValue;
 		$this->jurnal->PlaceHolder = ew_RemoveHtml($this->jurnal->FldCaption());
 
+		// jurnal_kode
+		$this->jurnal_kode->EditAttrs["class"] = "form-control";
+		$this->jurnal_kode->EditCustomAttributes = "";
+		$this->jurnal_kode->EditValue = $this->jurnal_kode->CurrentValue;
+		$this->jurnal_kode->PlaceHolder = ew_RemoveHtml($this->jurnal_kode->FldCaption());
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -641,9 +664,11 @@ class cview_akun_jurnal extends cTable {
 				if ($ExportPageType == "view") {
 					if ($this->no_nama_akun->Exportable) $Doc->ExportCaption($this->no_nama_akun);
 					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
+					if ($this->jurnal_kode->Exportable) $Doc->ExportCaption($this->jurnal_kode);
 				} else {
 					if ($this->no_nama_akun->Exportable) $Doc->ExportCaption($this->no_nama_akun);
 					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
+					if ($this->jurnal_kode->Exportable) $Doc->ExportCaption($this->jurnal_kode);
 				}
 				$Doc->EndExportRow();
 			}
@@ -677,9 +702,11 @@ class cview_akun_jurnal extends cTable {
 					if ($ExportPageType == "view") {
 						if ($this->no_nama_akun->Exportable) $Doc->ExportField($this->no_nama_akun);
 						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
+						if ($this->jurnal_kode->Exportable) $Doc->ExportField($this->jurnal_kode);
 					} else {
 						if ($this->no_nama_akun->Exportable) $Doc->ExportField($this->no_nama_akun);
 						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
+						if ($this->jurnal_kode->Exportable) $Doc->ExportField($this->jurnal_kode);
 					}
 					$Doc->EndExportRow();
 				}

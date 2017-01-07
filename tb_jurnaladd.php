@@ -652,12 +652,11 @@ class ctb_jurnal_add extends ctb_jurnal {
 		if ($this->akun_id->VirtualValue <> "") {
 			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
 		} else {
-			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		if (strval($this->akun_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		$lookuptblfilter = "`jurnal` = 1";
 		ew_AddFilter($sWhereWrk, $lookuptblfilter);
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -730,32 +729,31 @@ class ctb_jurnal_add extends ctb_jurnal {
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// akun_id
-			$this->akun_id->EditAttrs["class"] = "form-control";
 			$this->akun_id->EditCustomAttributes = "";
-			$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
-			if (strval($this->akun_id->CurrentValue) <> "") {
+			if (trim(strval($this->akun_id->CurrentValue)) == "") {
+				$sFilterWrk = "0=1";
+			} else {
 				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
+			}
+			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_akun_jurnal`";
 			$sWhereWrk = "";
-			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 			$lookuptblfilter = "`jurnal` = 1";
 			ew_AddFilter($sWhereWrk, $lookuptblfilter);
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-				$rswrk = Conn()->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
-					$this->akun_id->EditValue = $this->akun_id->DisplayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->akun_id->EditValue = ew_HtmlEncode($this->akun_id->CurrentValue);
-				}
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+				$this->akun_id->ViewValue = $this->akun_id->DisplayValue($arwrk);
 			} else {
-				$this->akun_id->EditValue = NULL;
+				$this->akun_id->ViewValue = $Language->Phrase("PleaseSelect");
 			}
-			$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			$this->akun_id->EditValue = $arwrk;
 
 			// jenis_jurnal
 			$this->jenis_jurnal->EditAttrs["class"] = "form-control";
@@ -1001,10 +999,10 @@ class ctb_jurnal_add extends ctb_jurnal {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "{filter}";
-			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 			$lookuptblfilter = "`jurnal` = 1";
 			ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1019,21 +1017,6 @@ class ctb_jurnal_add extends ctb_jurnal {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		case "x_akun_id":
-			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld` FROM `view_akun_jurnal`";
-			$sWhereWrk = "`no_nama_akun` LIKE '{query_value}%'";
-			$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
-			$lookuptblfilter = "`jurnal` = 1";
-			ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
-			$sSqlWrk = "";
-			$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " LIMIT " . EW_AUTO_SUGGEST_MAX_ENTRIES;
-			if ($sSqlWrk <> "")
-				$fld->LookupFilters["s"] .= $sSqlWrk;
-			break;
 		}
 	}
 
@@ -1270,7 +1253,7 @@ $tb_jurnal_add->ShowMessage();
 <div>
 <?php if ($tb_jurnal->akun_id->Visible) { // akun_id ?>
 	<div id="r_akun_id" class="form-group">
-		<label id="elh_tb_jurnal_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<label id="elh_tb_jurnal_akun_id" for="x_akun_id" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->akun_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_jurnal->akun_id->CellAttributes() ?>>
 <span id="el_tb_jurnal_akun_id">
 <span class="ewLookupList">
@@ -1366,6 +1349,13 @@ if (EW_DEBUG_ENABLED)
 //}
 //$("#x_no_bukti").readonly(true);
 
+$("#x_akun_id").change(function() {
+	if (this.value!="") { //alert("kosong"); 
+
+	//alert(this.value);
+		ambil_jurnal_kode(this.value);
+	}
+});
 $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 
 	//alert(this.value);
@@ -1396,6 +1386,17 @@ $("#x_jenis_jurnal").change(function() { // Assume Field1 is a text input
 	}*/
  });
 var ajaxku;
+var ajax_jurnal_kode;
+
+function ambil_jurnal_kode(akun_id) {
+	ajax_jurnal_kode = buatajax();
+	var url="ambiljurnalkode.php";
+	url=url+"?q="+akun_id;
+	url=url+"&sid="+Math.random();
+	ajax_jurnal_kode.onreadystatechange=stateChanged_jurnal_kode;
+	ajax_jurnal_kode.open("GET",url,true);
+	ajax_jurnal_kode.send(null);
+}
 
 function ambil_no_bukti(kode) {
 	ajaxku = buatajax();
@@ -1446,6 +1447,30 @@ function stateChanged() {
 
 		}
 	}
+}
+
+function stateChanged_jurnal_kode() {
+	var data;
+	if (ajax_jurnal_kode.readyState==4) {
+		data=ajax_jurnal_kode.responseText;
+		if(data.length>0) {
+			jurnal_kode = data;
+
+			//$("#x_no_bukti").val(data);
+			//$(this).fields("no_bukti").value(data); // Set value to FieldA
+			//document.getElementById("x_no_bukti").value = data
+
+		}
+		else {
+			jurnal_kode = "";
+
+			//$("#x_no_bukti").val("");
+			//$(this).fields("no_bukti").value("");
+			//document.getElementById("x_no_bukti").value = "";
+
+		}
+	}
+	alert(jurnal_kode);
 }
 </script>
 <?php include_once "footer.php" ?>

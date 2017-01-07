@@ -583,6 +583,7 @@
   <project>
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
+    <menu id="25" />
     <menu id="23" />
     <menu id="24">
       <phrase id="menutext" value="view akun jurnal" />
@@ -863,6 +864,10 @@
       <field id="jurnal">
         <phrase id="fldcaption" value="jurnal" />
       </field>
+      <field id="jurnal_kode">
+        <phrase id="fldcaption" value="jurnal kode" />
+      </field>
     </table>
+    <table id="ambiljurnalkode_php" />
   </project>
 </ew-language>

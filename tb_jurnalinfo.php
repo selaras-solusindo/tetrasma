@@ -52,8 +52,10 @@ class ctb_jurnal extends cTable {
 		$this->fields['jurnal_id'] = &$this->jurnal_id;
 
 		// akun_id
-		$this->akun_id = new cField('tb_jurnal', 'tb_jurnal', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`EV__akun_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->akun_id = new cField('tb_jurnal', 'tb_jurnal', 'x_akun_id', 'akun_id', '`akun_id`', '`akun_id`', 3, -1, FALSE, '`EV__akun_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
 		$this->akun_id->Sortable = TRUE; // Allow sort
+		$this->akun_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
+		$this->akun_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->akun_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['akun_id'] = &$this->akun_id;
 
@@ -72,7 +74,7 @@ class ctb_jurnal extends cTable {
 		$this->fields['no_bukti'] = &$this->no_bukti;
 
 		// tgl
-		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', 'DATE_FORMAT(`tgl`, \'%Y/%m/%d\')', 133, 7, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 7, "DB"), 133, 7, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
 		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['tgl'] = &$this->tgl;
@@ -683,12 +685,11 @@ class ctb_jurnal extends cTable {
 		if ($this->akun_id->VirtualValue <> "") {
 			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
 		} else {
-			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		if (strval($this->akun_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		$lookuptblfilter = "`jurnal` = 1";
 		ew_AddFilter($sWhereWrk, $lookuptblfilter);
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -789,8 +790,6 @@ class ctb_jurnal extends cTable {
 		// akun_id
 		$this->akun_id->EditAttrs["class"] = "form-control";
 		$this->akun_id->EditCustomAttributes = "";
-		$this->akun_id->EditValue = $this->akun_id->CurrentValue;
-		$this->akun_id->PlaceHolder = ew_RemoveHtml($this->akun_id->FldCaption());
 
 		// jenis_jurnal
 		$this->jenis_jurnal->EditAttrs["class"] = "form-control";

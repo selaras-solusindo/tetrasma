@@ -65,7 +65,7 @@ class ctb_anggota extends cTable {
 		$this->fields['nama'] = &$this->nama;
 
 		// tgl_masuk
-		$this->tgl_masuk = new cField('tb_anggota', 'tb_anggota', 'x_tgl_masuk', 'tgl_masuk', '`tgl_masuk`', 'DATE_FORMAT(`tgl_masuk`, \'%Y/%m/%d\')', 133, 0, FALSE, '`tgl_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl_masuk = new cField('tb_anggota', 'tb_anggota', 'x_tgl_masuk', 'tgl_masuk', '`tgl_masuk`', ew_CastDateFieldForLike('`tgl_masuk`', 0, "DB"), 133, 0, FALSE, '`tgl_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl_masuk->Sortable = TRUE; // Allow sort
 		$this->tgl_masuk->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['tgl_masuk'] = &$this->tgl_masuk;

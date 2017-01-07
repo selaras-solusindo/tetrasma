@@ -488,10 +488,6 @@ class ctb_jurnal_view extends ctb_jurnal {
 		$bLoadCurrentRecord = FALSE;
 		$sReturnUrl = "";
 		$bMatchRecord = FALSE;
-
-		// Set up Breadcrumb
-		if ($this->Export == "")
-			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
 			if (@$_GET["jurnal_id"] <> "") {
 				$this->jurnal_id->setQueryStringValue($_GET["jurnal_id"]);
@@ -525,6 +521,10 @@ class ctb_jurnal_view extends ctb_jurnal {
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
+
+		// Set up Breadcrumb
+		if ($this->Export == "")
+			$this->SetupBreadcrumb();
 
 		// Render row
 		$this->RowType = EW_ROWTYPE_VIEW;
@@ -815,12 +815,11 @@ class ctb_jurnal_view extends ctb_jurnal {
 		if ($this->akun_id->VirtualValue <> "") {
 			$this->akun_id->ViewValue = $this->akun_id->VirtualValue;
 		} else {
-			$this->akun_id->ViewValue = $this->akun_id->CurrentValue;
 		if (strval($this->akun_id->CurrentValue) <> "") {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		$lookuptblfilter = "`jurnal` = 1";
 		ew_AddFilter($sWhereWrk, $lookuptblfilter);
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
