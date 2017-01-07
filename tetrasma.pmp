@@ -495,6 +495,28 @@ $(document).ready(function() {
 	});
 });
 ]]></CustomScript>
+  <CustomScript ScriptType="Client" ScriptCodeType="Table" ScriptName="Startup Script" ScriptCtrlID="edit" ScriptL1Key="tb_level4" ScriptL2Key=""><![CDATA[// Write your table-specific startup script here
+// document.write("page loaded");
+
+$(document).ready(function() {
+	// Kondisi saat Form di-load
+	if($('input[name=x_jurnal]:radio:checked').val()=="1"){
+		$('#r_jurnal_kode').show();
+	} else {
+		$('#r_jurnal_kode').hide();
+	}
+	// Kondisi saat Radio Button diklik
+	$('input[name=x_jurnal]:radio').click(function(){
+		if($(this).attr("value")=="0"){
+			$('#x_jurnal_kode').val('');
+			$('#r_jurnal_kode').hide();
+		} else {
+			$('#r_jurnal_kode').show();
+			$('#x_jurnal_kode').focus();
+		}
+	});
+});
+]]></CustomScript>
   <Menu MenuID="23" MenuText="" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="ambildata.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="100" />
   <Menu MenuID="24" MenuText="view akun jurnal" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="view_akun_jurnal" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="200" />
   <Menu MenuID="22" MenuText="Home" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="home.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="1" MenuDisplayOrder="300" />

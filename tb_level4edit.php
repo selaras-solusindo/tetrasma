@@ -1548,6 +1548,26 @@ if (EW_DEBUG_ENABLED)
 // Write your table-specific startup script here
 // document.write("page loaded");
 
+$(document).ready(function() {
+
+	// Kondisi saat Form di-load
+	if($('input[name=x_jurnal]:radio:checked').val()=="1"){
+		$('#r_jurnal_kode').show();
+	} else {
+		$('#r_jurnal_kode').hide();
+	}
+
+	// Kondisi saat Radio Button diklik
+	$('input[name=x_jurnal]:radio').click(function(){
+		if($(this).attr("value")=="0"){
+			$('#x_jurnal_kode').val('');
+			$('#r_jurnal_kode').hide();
+		} else {
+			$('#r_jurnal_kode').show();
+			$('#x_jurnal_kode').focus();
+		}
+	});
+});
 </script>
 <?php include_once "footer.php" ?>
 <?php
