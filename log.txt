@@ -1,3 +1,8 @@
+3:18 AM 1/8/2017
+- buat rata kanan untuk nilai di detail jurnal
+- untuk view dan list master :: tampilkan nilai akhir di master, untuk cross-check akumulasi data di detail
+
+
 5:17 PM 1/6/2017
 - untuk tabel jurnal dan tabel detail :: 
 	- record detail disimpan di tabel detail
