@@ -852,6 +852,7 @@ class ctb_jurnal extends cTable {
 					if ($this->no_bukti->Exportable) $Doc->ExportCaption($this->no_bukti);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->ket->Exportable) $Doc->ExportCaption($this->ket);
+					if ($this->nilai->Exportable) $Doc->ExportCaption($this->nilai);
 				} else {
 					if ($this->jurnal_id->Exportable) $Doc->ExportCaption($this->jurnal_id);
 					if ($this->akun_id->Exportable) $Doc->ExportCaption($this->akun_id);
@@ -896,6 +897,7 @@ class ctb_jurnal extends cTable {
 						if ($this->no_bukti->Exportable) $Doc->ExportField($this->no_bukti);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->ket->Exportable) $Doc->ExportField($this->ket);
+						if ($this->nilai->Exportable) $Doc->ExportField($this->nilai);
 					} else {
 						if ($this->jurnal_id->Exportable) $Doc->ExportField($this->jurnal_id);
 						if ($this->akun_id->Exportable) $Doc->ExportField($this->akun_id);
@@ -1096,6 +1098,7 @@ class ctb_jurnal extends cTable {
 		//var_dump($this-><FieldName>);
 
 		$this->no_bukti->ReadOnly = true;
+		$this->nilai->ReadOnly = true;
 	}
 
 	// User ID Filtering event

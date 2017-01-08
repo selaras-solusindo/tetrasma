@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 07, 2017 at 12:58 PM
+-- Generation Time: Jan 08, 2017 at 11:12 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=161 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=218 ;
 
 --
 -- Dumping data for table `audittrail`
@@ -203,7 +203,64 @@ INSERT INTO `audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table`,
 (157, '2017-01-07 03:10:26', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '2', 'K', NULL),
 (158, '2017-01-07 03:11:00', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '1', NULL, 'K,B'),
 (159, '2017-01-07 03:11:23', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '2', NULL, 'B'),
-(160, '2017-01-07 05:26:57', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', '');
+(160, '2017-01-07 05:26:57', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(161, '2017-01-07 13:49:44', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(162, '2017-01-07 18:05:38', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(163, '2017-01-07 18:06:07', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(164, '2017-01-07 18:06:10', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(165, '2017-01-07 18:17:28', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal', '2', '0', '1'),
+(166, '2017-01-07 18:17:28', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '2', NULL, 'B'),
+(167, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(168, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '7', '', '2'),
+(169, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '7', '', '15000'),
+(170, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '7', '', NULL),
+(171, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '7', '', '4'),
+(172, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '7', '', '7'),
+(173, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(174, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'akun_id', '4', '', '1'),
+(175, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '4', '', 'M'),
+(176, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '4', '', 'KM201701004'),
+(177, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '4', '', '2017-01-08'),
+(178, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '4', '', 'tes6'),
+(179, '2017-01-07 18:31:32', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '4', '', '4'),
+(180, '2017-01-07 18:38:10', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(181, '2017-01-07 18:38:10', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '8', '', '2'),
+(182, '2017-01-07 18:38:10', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '8', '', '15500'),
+(183, '2017-01-07 18:38:10', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '8', '', NULL),
+(184, '2017-01-07 18:38:10', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '8', '', '5'),
+(185, '2017-01-07 18:38:10', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '8', '', '8'),
+(186, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(187, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'akun_id', '5', '', '1'),
+(188, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '5', '', 'M'),
+(189, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '5', '', 'KM201701005'),
+(190, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '5', '', '2017-01-08'),
+(191, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '5', '', 'tes7'),
+(192, '2017-01-07 18:38:11', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '5', '', '5'),
+(193, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert begin ***', 'tb_detail', '', '', '', ''),
+(194, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '9', '', '1'),
+(195, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '9', '', '16000'),
+(196, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '9', '', NULL),
+(197, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '9', '', '6'),
+(198, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '9', '', '9'),
+(199, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'akun_id', '10', '', '1'),
+(200, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'nilai', '10', '', '16500'),
+(201, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'anggota_id', '10', '', NULL),
+(202, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'jurnal_id', '10', '', '6'),
+(203, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_detail', 'detail_id', '10', '', '10'),
+(204, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', '*** Batch insert successful ***', 'tb_detail', '', '', '', ''),
+(205, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'akun_id', '6', '', '2'),
+(206, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jenis_jurnal', '6', '', 'M'),
+(207, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'no_bukti', '6', '', 'BM201701001'),
+(208, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'tgl', '6', '', '2017-01-08'),
+(209, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'ket', '6', '', 'tes8'),
+(210, '2017-01-07 18:39:27', '/tetrasma/tb_jurnaladd.php', 'admin', 'A', 'tb_jurnal', 'jurnal_id', '6', '', '6'),
+(211, '2017-01-08 15:17:21', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(212, '2017-01-08 15:44:19', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal', '1', '0', '1'),
+(213, '2017-01-08 15:44:19', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '1', NULL, 'K'),
+(214, '2017-01-08 15:44:28', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal', '2', '0', '1'),
+(215, '2017-01-08 15:44:28', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '2', NULL, 'B'),
+(216, '2017-01-08 15:44:58', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal', '3', '0', '1'),
+(217, '2017-01-08 15:44:58', '/tetrasma/tb_level4edit.php', 'admin', 'U', 'tb_level4', 'jurnal_kode', '3', NULL, 'B');
 
 -- --------------------------------------------------------
 
@@ -494,7 +551,7 @@ CREATE TABLE IF NOT EXISTS `tb_detail` (
   `nilai` bigint(20) NOT NULL,
   `anggota_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`detail_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `tb_detail`
@@ -506,7 +563,11 @@ INSERT INTO `tb_detail` (`detail_id`, `jurnal_id`, `akun_id`, `dk`, `nilai`, `an
 (3, 3, 2, 1, 14000, NULL),
 (4, 3, 1, 1, 14000, NULL),
 (5, 3, 2, 1, 14500, NULL),
-(6, 3, 1, 0, 42500, NULL);
+(6, 3, 1, 0, 42500, NULL),
+(7, 4, 2, 1, 15000, NULL),
+(8, 5, 2, 1, 15500, NULL),
+(9, 6, 1, 1, 16000, NULL),
+(10, 6, 1, 1, 16500, NULL);
 
 -- --------------------------------------------------------
 
@@ -523,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `tb_jurnal` (
   `akun_id` int(11) NOT NULL,
   `nilai` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`jurnal_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `tb_jurnal`
@@ -532,7 +593,10 @@ CREATE TABLE IF NOT EXISTS `tb_jurnal` (
 INSERT INTO `tb_jurnal` (`jurnal_id`, `no_bukti`, `tgl`, `ket`, `jenis_jurnal`, `akun_id`, `nilai`) VALUES
 (1, 'KM201701001', '2017-01-06', 'tes3', 'KM', 0, 0),
 (2, 'KM201701002', '2017-01-06', 'tes4', 'KM', 0, 0),
-(3, 'KM201701003', '2017-01-06', 'tes5', 'KM', 0, 0);
+(3, 'KM201701003', '2017-01-06', 'tes5', 'KM', 0, 0),
+(4, 'KM201701004', '2017-01-08', 'tes6', 'M', 1, 0),
+(5, 'KM201701005', '2017-01-08', 'tes7', 'M', 1, 15500),
+(6, 'BM201701001', '2017-01-08', 'tes8', 'M', 2, 32500);
 
 -- --------------------------------------------------------
 
@@ -545,7 +609,7 @@ CREATE TABLE IF NOT EXISTS `tb_level1` (
   `level1_no` varchar(2) NOT NULL,
   `level1_nama` varchar(50) NOT NULL,
   PRIMARY KEY (`level1_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `tb_level1`
@@ -553,7 +617,11 @@ CREATE TABLE IF NOT EXISTS `tb_level1` (
 
 INSERT INTO `tb_level1` (`level1_id`, `level1_no`, `level1_nama`) VALUES
 (1, '1', 'Aktiva'),
-(2, '2', 'Pasiva');
+(2, '2', 'Hutang'),
+(3, '3', 'Modal'),
+(4, '4', 'Pendapatan'),
+(5, '5', 'HPP'),
+(6, '6', 'Biaya');
 
 -- --------------------------------------------------------
 
@@ -567,7 +635,7 @@ CREATE TABLE IF NOT EXISTS `tb_level2` (
   `level2_no` varchar(2) NOT NULL,
   `level2_nama` varchar(50) NOT NULL,
   PRIMARY KEY (`level2_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `tb_level2`
@@ -575,7 +643,13 @@ CREATE TABLE IF NOT EXISTS `tb_level2` (
 
 INSERT INTO `tb_level2` (`level2_id`, `level1_id`, `level2_no`, `level2_nama`) VALUES
 (1, 1, '1', 'Aktiva Lancar'),
-(2, 1, '2', 'Aktiva Tetap');
+(2, 1, '2', 'Aktiva Tetap'),
+(3, 2, '1', 'Hutang Jk. Pendek'),
+(4, 3, '1', 'Modal Sendiri'),
+(5, 4, '1', 'Pendapatan Usaha'),
+(6, 5, '1', 'Biaya Langsung'),
+(7, 6, '1', 'Biaya'),
+(8, 2, '2', 'Hutang Jk. Panjang');
 
 -- --------------------------------------------------------
 
@@ -590,14 +664,29 @@ CREATE TABLE IF NOT EXISTS `tb_level3` (
   `level3_no` varchar(2) NOT NULL,
   `level3_nama` varchar(50) NOT NULL,
   PRIMARY KEY (`level3_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `tb_level3`
 --
 
 INSERT INTO `tb_level3` (`level3_id`, `level1_id`, `level2_id`, `level3_no`, `level3_nama`) VALUES
-(1, 1, 1, '1', 'Kas');
+(1, 1, 1, '1', 'Kas'),
+(2, 1, 1, '3', 'Piutang'),
+(3, 1, 1, '4', 'Aktiva Lain'),
+(4, 1, 2, '1', 'Aktiva Tetap'),
+(5, 2, 3, '1', 'Hutang Lancar'),
+(6, 2, 3, '2', 'Hutang Jangka Panjang'),
+(7, 3, 4, '1', 'Simpanan Pokok'),
+(8, 3, 4, '2', 'Simpanan Wajib'),
+(9, 4, 5, '1', 'Pendapatan Bunga Pinjaman'),
+(10, 5, 6, '1', 'Biaya Langsung'),
+(11, 6, 7, '1', 'Biaya Keuangan'),
+(12, 6, 7, '2', 'Biaya Organisasi'),
+(13, 6, 7, '3', 'Biaya Karyawan'),
+(14, 6, 7, '4', 'Biaya Operasional Kantor'),
+(15, 1, 1, '2', 'Bank'),
+(16, 3, 4, '3', 'Simpanan Sukarela');
 
 -- --------------------------------------------------------
 
@@ -617,7 +706,7 @@ CREATE TABLE IF NOT EXISTS `tb_level4` (
   `jurnal` tinyint(1) DEFAULT '0',
   `jurnal_kode` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`level4_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=63 ;
 
 --
 -- Dumping data for table `tb_level4`
@@ -625,7 +714,67 @@ CREATE TABLE IF NOT EXISTS `tb_level4` (
 
 INSERT INTO `tb_level4` (`level4_id`, `level1_id`, `level2_id`, `level3_id`, `level4_no`, `level4_nama`, `saldo_awal`, `saldo`, `jurnal`, `jurnal_kode`) VALUES
 (1, 1, 1, 1, '01', 'Kas', NULL, NULL, 1, 'K'),
-(2, 1, 1, 1, '02', 'Bank BCA', NULL, NULL, 0, 'B');
+(2, 1, 1, 1, '02', 'Bank BCA', NULL, NULL, 1, 'B'),
+(3, 1, 1, 1, '03', 'Bank Mandiri', NULL, NULL, 1, 'B'),
+(4, 1, 1, 2, '01', 'Pinjaman yang diberikan', NULL, NULL, 0, NULL),
+(5, 1, 1, 2, '02', 'Asuransi dibayar dimuka', NULL, NULL, 0, NULL),
+(6, 1, 1, 2, '03', 'Beban dibayar dimuka', NULL, NULL, 0, NULL),
+(7, 1, 1, 2, '04', 'Penyisihan piutang tak tertagih', NULL, NULL, 0, NULL),
+(8, 1, 1, 2, '05', 'Pendapatan ymh diterima', NULL, NULL, 0, NULL),
+(9, 1, 1, 3, '01', 'Aktiva lain', NULL, NULL, 0, NULL),
+(10, 1, 2, 4, '01', 'Tanah', NULL, NULL, 0, NULL),
+(11, 1, 2, 4, '02', 'Bangunan', NULL, NULL, 0, NULL),
+(12, 1, 2, 4, '03', 'Akumulasi Penyusutan Bangunan', NULL, NULL, 0, NULL),
+(13, 1, 2, 4, '04', 'Peralatan / Mebel', NULL, NULL, 0, NULL),
+(14, 1, 2, 4, '05', 'Akumulasi Penyusutan Peralatan / Mebel', NULL, NULL, 0, NULL),
+(15, 1, 2, 4, '06', 'Inventaris Kantor', NULL, NULL, 0, NULL),
+(16, 1, 2, 4, '07', 'Akumulasi Penyusutan Inventaris Kantor', NULL, NULL, 0, NULL),
+(17, 2, 3, 5, '01', 'Simpanan Sukarela', NULL, NULL, 0, NULL),
+(18, 2, 3, 5, '02', 'Simpanan Berjangka', NULL, NULL, 0, NULL),
+(19, 2, 3, 5, '03', 'Simpanan Karyawan', NULL, NULL, 0, NULL),
+(20, 2, 3, 5, '04', 'Hutang Bank', NULL, NULL, 0, NULL),
+(21, 2, 3, 5, '05', 'Beban YMH Dibayar', NULL, NULL, 0, NULL),
+(22, 2, 3, 5, '99', 'Hutang Lain-Lain', NULL, NULL, 0, NULL),
+(23, 2, 3, 6, '01', 'Hutang Sewa', NULL, NULL, 0, NULL),
+(24, 3, 4, 7, '01', 'Simpanan Pokok', NULL, NULL, 0, NULL),
+(25, 3, 4, 7, '02', 'Simpanan Wajib', NULL, NULL, 0, NULL),
+(26, 3, 4, 7, '03', 'Donasi', NULL, NULL, 0, NULL),
+(27, 3, 4, 7, '04', 'Modal Penyertaan', NULL, NULL, 0, NULL),
+(28, 3, 4, 7, '05', 'Cad. Tujuan Resiko', NULL, NULL, 0, NULL),
+(29, 3, 4, 8, '01', 'Laba Periode Berjalan', NULL, NULL, 0, NULL),
+(30, 3, 4, 8, '02', 'Cadangan SHU', NULL, NULL, 0, NULL),
+(31, 4, 5, 9, '01', 'Pendapatan Bunga', NULL, NULL, 0, NULL),
+(32, 4, 5, 9, '02', 'Pendapatan Provisi', NULL, NULL, 0, NULL),
+(33, 4, 5, 9, '03', 'Pendapatan Administrasi', NULL, NULL, 0, NULL),
+(34, 4, 5, 9, '99', 'Pendapatan Lainnya', NULL, NULL, 0, NULL),
+(35, 5, 6, 10, '01', 'Biaya Langsung', NULL, NULL, 0, NULL),
+(36, 6, 7, 11, '01', 'Bunga Simpanan', NULL, NULL, 0, NULL),
+(37, 6, 7, 11, '02', 'Bunga Bank', NULL, NULL, 0, NULL),
+(38, 6, 7, 11, '03', 'Bunga Simpanan Lain-Lain', NULL, NULL, 0, NULL),
+(39, 6, 7, 11, '04', 'Bunga Simpanan Berjangka', NULL, NULL, 0, NULL),
+(40, 6, 7, 11, '05', 'Bunga Simpanan Khusus', NULL, NULL, 0, NULL),
+(41, 6, 7, 11, '06', 'Biaya Penysh. Piut. Tak Tertg.', NULL, NULL, 0, NULL),
+(42, 6, 7, 11, '07', 'Biaya Asuransi', NULL, NULL, 0, NULL),
+(43, 6, 7, 11, '08', 'Biaya Audit', NULL, NULL, 0, NULL),
+(44, 6, 7, 11, '09', 'Biaya Pajak', NULL, NULL, 0, NULL),
+(45, 6, 7, 11, '99', 'Biaya Keu. Lain-Lain', NULL, NULL, 0, NULL),
+(46, 6, 7, 12, '01', 'Biaya Rapat Pengurus', NULL, NULL, 0, NULL),
+(47, 6, 7, 12, '02', 'Biaya Rapat Anggota', NULL, NULL, 0, NULL),
+(48, 6, 7, 12, '03', 'Biaya Perjalanan Dinas', NULL, NULL, 0, NULL),
+(49, 6, 7, 12, '04', 'Biaya Diklat', NULL, NULL, 0, NULL),
+(50, 6, 7, 12, '05', 'Biaya Honorarium Pengurus', NULL, NULL, 0, NULL),
+(51, 6, 7, 12, '06', 'Biaya Pembinaan', NULL, NULL, 0, NULL),
+(52, 6, 7, 12, '99', 'Biaya Org. Lain-Lain', NULL, NULL, 0, NULL),
+(53, 6, 7, 13, '01', 'Gaji Karyawan', NULL, NULL, 0, NULL),
+(54, 6, 7, 13, '02', 'Tunjangan', NULL, NULL, 0, NULL),
+(55, 6, 7, 13, '03', 'Konsumsi', NULL, NULL, 0, NULL),
+(56, 6, 7, 13, '04', 'Biaya Transport Dinas', NULL, NULL, 0, NULL),
+(57, 6, 7, 13, '05', 'Biaya Pendidikan', NULL, NULL, 0, NULL),
+(58, 6, 7, 14, '99', 'Biaya Kary. Lain-Lain', NULL, NULL, 0, NULL),
+(59, 6, 7, 14, '01', 'Biaya Alat Tulis', NULL, NULL, 0, NULL),
+(60, 6, 7, 14, '02', 'Biaya Listrik xx', NULL, NULL, 0, NULL),
+(61, 6, 7, 14, '03', 'Biaya Telepon', NULL, NULL, 0, NULL),
+(62, 6, 7, 14, '04', 'Biaya Air', NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -654,15 +803,75 @@ INSERT INTO `tb_user` (`user_id`, `username`, `password`, `userlevel`) VALUES
 -- Table structure for table `view_akun_jurnal`
 --
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`view_akun_jurnal` AS select `db_tetrasma`.`tb_level4`.`level4_id` AS `level4_id`,concat(`db_tetrasma`.`tb_level1`.`level1_no`,'.',`db_tetrasma`.`tb_level2`.`level2_no`,'.',`db_tetrasma`.`tb_level3`.`level3_no`,'.',`db_tetrasma`.`tb_level4`.`level4_no`,' - ',`db_tetrasma`.`tb_level4`.`level4_nama`) AS `no_nama_akun`,`db_tetrasma`.`tb_level4`.`jurnal` AS `jurnal` from (((`db_tetrasma`.`tb_level4` join `db_tetrasma`.`tb_level1` on((`db_tetrasma`.`tb_level4`.`level1_id` = `db_tetrasma`.`tb_level1`.`level1_id`))) join `db_tetrasma`.`tb_level2` on((`db_tetrasma`.`tb_level4`.`level2_id` = `db_tetrasma`.`tb_level2`.`level2_id`))) join `db_tetrasma`.`tb_level3` on((`db_tetrasma`.`tb_level4`.`level3_id` = `db_tetrasma`.`tb_level3`.`level3_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`view_akun_jurnal` AS select `db_tetrasma`.`tb_level4`.`level4_id` AS `level4_id`,concat(`db_tetrasma`.`tb_level1`.`level1_no`,'.',`db_tetrasma`.`tb_level2`.`level2_no`,'.',`db_tetrasma`.`tb_level3`.`level3_no`,'.',`db_tetrasma`.`tb_level4`.`level4_no`,' - ',`db_tetrasma`.`tb_level4`.`level4_nama`) AS `no_nama_akun`,`db_tetrasma`.`tb_level4`.`jurnal` AS `jurnal`,`db_tetrasma`.`tb_level4`.`jurnal_kode` AS `jurnal_kode` from (((`db_tetrasma`.`tb_level4` join `db_tetrasma`.`tb_level1` on((`db_tetrasma`.`tb_level4`.`level1_id` = `db_tetrasma`.`tb_level1`.`level1_id`))) join `db_tetrasma`.`tb_level2` on((`db_tetrasma`.`tb_level4`.`level2_id` = `db_tetrasma`.`tb_level2`.`level2_id`))) join `db_tetrasma`.`tb_level3` on((`db_tetrasma`.`tb_level4`.`level3_id` = `db_tetrasma`.`tb_level3`.`level3_id`)));
 
 --
 -- Dumping data for table `view_akun_jurnal`
 --
 
-INSERT INTO `view_akun_jurnal` (`level4_id`, `no_nama_akun`, `jurnal`) VALUES
-(1, '1.1.1.01 - Kas', 1),
-(2, '1.1.1.02 - Bank BCA', 0);
+INSERT INTO `view_akun_jurnal` (`level4_id`, `no_nama_akun`, `jurnal`, `jurnal_kode`) VALUES
+(1, '1.1.1.01 - Kas', 1, 'K'),
+(2, '1.1.1.02 - Bank BCA', 1, 'B'),
+(3, '1.1.1.03 - Bank Mandiri', 1, 'B'),
+(4, '1.1.3.01 - Pinjaman yang diberikan', 0, NULL),
+(5, '1.1.3.02 - Asuransi dibayar dimuka', 0, NULL),
+(6, '1.1.3.03 - Beban dibayar dimuka', 0, NULL),
+(7, '1.1.3.04 - Penyisihan piutang tak tertagih', 0, NULL),
+(8, '1.1.3.05 - Pendapatan ymh diterima', 0, NULL),
+(9, '1.1.4.01 - Aktiva lain', 0, NULL),
+(10, '1.2.1.01 - Tanah', 0, NULL),
+(11, '1.2.1.02 - Bangunan', 0, NULL),
+(12, '1.2.1.03 - Akumulasi Penyusutan Bangunan', 0, NULL),
+(13, '1.2.1.04 - Peralatan / Mebel', 0, NULL),
+(14, '1.2.1.05 - Akumulasi Penyusutan Peralatan / Mebel', 0, NULL),
+(15, '1.2.1.06 - Inventaris Kantor', 0, NULL),
+(16, '1.2.1.07 - Akumulasi Penyusutan Inventaris Kantor', 0, NULL),
+(17, '2.1.1.01 - Simpanan Sukarela', 0, NULL),
+(18, '2.1.1.02 - Simpanan Berjangka', 0, NULL),
+(19, '2.1.1.03 - Simpanan Karyawan', 0, NULL),
+(20, '2.1.1.04 - Hutang Bank', 0, NULL),
+(21, '2.1.1.05 - Beban YMH Dibayar', 0, NULL),
+(22, '2.1.1.99 - Hutang Lain-Lain', 0, NULL),
+(23, '2.1.2.01 - Hutang Sewa', 0, NULL),
+(24, '3.1.1.01 - Simpanan Pokok', 0, NULL),
+(25, '3.1.1.02 - Simpanan Wajib', 0, NULL),
+(26, '3.1.1.03 - Donasi', 0, NULL),
+(27, '3.1.1.04 - Modal Penyertaan', 0, NULL),
+(28, '3.1.1.05 - Cad. Tujuan Resiko', 0, NULL),
+(29, '3.1.2.01 - Laba Periode Berjalan', 0, NULL),
+(30, '3.1.2.02 - Cadangan SHU', 0, NULL),
+(31, '4.1.1.01 - Pendapatan Bunga', 0, NULL),
+(32, '4.1.1.02 - Pendapatan Provisi', 0, NULL),
+(33, '4.1.1.03 - Pendapatan Administrasi', 0, NULL),
+(34, '4.1.1.99 - Pendapatan Lainnya', 0, NULL),
+(35, '5.1.1.01 - Biaya Langsung', 0, NULL),
+(36, '6.1.1.01 - Bunga Simpanan', 0, NULL),
+(37, '6.1.1.02 - Bunga Bank', 0, NULL),
+(38, '6.1.1.03 - Bunga Simpanan Lain-Lain', 0, NULL),
+(39, '6.1.1.04 - Bunga Simpanan Berjangka', 0, NULL),
+(40, '6.1.1.05 - Bunga Simpanan Khusus', 0, NULL),
+(41, '6.1.1.06 - Biaya Penysh. Piut. Tak Tertg.', 0, NULL),
+(42, '6.1.1.07 - Biaya Asuransi', 0, NULL),
+(43, '6.1.1.08 - Biaya Audit', 0, NULL),
+(44, '6.1.1.09 - Biaya Pajak', 0, NULL),
+(45, '6.1.1.99 - Biaya Keu. Lain-Lain', 0, NULL),
+(46, '6.1.2.01 - Biaya Rapat Pengurus', 0, NULL),
+(47, '6.1.2.02 - Biaya Rapat Anggota', 0, NULL),
+(48, '6.1.2.03 - Biaya Perjalanan Dinas', 0, NULL),
+(49, '6.1.2.04 - Biaya Diklat', 0, NULL),
+(50, '6.1.2.05 - Biaya Honorarium Pengurus', 0, NULL),
+(51, '6.1.2.06 - Biaya Pembinaan', 0, NULL),
+(52, '6.1.2.99 - Biaya Org. Lain-Lain', 0, NULL),
+(53, '6.1.3.01 - Gaji Karyawan', 0, NULL),
+(54, '6.1.3.02 - Tunjangan', 0, NULL),
+(55, '6.1.3.03 - Konsumsi', 0, NULL),
+(56, '6.1.3.04 - Biaya Transport Dinas', 0, NULL),
+(57, '6.1.3.05 - Biaya Pendidikan', 0, NULL),
+(58, '6.1.4.99 - Biaya Kary. Lain-Lain', 0, NULL),
+(59, '6.1.4.01 - Biaya Alat Tulis', 0, NULL),
+(60, '6.1.4.02 - Biaya Listrik xx', 0, NULL),
+(61, '6.1.4.03 - Biaya Telepon', 0, NULL),
+(62, '6.1.4.04 - Biaya Air', 0, NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

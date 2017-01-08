@@ -5,6 +5,7 @@
 // no_bukti
 // tgl
 // ket
+// nilai
 
 ?>
 <?php if ($tb_jurnal->Visible) { ?>
@@ -63,6 +64,17 @@
 <span id="el_tb_jurnal_ket">
 <span<?php echo $tb_jurnal->ket->ViewAttributes() ?>>
 <?php echo $tb_jurnal->ket->ListViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+		<tr id="r_nilai">
+			<td><?php echo $tb_jurnal->nilai->FldCaption() ?></td>
+			<td<?php echo $tb_jurnal->nilai->CellAttributes() ?>>
+<span id="el_tb_jurnal_nilai">
+<span<?php echo $tb_jurnal->nilai->ViewAttributes() ?>>
+<?php echo $tb_jurnal->nilai->ListViewValue() ?></span>
 </span>
 </td>
 		</tr>

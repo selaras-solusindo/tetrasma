@@ -292,6 +292,7 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->ket->SetVisibility();
+		$this->nilai->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -535,6 +536,9 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		if (!$this->ket->FldIsDetailKey) {
 			$this->ket->setFormValue($objForm->GetValue("x_ket"));
 		}
+		if (!$this->nilai->FldIsDetailKey) {
+			$this->nilai->setFormValue($objForm->GetValue("x_nilai"));
+		}
 		if (!$this->jurnal_id->FldIsDetailKey)
 			$this->jurnal_id->setFormValue($objForm->GetValue("x_jurnal_id"));
 	}
@@ -550,6 +554,7 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
 		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 7);
 		$this->ket->CurrentValue = $this->ket->FormValue;
+		$this->nilai->CurrentValue = $this->nilai->FormValue;
 	}
 
 	// Load row based on key values
@@ -710,6 +715,11 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$this->ket->LinkCustomAttributes = "";
 			$this->ket->HrefValue = "";
 			$this->ket->TooltipValue = "";
+
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// akun_id
@@ -762,6 +772,12 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			$this->ket->EditValue = ew_HtmlEncode($this->ket->CurrentValue);
 			$this->ket->PlaceHolder = ew_RemoveHtml($this->ket->FldCaption());
 
+			// nilai
+			$this->nilai->EditAttrs["class"] = "form-control";
+			$this->nilai->EditCustomAttributes = "";
+			$this->nilai->EditValue = ew_HtmlEncode($this->nilai->CurrentValue);
+			$this->nilai->PlaceHolder = ew_RemoveHtml($this->nilai->FldCaption());
+
 			// Edit refer script
 			// akun_id
 
@@ -783,6 +799,10 @@ class ctb_jurnal_edit extends ctb_jurnal {
 			// ket
 			$this->ket->LinkCustomAttributes = "";
 			$this->ket->HrefValue = "";
+
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -822,6 +842,12 @@ class ctb_jurnal_edit extends ctb_jurnal {
 		}
 		if (!$this->ket->FldIsDetailKey && !is_null($this->ket->FormValue) && $this->ket->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->ket->FldCaption(), $this->ket->ReqErrMsg));
+		}
+		if (!$this->nilai->FldIsDetailKey && !is_null($this->nilai->FormValue) && $this->nilai->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->nilai->FldCaption(), $this->nilai->ReqErrMsg));
+		}
+		if (!ew_CheckInteger($this->nilai->FormValue)) {
+			ew_AddMessage($gsFormError, $this->nilai->FldErrMsg());
 		}
 
 		// Validate detail grid
@@ -884,6 +910,9 @@ class ctb_jurnal_edit extends ctb_jurnal {
 
 			// ket
 			$this->ket->SetDbValueDef($rsnew, $this->ket->CurrentValue, "", $this->ket->ReadOnly);
+
+			// nilai
+			$this->nilai->SetDbValueDef($rsnew, $this->nilai->CurrentValue, 0, $this->nilai->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -1190,6 +1219,12 @@ ftb_jurnaledit.Validate = function() {
 			elm = this.GetElements("x" + infix + "_ket");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_jurnal->ket->FldCaption(), $tb_jurnal->ket->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_nilai");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $tb_jurnal->nilai->FldCaption(), $tb_jurnal->nilai->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_nilai");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($tb_jurnal->nilai->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1314,6 +1349,16 @@ ew_CreateCalendar("ftb_jurnaledit", "x_tgl", 7);
 <textarea data-table="tb_jurnal" data-field="x_ket" name="x_ket" id="x_ket" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($tb_jurnal->ket->getPlaceHolder()) ?>"<?php echo $tb_jurnal->ket->EditAttributes() ?>><?php echo $tb_jurnal->ket->EditValue ?></textarea>
 </span>
 <?php echo $tb_jurnal->ket->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+	<div id="r_nilai" class="form-group">
+		<label id="elh_tb_jurnal_nilai" for="x_nilai" class="col-sm-2 control-label ewLabel"><?php echo $tb_jurnal->nilai->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $tb_jurnal->nilai->CellAttributes() ?>>
+<span id="el_tb_jurnal_nilai">
+<input type="text" data-table="tb_jurnal" data-field="x_nilai" name="x_nilai" id="x_nilai" size="30" placeholder="<?php echo ew_HtmlEncode($tb_jurnal->nilai->getPlaceHolder()) ?>" value="<?php echo $tb_jurnal->nilai->EditValue ?>"<?php echo $tb_jurnal->nilai->EditAttributes() ?>>
+</span>
+<?php echo $tb_jurnal->nilai->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>

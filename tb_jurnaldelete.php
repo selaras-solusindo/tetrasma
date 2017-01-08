@@ -288,6 +288,7 @@ class ctb_jurnal_delete extends ctb_jurnal {
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->ket->SetVisibility();
+		$this->nilai->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -591,6 +592,11 @@ class ctb_jurnal_delete extends ctb_jurnal {
 			$this->ket->LinkCustomAttributes = "";
 			$this->ket->HrefValue = "";
 			$this->ket->TooltipValue = "";
+
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -908,6 +914,9 @@ $tb_jurnal_delete->ShowMessage();
 <?php if ($tb_jurnal->ket->Visible) { // ket ?>
 		<th><span id="elh_tb_jurnal_ket" class="tb_jurnal_ket"><?php echo $tb_jurnal->ket->FldCaption() ?></span></th>
 <?php } ?>
+<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+		<th><span id="elh_tb_jurnal_nilai" class="tb_jurnal_nilai"><?php echo $tb_jurnal->nilai->FldCaption() ?></span></th>
+<?php } ?>
 	</tr>
 	</thead>
 	<tbody>
@@ -966,6 +975,14 @@ while (!$tb_jurnal_delete->Recordset->EOF) {
 <span id="el<?php echo $tb_jurnal_delete->RowCnt ?>_tb_jurnal_ket" class="tb_jurnal_ket">
 <span<?php echo $tb_jurnal->ket->ViewAttributes() ?>>
 <?php echo $tb_jurnal->ket->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+		<td<?php echo $tb_jurnal->nilai->CellAttributes() ?>>
+<span id="el<?php echo $tb_jurnal_delete->RowCnt ?>_tb_jurnal_nilai" class="tb_jurnal_nilai">
+<span<?php echo $tb_jurnal->nilai->ViewAttributes() ?>>
+<?php echo $tb_jurnal->nilai->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

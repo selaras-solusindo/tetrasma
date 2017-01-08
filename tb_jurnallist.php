@@ -417,6 +417,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->ket->SetVisibility();
+		$this->nilai->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -1027,6 +1028,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 			$this->UpdateSort($this->no_bukti); // no_bukti
 			$this->UpdateSort($this->tgl); // tgl
 			$this->UpdateSort($this->ket); // ket
+			$this->UpdateSort($this->nilai); // nilai
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1065,6 +1067,7 @@ class ctb_jurnal_list extends ctb_jurnal {
 				$this->no_bukti->setSort("");
 				$this->tgl->setSort("");
 				$this->ket->setSort("");
+				$this->nilai->setSort("");
 			}
 
 			// Reset start position
@@ -1786,6 +1789,11 @@ class ctb_jurnal_list extends ctb_jurnal {
 			$this->ket->LinkCustomAttributes = "";
 			$this->ket->HrefValue = "";
 			$this->ket->TooltipValue = "";
+
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2431,6 +2439,15 @@ $tb_jurnal_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+	<?php if ($tb_jurnal->SortUrl($tb_jurnal->nilai) == "") { ?>
+		<th data-name="nilai"><div id="elh_tb_jurnal_nilai" class="tb_jurnal_nilai"><div class="ewTableHeaderCaption"><?php echo $tb_jurnal->nilai->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="nilai"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $tb_jurnal->SortUrl($tb_jurnal->nilai) ?>',1);"><div id="elh_tb_jurnal_nilai" class="tb_jurnal_nilai">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $tb_jurnal->nilai->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($tb_jurnal->nilai->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($tb_jurnal->nilai->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2533,6 +2550,14 @@ $tb_jurnal_list->ListOptions->Render("body", "left", $tb_jurnal_list->RowCnt);
 <span id="el<?php echo $tb_jurnal_list->RowCnt ?>_tb_jurnal_ket" class="tb_jurnal_ket">
 <span<?php echo $tb_jurnal->ket->ViewAttributes() ?>>
 <?php echo $tb_jurnal->ket->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+		<td data-name="nilai"<?php echo $tb_jurnal->nilai->CellAttributes() ?>>
+<span id="el<?php echo $tb_jurnal_list->RowCnt ?>_tb_jurnal_nilai" class="tb_jurnal_nilai">
+<span<?php echo $tb_jurnal->nilai->ViewAttributes() ?>>
+<?php echo $tb_jurnal->nilai->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

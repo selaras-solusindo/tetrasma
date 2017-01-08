@@ -390,6 +390,7 @@ class ctb_jurnal_view extends ctb_jurnal {
 		$this->no_bukti->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->ket->SetVisibility();
+		$this->nilai->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -889,6 +890,11 @@ class ctb_jurnal_view extends ctb_jurnal {
 			$this->ket->LinkCustomAttributes = "";
 			$this->ket->HrefValue = "";
 			$this->ket->TooltipValue = "";
+
+			// nilai
+			$this->nilai->LinkCustomAttributes = "";
+			$this->nilai->HrefValue = "";
+			$this->nilai->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1447,6 +1453,17 @@ $tb_jurnal_view->ShowMessage();
 <span id="el_tb_jurnal_ket">
 <span<?php echo $tb_jurnal->ket->ViewAttributes() ?>>
 <?php echo $tb_jurnal->ket->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($tb_jurnal->nilai->Visible) { // nilai ?>
+	<tr id="r_nilai">
+		<td><span id="elh_tb_jurnal_nilai"><?php echo $tb_jurnal->nilai->FldCaption() ?></span></td>
+		<td data-name="nilai"<?php echo $tb_jurnal->nilai->CellAttributes() ?>>
+<span id="el_tb_jurnal_nilai">
+<span<?php echo $tb_jurnal->nilai->ViewAttributes() ?>>
+<?php echo $tb_jurnal->nilai->ViewValue ?></span>
 </span>
 </td>
 	</tr>
