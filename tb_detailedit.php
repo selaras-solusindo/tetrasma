@@ -642,6 +642,8 @@ class ctb_detail_edit extends ctb_detail {
 
 		// nilai
 		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewValue = ew_FormatNumber($this->nilai->ViewValue, 0, -2, -2, -1);
+		$this->nilai->CellCssStyle .= "text-align: right;";
 		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id

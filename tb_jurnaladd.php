@@ -706,6 +706,8 @@ class ctb_jurnal_add extends ctb_jurnal {
 
 		// nilai
 		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewValue = ew_FormatNumber($this->nilai->ViewValue, 0, -2, -2, -1);
+		$this->nilai->CellCssStyle .= "text-align: right;";
 		$this->nilai->ViewCustomAttributes = "";
 
 			// akun_id
@@ -1503,6 +1505,17 @@ function stateChanged_jurnal_kode() {
 	}
 
 	//alert(jurnal_kode);
+}
+
+function myfunction(rowindex) {
+	var form = this.form;
+	var total_detail = 0;
+	for (i = 1; i <= rowindex; i++) {
+		var nilai = form.elements["x"+i+"_nilai"];
+		total_detail += parseInt(nilai.value);
+	}
+
+	//alert(total_detail);
 }
 </script>
 <?php include_once "footer.php" ?>

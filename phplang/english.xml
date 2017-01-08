@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/1/8" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/1/9" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -846,7 +846,7 @@
         <phrase id="fldcaption" value="Keterangan" />
       </field>
       <field id="nilai">
-        <phrase id="fldcaption" value="nilai" />
+        <phrase id="fldcaption" value="Nilai" />
       </field>
     </table>
     <table id="home_php">

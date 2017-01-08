@@ -653,6 +653,8 @@ class ctb_detail_add extends ctb_detail {
 
 		// nilai
 		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewValue = ew_FormatNumber($this->nilai->ViewValue, 0, -2, -2, -1);
+		$this->nilai->CellCssStyle .= "text-align: right;";
 		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id
@@ -1301,6 +1303,14 @@ if (EW_DEBUG_ENABLED)
 // Write your table-specific startup script here
 // document.write("page loaded");
 
+/*$("#x_nilai").click(function() {
+	nilai_detail_current = 0;
+	if (this.value != "" || parseInt(this.value) != 0) {
+		nilai_detail_current = parseInt(this.value);
+	}
+});
+$("#x_nilai").change(function() {
+});*/
 </script>
 <?php include_once "footer.php" ?>
 <?php

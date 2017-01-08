@@ -730,6 +730,8 @@ class ctb_detail extends cTable {
 
 		// nilai
 		$this->nilai->ViewValue = $this->nilai->CurrentValue;
+		$this->nilai->ViewValue = ew_FormatNumber($this->nilai->ViewValue, 0, -2, -2, -1);
+		$this->nilai->CellCssStyle .= "text-align: right;";
 		$this->nilai->ViewCustomAttributes = "";
 
 		// anggota_id
@@ -1045,6 +1047,20 @@ class ctb_detail extends cTable {
 	function Row_Updated($rsold, &$rsnew) {
 
 		//echo "Row Updated";
+		//$total_nilai = ew_ExecuteScalar("select sum(nilai) ");
+
+		$jenis_jurnal = ew_ExecuteScalar("select jenis_jurnal from tb_jurnal where jurnal_id = ".$rsold["jurnal_id"]."");
+		if ($jenis_jurnal == "M") {
+			$dk = 1;
+			$dk_lawan = 0;
+		}
+		else {
+			$dk = 0;
+			$dk_lawan = 1;
+		}
+		ew_Execute("update tb_detail set dk = ".$dk." where jurnal_id = ".$rsold["jurnal_id"]."");
+		$total_lawan = ew_ExecuteScalar("select sum(nilai) from tb_detail where jurnal_id = ".$rsold["jurnal_id"]."");
+		ew_Execute("update tb_jurnal set nilai = ".$total_lawan." where jurnal_id = ".$rsold["jurnal_id"]."");
 	}
 
 	// Row Update Conflict event
@@ -1099,6 +1115,14 @@ class ctb_detail extends cTable {
 	function Row_Deleted(&$rs) {
 
 		//echo "Row Deleted";
+		$row_count = ew_ExecuteScalar("select count(nilai) from tb_detail where jurnal_id = ".$rs["jurnal_id"]."");
+		if ($row_count > 0) {
+			$total_lawan = ew_ExecuteScalar("select sum(nilai) from tb_detail where jurnal_id = ".$rs["jurnal_id"]."");
+			ew_Execute("update tb_jurnal set nilai = ".$total_lawan." where jurnal_id = ".$rs["jurnal_id"]."");
+		}
+		else {
+			ew_Execute("update tb_jurnal set nilai = 0 where jurnal_id = ".$rs["jurnal_id"]."");
+		}
 	}
 
 	// Email Sending event
@@ -1126,8 +1150,9 @@ class ctb_detail extends cTable {
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
+		$this->nilai->EditAttrs["onchange"] = "myfunction.call(this, ".$this->RowIndex.");";
 	}
 
 	// User ID Filtering event

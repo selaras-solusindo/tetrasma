@@ -1,36 +1,52 @@
+-----------------
+11:45 PM 1/8/2017
+-----------------
+01. re: done
+02. re: done
+03. re: done
+04. re: done, sesuai desain awal, 4 level, tidak jadi seperti keuangan guyub
+05. re: done
+06. re: 
+	- cancel, tidak jadi, akhirnya :: tetap disimpan di tabel master
+	- cancel, record lawan disimpan di tabel master
+	- done
+07. re: done
+08. re: done
+09. perlu dibuat onchange di detail :: ostosmastis merubah nilai total di master
+10. 
+
+
+----------------
 3:18 AM 1/8/2017
-- buat rata kanan untuk nilai di detail jurnal
-- untuk view dan list master :: tampilkan nilai akhir di master, untuk cross-check akumulasi data di detail
+----------------
+07. buat rata kanan untuk nilai di detail jurnal
+08. untuk view dan list master :: tampilkan nilai akhir di master, untuk cross-check akumulasi data di detail
 
 
+----------------
 5:17 PM 1/6/2017
-- untuk tabel jurnal dan tabel detail :: 
+----------------
+06. untuk tabel jurnal dan tabel detail :: 
 	- record detail disimpan di tabel detail
 	- record lawan disimpan di tabel jurnal sebagai akumulasi dari record detail
 	- perlu pendefinisian awal, apa2 aja yang disimpan di tabel jurnal, antara lain :: akun_id dan nilai (nilai total dari detail)
 
+
+-----------------
 10:50 AM 1/5/2017
-- sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
-	belum
-	
-- tampilan awal :: tabel jurnal
-- ada edit, add, delete
-	belum, sedang diuji coba
-
-- desain tabel jurnal seperti apa ya ?
-	sedang uji coba
-	
-- coba mencontoh tabel jurnal dari keuangan guyub
-	sedang uji coba
-	
-- buat home.php untuk landing page
+-----------------
+01. re: belum
+02. re: belum, sedang diuji coba
+03. re: sedang uji coba
+04. re: sedang uji coba
+05. buat home.php untuk landing page
 
 
+-------------------
 12:42 AM 12/30/2016
-- sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
-- tampilan awal :: tabel jurnal
-- ada edit, add, delete
-- desain tabel jurnal seperti apa ya ?
-
-- coba mencontoh tabel jurnal dari keuangan guyub
+-------------------
+01. sebelum jauh melangkah, mari kita buat tabel jurnal seperti crud biasa
+02. tampilan awal :: tabel jurnal, ada edit, add, delete
+03. desain tabel jurnal seperti apa ya ?
+04. coba mencontoh tabel jurnal dari keuangan guyub
 
