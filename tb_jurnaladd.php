@@ -1396,6 +1396,7 @@ if (EW_DEBUG_ENABLED)
 //	 alert(elm_name);alert("x");
 //}
 
+$("#x_tgl").val("<?php echo date('d/m/Y');?>");
 $("#x_akun_id").change(function() {
 	jurnal_kode = "";
 	$("#x_jenis_jurnal").val("");
