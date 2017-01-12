@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/1/12" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/1/13" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -584,6 +584,9 @@
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
     <menu id="25" />
+    <menu id="26">
+      <phrase id="menutext" value="Detail Jurnal Memorial" />
+    </menu>
     <menu id="23" />
     <menu id="24">
       <phrase id="menutext" value="view akun jurnal" />
@@ -592,7 +595,7 @@
       <phrase id="menutext" value="Home" />
     </menu>
     <menu id="21">
-      <phrase id="menutext" value="Detail Jurnal" />
+      <phrase id="menutext" value="Detail Jurnal Kas &amp; Bank" />
     </menu>
     <menu id="17">
       <phrase id="menutext" value="audittrail" />
@@ -618,8 +621,14 @@
     <menu id="19">
       <phrase id="menutext" value="View Akun" />
     </menu>
-    <menu id="20">
+    <menu id="42">
       <phrase id="menutext" value="Jurnal" />
+    </menu>
+    <menu id="20">
+      <phrase id="menutext" value="Jurnal Kas &amp; Bank" />
+    </menu>
+    <menu id="27">
+      <phrase id="menutext" value="Jurnal Memorial" />
     </menu>
     <menu id="16">
       <phrase id="menutext" value="Manajemen User" />
@@ -801,7 +810,7 @@
       <phrase id="tblcaption" value="View Akun" />
     </table>
     <table id="tb_detail">
-      <phrase id="tblcaption" value="Detail Jurnal" />
+      <phrase id="tblcaption" value="Detail Jurnal Kas &amp; Bank" />
       <field id="detail_id">
         <phrase id="fldcaption" value="detail id" />
       </field>
@@ -822,9 +831,9 @@
       </field>
     </table>
     <table id="tb_jurnal">
-      <phrase id="tblcaption" value="Jurnal" />
+      <phrase id="tblcaption" value="Jurnal Kas &amp; Bank" />
       <field id="jurnal_id">
-        <phrase id="fldcaption" value="jurnal id" />
+        <phrase id="fldcaption" value="ID" />
       </field>
       <field id="akun_id">
         <phrase id="fldcaption" value="Akun" />
@@ -869,5 +878,41 @@
       </field>
     </table>
     <table id="ambiljurnalkode_php" />
+    <table id="tb_detailm">
+      <phrase id="tblcaption" value="Detail Jurnal Memorial" />
+      <field id="detailm_id">
+        <phrase id="fldcaption" value="ID" />
+      </field>
+      <field id="jurnalm_id">
+        <phrase id="fldcaption" value="Jurnal ID" />
+      </field>
+      <field id="akunm_id_debet">
+        <phrase id="fldcaption" value="Akun" />
+      </field>
+      <field id="nilaim_debet">
+        <phrase id="fldcaption" value="Debet" />
+      </field>
+      <field id="akunm_id_kredit">
+        <phrase id="fldcaption" value="Akun" />
+      </field>
+      <field id="nilaim_kredit">
+        <phrase id="fldcaption" value="Kredit" />
+      </field>
+    </table>
+    <table id="tb_jurnalm">
+      <phrase id="tblcaption" value="Jurnal Memorial" />
+      <field id="jurnalm_id">
+        <phrase id="fldcaption" value="ID" />
+      </field>
+      <field id="no_buktim">
+        <phrase id="fldcaption" value="No. Bukti" />
+      </field>
+      <field id="tglm">
+        <phrase id="fldcaption" value="Tanggal" />
+      </field>
+      <field id="ketm">
+        <phrase id="fldcaption" value="Keterangan" />
+      </field>
+    </table>
   </project>
 </ew-language>

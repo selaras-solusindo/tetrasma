@@ -294,6 +294,10 @@ class cdefault {
 			$this->Page_Terminate("view_akun_jurnallist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'ambiljurnalkode.php'))
 			$this->Page_Terminate("ambiljurnalkode.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_detailm'))
+			$this->Page_Terminate("tb_detailmlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'tb_jurnalm'))
+			$this->Page_Terminate("tb_jurnalmlist.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

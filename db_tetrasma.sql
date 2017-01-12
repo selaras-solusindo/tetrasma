@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 09, 2017 at 02:52 AM
+-- Generation Time: Jan 13, 2017 at 01:48 AM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=258 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=262 ;
 
 --
 -- Dumping data for table `audittrail`
@@ -300,7 +300,11 @@ INSERT INTO `audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table`,
 (254, '2017-01-08 19:18:43', '/tetrasma/tb_jurnaledit.php', 'admin', 'D', 'tb_detail', 'nilai', '2', '7500', ''),
 (255, '2017-01-08 19:18:43', '/tetrasma/tb_jurnaledit.php', 'admin', 'D', 'tb_detail', 'anggota_id', '2', '5', ''),
 (256, '2017-01-08 19:18:43', '/tetrasma/tb_jurnaledit.php', 'admin', '*** Batch delete successful ***', 'tb_detail', '', '', '', ''),
-(257, '2017-01-08 19:18:43', '/tetrasma/tb_jurnaledit.php', 'admin', '*** Batch update successful ***', 'tb_detail', '', '', '', '');
+(257, '2017-01-08 19:18:43', '/tetrasma/tb_jurnaledit.php', 'admin', '*** Batch update successful ***', 'tb_detail', '', '', '', ''),
+(258, '2017-01-12 10:39:37', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(259, '2017-01-12 14:30:36', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(260, '2017-01-12 15:08:23', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(261, '2017-01-12 18:41:37', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -601,6 +605,27 @@ CREATE TABLE IF NOT EXISTS `tb_detail` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_detailm`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_detailm` (
+  `detailm_id` int(11) NOT NULL AUTO_INCREMENT,
+  `jurnalm_id` int(11) NOT NULL,
+  `akunm_id_debet` int(11) NOT NULL,
+  `nilaim_debet` bigint(20) NOT NULL,
+  `akunm_id_kredit` int(11) NOT NULL,
+  `nilaim_kredit` bigint(20) NOT NULL,
+  PRIMARY KEY (`detailm_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `tb_detailm`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tb_jurnal`
 --
 
@@ -613,14 +638,31 @@ CREATE TABLE IF NOT EXISTS `tb_jurnal` (
   `akun_id` int(11) NOT NULL,
   `nilai` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`jurnal_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `tb_jurnal`
 --
 
-INSERT INTO `tb_jurnal` (`jurnal_id`, `no_bukti`, `tgl`, `ket`, `jenis_jurnal`, `akun_id`, `nilai`) VALUES
-(1, 'KM201701001', '2017-01-09', 'coba', 'M', 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_jurnalm`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_jurnalm` (
+  `jurnalm_id` int(11) NOT NULL AUTO_INCREMENT,
+  `no_buktim` varchar(25) NOT NULL,
+  `tglm` date NOT NULL,
+  `ketm` text NOT NULL,
+  PRIMARY KEY (`jurnalm_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `tb_jurnalm`
+--
+
 
 -- --------------------------------------------------------
 

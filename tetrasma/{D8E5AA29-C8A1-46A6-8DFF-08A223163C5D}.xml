@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<configuration date="2017/01/12" author="e.World Technology Ltd.">
-  <project id="{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}" file="D:\xampp\htdocs\tetrasma\tetrasma.pmp" name="tetrasma" product="PHPMaker" version="13.0" datetime="2017/01/12 22:00:54" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+<configuration date="2017/01/13" author="e.World Technology Ltd.">
+  <project id="{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}" file="D:\xampp\htdocs\tetrasma\tetrasma.pmp" name="tetrasma" product="PHPMaker" version="13.0" datetime="2017/01/13 01:43:42" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="tb_anggota" name="tb_anggota" caption="Manajemen Anggota" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="audittrail" name="audittrail" caption="audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="tb_level1" name="tb_level1" caption="Level 1" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -9,11 +9,13 @@
     <table id="tb_level4" name="tb_level4" caption="Level 4" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="tb_user" name="tb_user" caption="Manajemen User" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="view_akun_php" name="view_akun.php" caption="View Akun" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_detail" name="tb_detail" caption="Detail Jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_jurnal" name="tb_jurnal" caption="Jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="tb_detail" name="tb_detail" caption="Detail Jurnal Kas &amp; Bank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="tb_jurnal" name="tb_jurnal" caption="Jurnal Kas &amp; Bank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="home_php" name="home.php" caption="Home" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="ambildata_php" name="ambildata.php" caption="" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="view_akun_jurnal" name="view_akun_jurnal" caption="view akun jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="ambiljurnalkode_php" name="ambiljurnalkode.php" caption="" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="tb_detailm" name="tb_detailm" caption="Detail Jurnal Memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="tb_jurnalm" name="tb_jurnalm" caption="Jurnal Memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>
