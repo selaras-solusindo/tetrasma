@@ -828,6 +828,7 @@ class ctb_jurnalm extends cTable {
 		// Enter your code here
 		// To cancel, set return value to FALSE
 
+		$rsnew["no_buktim"] = GetNextNo_buktim(); // mengantisipasi lebih satu user menginput data saat bersamaan
 		return TRUE;
 	}
 
@@ -931,8 +932,19 @@ class ctb_jurnalm extends cTable {
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
+		// Kondisi saat form Tambah sedang terbuka (tidak dalam mode konfirmasi)
 
+		if (CurrentPageID() == "add" && $this->CurrentAction != "F") {
+			$this->no_buktim->CurrentValue = GetNextNo_buktim(); // trik
+			$this->no_buktim->EditValue = $this->no_buktim->CurrentValue; // tampilkan
+			$this->no_buktim->ReadOnly = TRUE; // supaya tidak bisa diubah
+		}
+
+		// Kondisi saat form Tambah sedang dalam mode konfirmasi
+		if ($this->CurrentAction == "add" && $this->CurrentAction=="F") {
+			$this->no_buktim->ViewValue = $this->no_buktim->CurrentValue; // ambil dari mode sebelumnya
+		}
 	}
 
 	// User ID Filtering event

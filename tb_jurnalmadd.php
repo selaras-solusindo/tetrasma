@@ -1162,7 +1162,9 @@ if (EW_DEBUG_ENABLED)
 
 // Write your table-specific startup script here
 // document.write("page loaded");
+// isi tanggal jurnal memorial ostosmastis tanggal hari ini
 
+$("#x_tglm").val("<?php echo date('d/m/Y'); ?>");
 </script>
 <?php include_once "footer.php" ?>
 <?php

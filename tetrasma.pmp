@@ -977,6 +977,74 @@ function myfunction(rowindex) {
 	//alert(total_detail);
 }
 ]]></CustomScript>
+  <CustomScript ScriptType="Client" ScriptCodeType="Table" ScriptName="Startup Script" ScriptCtrlID="add" ScriptL1Key="tb_jurnalm" ScriptL2Key=""><![CDATA[// Write your table-specific startup script here
+// document.write("page loaded");
+
+// isi tanggal jurnal memorial ostosmastis tanggal hari ini
+$("#x_tglm").val("<?php echo date('d/m/Y'); ?>");
+
+
+]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Global" ScriptName="Global Code" ScriptCtrlID="" ScriptL1Key="" ScriptL2Key=""><![CDATA[function GetNextKodeJenis() {
+	$sNextKode = "";
+	$sLastKode = "";
+	$value = ew_ExecuteScalar("SELECT Kode FROM t_jenis ORDER BY Kode DESC");
+	if ($value != "") { // jika sudah ada, langsung ambil dan proses...
+		$sLastKode = intval(substr($value, 3, 3)); // ambil 3 digit terakhir
+		$sLastKode = intval($sLastKode) + 1; // konversi ke integer, lalu tambahkan satu
+		$sNextKode = "JNS" . sprintf('%03s', $sLastKode); // format hasilnya dan tambahkan prefix
+		if (strlen($sNextKode) > 6) {
+			$sNextKode = "JNS999";
+		}
+	} else { // jika belum ada, gunakan kode yang pertama
+		$sNextKode = "JNS001";
+	}
+	return $sNextKode;
+}
+
+function GetNextNo_buktim() {
+	$sNextKode = "";
+	$sLastKode = "";
+	$value = ew_ExecuteScalar("SELECT no_buktim FROM tb_jurnalm ORDER BY no_buktim DESC");
+	if ($value != "") { // jika sudah ada, langsung ambil dan proses...
+		$sLastKode = intval(substr($value, 2, 3)); // ambil 3 digit terakhir
+		$sLastKode = intval($sLastKode) + 1; // konversi ke integer, lalu tambahkan satu
+		$sNextKode = "JM" . sprintf('%03s', $sLastKode); // format hasilnya dan tambahkan prefix
+		if (strlen($sNextKode) > 6) {
+			$sNextKode = "JM001".date('my');
+		}
+	} else { // jika belum ada, gunakan kode yang pertama
+		$sNextKode = "JM001".date('my');
+	}
+	return $sNextKode;
+}
+]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Row_Inserting" ScriptCtrlID="" ScriptL1Key="tb_jurnalm" ScriptL2Key=""><![CDATA[// Row Inserting event
+function Row_Inserting($rsold, &$rsnew) {
+	// Enter your code here
+	// To cancel, set return value to FALSE
+	$rsnew["no_buktim"] = GetNextNo_buktim(); // mengantisipasi lebih satu user menginput data saat bersamaan
+	return TRUE;
+}
+]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Row_Rendered" ScriptCtrlID="" ScriptL1Key="tb_jurnalm" ScriptL2Key=""><![CDATA[// Row Rendered event
+function Row_Rendered() {
+	// To view properties of field class, use:
+	//var_dump($this-><FieldName>);
+
+	// Kondisi saat form Tambah sedang terbuka (tidak dalam mode konfirmasi)
+	if (CurrentPageID() == "add" && $this->CurrentAction != "F") {
+		$this->no_buktim->CurrentValue = GetNextNo_buktim(); // trik
+		$this->no_buktim->EditValue = $this->no_buktim->CurrentValue; // tampilkan
+		$this->no_buktim->ReadOnly = TRUE; // supaya tidak bisa diubah
+	}
+ 
+	// Kondisi saat form Tambah sedang dalam mode konfirmasi
+	if ($this->CurrentAction == "add" && $this->CurrentAction=="F") {
+		$this->no_buktim->ViewValue = $this->no_buktim->CurrentValue; // ambil dari mode sebelumnya
+	}
+}
+]]></CustomScript>
   <Menu MenuID="25" MenuText="" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="ambiljurnalkode.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="1" MenuDisplayOrder="100" />
   <Menu MenuID="26" MenuText="Detail Jurnal Memorial" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="tb_detailm" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="200" />
   <Menu MenuID="23" MenuText="" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="ambildata.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="300" />
