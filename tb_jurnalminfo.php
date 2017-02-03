@@ -54,7 +54,7 @@ class ctb_jurnalm extends cTable {
 		$this->fields['no_buktim'] = &$this->no_buktim;
 
 		// tglm
-		$this->tglm = new cField('tb_jurnalm', 'tb_jurnalm', 'x_tglm', 'tglm', '`tglm`', 'DATE_FORMAT(`tglm`, \'%Y/%m/%d\')', 133, 7, FALSE, '`tglm`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tglm = new cField('tb_jurnalm', 'tb_jurnalm', 'x_tglm', 'tglm', '`tglm`', ew_CastDateFieldForLike('`tglm`', 7, "DB"), 133, 7, FALSE, '`tglm`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tglm->Sortable = TRUE; // Allow sort
 		$this->tglm->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['tglm'] = &$this->tglm;

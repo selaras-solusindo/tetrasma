@@ -757,9 +757,16 @@ class cview_akun_jurnal_list extends cview_akun_jurnal {
 	// Process filter list
 	function ProcessFilterList() {
 		global $UserProfile;
-		if (@$_POST["cmd"] == "savefilters") {
+		if (@$_POST["ajax"] == "savefilters") { // Save filter request (Ajax)
 			$filters = ew_StripSlashes(@$_POST["filters"]);
 			$UserProfile->SetSearchFilters(CurrentUserName(), "fview_akun_jurnallistsrch", $filters);
+
+			// Clean output buffer
+			if (!EW_DEBUG_ENABLED && ob_get_length())
+				ob_end_clean();
+			echo ew_ArrayToJson(array(array("success" => TRUE))); // Success
+			$this->Page_Terminate();
+			exit();
 		} elseif (@$_POST["cmd"] == "resetfilter") {
 			$this->RestoreFilterList();
 		}
@@ -818,7 +825,8 @@ class cview_akun_jurnal_list extends cview_akun_jurnal {
 	}
 
 	// Build basic search SQL
-	function BuildBasicSearchSql(&$Where, &$Fld, $arKeywords, $type) {
+	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+		global $EW_BASIC_SEARCH_IGNORE_PATTERN;
 		$sDefCond = ($type == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
 		$arCond = array(); // Array for search conditions
@@ -827,8 +835,8 @@ class cview_akun_jurnal_list extends cview_akun_jurnal {
 		for ($i = 0; $i < $cnt; $i++) {
 			$Keyword = $arKeywords[$i];
 			$Keyword = trim($Keyword);
-			if (EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
-				$Keyword = preg_replace(EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
+			if ($EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
+				$Keyword = preg_replace($EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
 				$ar = explode("\\", $Keyword);
 			} else {
 				$ar = array($Keyword);
@@ -843,7 +851,7 @@ class cview_akun_jurnal_list extends cview_akun_jurnal {
 						$sWrk = $Fld->FldExpression . " IS NULL";
 					} elseif ($Keyword == EW_NOT_NULL_VALUE) {
 						$sWrk = $Fld->FldExpression . " IS NOT NULL";
-					} elseif ($Fld->FldIsVirtual && $Fld->FldVirtualSearch) {
+					} elseif ($Fld->FldIsVirtual) {
 						$sWrk = $Fld->FldVirtualExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
 					} elseif ($Fld->FldDataType != EW_DATATYPE_NUMBER || is_numeric($Keyword)) {
 						$sWrk = $Fld->FldBasicSearchExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
@@ -2052,7 +2060,7 @@ $view_akun_jurnal_list->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="view_akun_jurnal">
 <div id="gmp_view_akun_jurnal" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($view_akun_jurnal_list->TotalRecs > 0) { ?>
+<?php if ($view_akun_jurnal_list->TotalRecs > 0 || $view_akun_jurnal->CurrentAction == "gridedit") { ?>
 <table id="tbl_view_akun_jurnallist" class="table ewTable">
 <?php echo $view_akun_jurnal->TableCustomInnerHtml ?>
 <thead><!-- Table header -->

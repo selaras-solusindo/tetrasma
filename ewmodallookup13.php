@@ -59,11 +59,11 @@ class cewmodallookup {
 	//
 	function Page_Main() {
 		global $Language;
-		$Language = new cLanguage();
-		$GLOBALS["Page"] = &$this;
 		$this->PostData = ew_StripSlashes($_POST);
 		if (count($this->PostData) == 0)
 			$this->Page_Error("Missing post data.");
+		$Language = new cLanguage("", @$this->PostData["lang"]);
+		$GLOBALS["Page"] = &$this;
 
 		// Load form data
 		$sql = @$this->PostData["s"];
@@ -115,7 +115,7 @@ class cewmodallookup {
 				$filterwrk = "";
 				$cnt = count($arKeys);
 				for ($i = 0; $i < $cnt; $i++) {
-					$arKeys[$i] = ew_QuotedValue($arKeys[$i], $flddatatype, $dbid);
+					$arKeys[$i] = ew_QuotedValue($arKeys[$i], $flddatatype, $this->DBID);
 					$filterwrk .= (($filterwrk <> "") ? " OR " : "") . str_replace("{filter_value}", $arKeys[$i], $filter);
 				}
 				$filter = $filterwrk;
@@ -182,14 +182,14 @@ class cewmodallookup {
 		// Get records
 
 		$this->Connection = &Conn($this->DBID);
-		$this->TotalRecs = $this->TryGetRecordCount($sql);
+		$this->TotalRecs = $this->GetRecordCount($sql);
 		if ($this->PageSize > 0)
 			$this->Recordset = $this->Connection->SelectLimit($sql, $this->PageSize, $this->StartOffset);
 		if (!$this->Recordset)
 			$this->Recordset = $this->Connection->Execute($sql);
 
 		// Return JSON
-  		$this->Page_Response();
+		$this->Page_Response();
 	}
 
 	// Get search filter
@@ -235,8 +235,8 @@ class cewmodallookup {
 		} else {
 			$sSearchStr = $this->GetSearchSQL(array($sSearch));
 		}
-	  return $sSearchStr;
-  }
+		return $sSearchStr;
+	}
 
 	// Get search SQL
 	function GetSearchSQL($arKeywords) {
@@ -251,6 +251,7 @@ class cewmodallookup {
 
 	// Build search SQL
 	function BuildSearchSQL(&$Where, $FldExpr, $arKeywords) {
+		global $EW_BASIC_SEARCH_IGNORE_PATTERN;
 		$sSearchType = $this->SearchType;
 		$sDefCond = ($sSearchType == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
@@ -260,8 +261,8 @@ class cewmodallookup {
 		for ($i = 0; $i < $cnt; $i++) {
 			$Keyword = $arKeywords[$i];
 			$Keyword = trim($Keyword);
-			if (EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
-				$Keyword = preg_replace(EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
+			if ($EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
+				$Keyword = preg_replace($EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
 				$ar = explode("\\", $Keyword);
 			} else {
 				$ar = array($Keyword);
@@ -305,24 +306,37 @@ class cewmodallookup {
 		}
 		if ($sSql <> "") {
 			if ($Where <> "") $Where .= " OR ";
-			$Where .=  "(" . $sSql . ")";
+			$Where .= "(" . $sSql . ")";
 		}
 	}
 
-	// Try to get record count
-	function TryGetRecordCount($sSql) {
+	// Get record count
+	function GetRecordCount($sSql) {
 		$cnt = -1;
-		$sSql = "SELECT COUNT(*) FROM" . preg_replace('/^SELECT\s([\s\S]+)?\sFROM/i', "", $sSql);
-		$rs = $this->Connection->Execute($sSql);
+		$rs = NULL;
+		$sql = preg_replace('/\/\*BeginOrderBy\*\/[\s\S]+\/\*EndOrderBy\*\//', "", $sSql); // Remove ORDER BY clause (MSSQL)
+		$pattern = '/^SELECT\s([\s\S]+)\sFROM\s/i';
+		if (preg_match($pattern, $sql)) {
+			$sqlwrk = "SELECT COUNT(*) FROM " . preg_replace($pattern, "", $sql);
+			$rs = $this->Connection->Execute($sqlwrk);
+		}
 		if (!$rs) {
-			$sSql = "SELECT COUNT(*) FROM (" . $sSql . ") EW_COUNT_TABLE";
-			$rs = $this->Connection->Execute($sSql);
+			$sqlwrk = "SELECT COUNT(*) FROM (" . $sql . ") EW_COUNT_TABLE";
+			$rs = $this->Connection->Execute($sqlwrk);
 		}
 		if ($rs && !$rs->EOF && $rs->FieldCount() > 0) {
 			$cnt = $rs->fields[0];
 			$rs->Close();
+			return intval($cnt);
 		}
-		return intval($cnt);
+
+		// Unable to get count, get record count directly
+		if ($rs = $this->Connection->Execute($sql)) {
+			$cnt = $rs->RecordCount();
+			$rs->Close();
+			return intval($cnt);
+		}
+		return $cnt;
 	}
 
 	// Show page response
@@ -355,7 +369,7 @@ class cewmodallookup {
 				$ar = array($this->LinkField => $row[0]);
 				for ($i = 1; $i <= $fldcnt; $i++) {
 					$str = ew_ConvertToUtf8(strval($row[$i]));
-					if ($ardt[$i] != "" && intval($ardt[$i]) > 0) // Format date
+					if ($ardt[$i] != "" && intval($ardt[$i]) >= 0) // Format date
 						$str = ew_FormatDateTime($str, $ardt[$i]);
 					$str = str_replace(array("\r", "\n", "\t"), isset($post["keepCRLF"]) ? array("\\r", "\\n", "\\t") : array(" ", " ", " "), $str);
 					$row[$i] = $str;

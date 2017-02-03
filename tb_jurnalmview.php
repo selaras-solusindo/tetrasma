@@ -488,10 +488,6 @@ class ctb_jurnalm_view extends ctb_jurnalm {
 		$bLoadCurrentRecord = FALSE;
 		$sReturnUrl = "";
 		$bMatchRecord = FALSE;
-
-		// Set up Breadcrumb
-		if ($this->Export == "")
-			$this->SetupBreadcrumb();
 		if ($this->IsPageRequest()) { // Validate request
 			if (@$_GET["jurnalm_id"] <> "") {
 				$this->jurnalm_id->setQueryStringValue($_GET["jurnalm_id"]);
@@ -525,6 +521,10 @@ class ctb_jurnalm_view extends ctb_jurnalm {
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
+
+		// Set up Breadcrumb
+		if ($this->Export == "")
+			$this->SetupBreadcrumb();
 
 		// Render row
 		$this->RowType = EW_ROWTYPE_VIEW;

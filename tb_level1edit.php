@@ -392,9 +392,6 @@ class ctb_level1_edit extends ctb_level1 {
 			$this->level1_id->setQueryStringValue($_GET["level1_id"]);
 		}
 
-		// Set up Breadcrumb
-		$this->SetupBreadcrumb();
-
 		// Process form if post back
 		if (@$_POST["a_edit"] <> "") {
 			$this->CurrentAction = $_POST["a_edit"]; // Get action code
@@ -440,6 +437,9 @@ class ctb_level1_edit extends ctb_level1 {
 					$this->RestoreFormValues(); // Restore form values if update failed
 				}
 		}
+
+		// Set up Breadcrumb
+		$this->SetupBreadcrumb();
 
 		// Render the record
 		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit

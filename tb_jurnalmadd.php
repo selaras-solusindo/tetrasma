@@ -1057,7 +1057,11 @@ ftb_jurnalmadd.Validate = function() {
 ftb_jurnalmadd.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
+ 	if(debet_total != kredit_total) {
+ 		alert('saldo belum balance');
+ 		return false;
+ 	}
  	return true;
  }
 
@@ -1165,6 +1169,34 @@ if (EW_DEBUG_ENABLED)
 // isi tanggal jurnal memorial ostosmastis tanggal hari ini
 
 $("#x_tglm").val("<?php echo date('d/m/Y'); ?>");
+
+function debet_onchange(event) {
+	var elm_name = $(event.target).val();
+	debet_new = parseInt(elm_name);
+	if(isNaN(debet_old)) debet_old = 0;
+	if(isNaN(debet_new)) debet_new = 0;
+	debet_total = debet_total - debet_old + debet_new;
+	alert('debet : '+debet_total);
+}
+
+function debet_onfocus(event) {
+	var elm_name = $(event.target).val();
+	debet_old = parseInt(elm_name);
+}
+
+function kredit_onchange(event) {
+	var elm_name = $(event.target).val();
+	kredit_new = parseInt(elm_name);
+	if(isNaN(kredit_old)) kredit_old = 0;
+	if(isNaN(kredit_new)) kredit_new = 0;
+	kredit_total = kredit_total - kredit_old + kredit_new;
+	alert('kredit : '+kredit_total);
+}
+
+function kredit_onfocus(event) {
+	var elm_name = $(event.target).val();
+	kredit_old = parseInt(elm_name);
+}
 </script>
 <?php include_once "footer.php" ?>
 <?php

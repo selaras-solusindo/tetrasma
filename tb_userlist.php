@@ -759,9 +759,16 @@ class ctb_user_list extends ctb_user {
 	// Process filter list
 	function ProcessFilterList() {
 		global $UserProfile;
-		if (@$_POST["cmd"] == "savefilters") {
+		if (@$_POST["ajax"] == "savefilters") { // Save filter request (Ajax)
 			$filters = ew_StripSlashes(@$_POST["filters"]);
 			$UserProfile->SetSearchFilters(CurrentUserName(), "ftb_userlistsrch", $filters);
+
+			// Clean output buffer
+			if (!EW_DEBUG_ENABLED && ob_get_length())
+				ob_end_clean();
+			echo ew_ArrayToJson(array(array("success" => TRUE))); // Success
+			$this->Page_Terminate();
+			exit();
 		} elseif (@$_POST["cmd"] == "resetfilter") {
 			$this->RestoreFilterList();
 		}
@@ -820,7 +827,8 @@ class ctb_user_list extends ctb_user {
 	}
 
 	// Build basic search SQL
-	function BuildBasicSearchSql(&$Where, &$Fld, $arKeywords, $type) {
+	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+		global $EW_BASIC_SEARCH_IGNORE_PATTERN;
 		$sDefCond = ($type == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
 		$arCond = array(); // Array for search conditions
@@ -829,8 +837,8 @@ class ctb_user_list extends ctb_user {
 		for ($i = 0; $i < $cnt; $i++) {
 			$Keyword = $arKeywords[$i];
 			$Keyword = trim($Keyword);
-			if (EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
-				$Keyword = preg_replace(EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
+			if ($EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
+				$Keyword = preg_replace($EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
 				$ar = explode("\\", $Keyword);
 			} else {
 				$ar = array($Keyword);
@@ -845,7 +853,7 @@ class ctb_user_list extends ctb_user {
 						$sWrk = $Fld->FldExpression . " IS NULL";
 					} elseif ($Keyword == EW_NOT_NULL_VALUE) {
 						$sWrk = $Fld->FldExpression . " IS NOT NULL";
-					} elseif ($Fld->FldIsVirtual && $Fld->FldVirtualSearch) {
+					} elseif ($Fld->FldIsVirtual) {
 						$sWrk = $Fld->FldVirtualExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
 					} elseif ($Fld->FldDataType != EW_DATATYPE_NUMBER || is_numeric($Keyword)) {
 						$sWrk = $Fld->FldBasicSearchExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
@@ -2167,7 +2175,7 @@ $tb_user_list->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="tb_user">
 <div id="gmp_tb_user" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($tb_user_list->TotalRecs > 0) { ?>
+<?php if ($tb_user_list->TotalRecs > 0 || $tb_user->CurrentAction == "gridedit") { ?>
 <table id="tbl_tb_userlist" class="table ewTable">
 <?php echo $tb_user->TableCustomInnerHtml ?>
 <thead><!-- Table header -->

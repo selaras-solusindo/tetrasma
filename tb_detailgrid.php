@@ -299,23 +299,41 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowCnt);
 		<td data-name="akun_id"<?php echo $tb_detail->akun_id->CellAttributes() ?>>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_akun_id" class="form-group tb_detail_akun_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id"><?php echo (strval($tb_detail->akun_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->akun_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->akun_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->akun_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detail_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="sv_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_akun_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->CurrentValue ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="q_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>_akun_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_akun_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(false) ?>">
 </span>
 <input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->OldValue) ?>">
 <?php } ?>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_akun_id" class="form-group tb_detail_akun_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id"><?php echo (strval($tb_detail->akun_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->akun_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->akun_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->akun_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detail_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="sv_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_akun_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->CurrentValue ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="q_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>_akun_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_akun_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(false) ?>">
 </span>
 <?php } ?>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -323,8 +341,13 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowCnt);
 <span<?php echo $tb_detail->akun_id->ViewAttributes() ?>>
 <?php echo $tb_detail->akun_id->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detail->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->FormValue) ?>">
 <input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->FormValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_akun_id" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 <a id="<?php echo $tb_detail_grid->PageObjName . "_row_" . $tb_detail_grid->RowCnt ?>"></a></td>
 	<?php } ?>
@@ -353,8 +376,13 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowCnt);
 <span<?php echo $tb_detail->nilai->ViewAttributes() ?>>
 <?php echo $tb_detail->nilai->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detail->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detail" data-field="x_nilai" name="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="x<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->FormValue) ?>">
 <input type="hidden" data-table="tb_detail" data-field="x_nilai" name="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="o<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->FormValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_nilai" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_nilai" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_nilai" value="<?php echo ew_HtmlEncode($tb_detail->nilai->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 </td>
 	<?php } ?>
@@ -362,23 +390,41 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowCnt);
 		<td data-name="anggota_id"<?php echo $tb_detail->anggota_id->CellAttributes() ?>>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_anggota_id" class="form-group tb_detail_anggota_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id"><?php echo (strval($tb_detail->anggota_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->anggota_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->anggota_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->anggota_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detail_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="sv_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->CurrentValue ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="q_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(false) ?>">
 </span>
 <input type="hidden" data-table="tb_detail" data-field="x_anggota_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->OldValue) ?>">
 <?php } ?>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $tb_detail_grid->RowCnt ?>_tb_detail_anggota_id" class="form-group tb_detail_anggota_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id"><?php echo (strval($tb_detail->anggota_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->anggota_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->anggota_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->anggota_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detail_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="sv_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->CurrentValue ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="q_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(false) ?>">
 </span>
 <?php } ?>
 <?php if ($tb_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -386,8 +432,13 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowCnt);
 <span<?php echo $tb_detail->anggota_id->ViewAttributes() ?>>
 <?php echo $tb_detail->anggota_id->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detail->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detail" data-field="x_anggota_id" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->FormValue) ?>">
 <input type="hidden" data-table="tb_detail" data-field="x_anggota_id" name="o<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="o<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" name="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="ftb_detailgrid$x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->FormValue) ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" name="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="ftb_detailgrid$o<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 </td>
 	<?php } ?>
@@ -437,12 +488,21 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowIndex);
 		<td data-name="akun_id">
 <?php if ($tb_detail->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_tb_detail_akun_id" class="form-group tb_detail_akun_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id"><?php echo (strval($tb_detail->akun_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->akun_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->akun_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->akun_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detail_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="sv_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->akun_id->getPlaceHolder()) ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_akun_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->CurrentValue ?>"<?php echo $tb_detail->akun_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_akun_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->akun_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo ew_HtmlEncode($tb_detail->akun_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="q_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>_akun_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->akun_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_akun_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_akun_id" value="<?php echo $tb_detail->akun_id->LookupFilterQuery(false) ?>">
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_tb_detail_akun_id" class="form-group tb_detail_akun_id">
@@ -474,12 +534,21 @@ $tb_detail_grid->ListOptions->Render("body", "left", $tb_detail_grid->RowIndex);
 		<td data-name="anggota_id">
 <?php if ($tb_detail->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_tb_detail_anggota_id" class="form-group tb_detail_anggota_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id"><?php echo (strval($tb_detail->anggota_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detail->anggota_id->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detail->anggota_id->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detail->anggota_id->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detail_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="sv_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detail->anggota_id->getPlaceHolder()) ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->CurrentValue ?>"<?php echo $tb_detail->anggota_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detail" data-field="x_anggota_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detail->anggota_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo ew_HtmlEncode($tb_detail->anggota_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="q_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detail->anggota_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" id="s_x<?php echo $tb_detail_grid->RowIndex ?>_anggota_id" value="<?php echo $tb_detail->anggota_id->LookupFilterQuery(false) ?>">
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_tb_detail_anggota_id" class="form-group tb_detail_anggota_id">

@@ -16,5 +16,3 @@ if ($kode) {
 echo $hasil;
 
 ?>
-
-

@@ -1296,7 +1296,7 @@ class ctb_detailm_list extends ctb_detailm {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_debet->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_debet->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1330,7 +1330,7 @@ class ctb_detailm_list extends ctb_detailm {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_kredit->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_kredit->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -2011,7 +2011,7 @@ $tb_detailm_list->ShowMessage();
 <input type="hidden" name="fk_jurnalm_id" value="<?php echo $tb_detailm->jurnalm_id->getSessionValue() ?>">
 <?php } ?>
 <div id="gmp_tb_detailm" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($tb_detailm_list->TotalRecs > 0) { ?>
+<?php if ($tb_detailm_list->TotalRecs > 0 || $tb_detailm->CurrentAction == "gridedit") { ?>
 <table id="tbl_tb_detailmlist" class="table ewTable">
 <?php echo $tb_detailm->TableCustomInnerHtml ?>
 <thead><!-- Table header -->

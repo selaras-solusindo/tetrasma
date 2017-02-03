@@ -534,7 +534,7 @@ class ctb_detailm_delete extends ctb_detailm {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_debet->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_debet->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -568,7 +568,7 @@ class ctb_detailm_delete extends ctb_detailm {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_kredit->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_kredit->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;

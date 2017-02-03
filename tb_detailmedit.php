@@ -401,9 +401,6 @@ class ctb_detailm_edit extends ctb_detailm {
 		// Set up master detail parameters
 		$this->SetUpMasterParms();
 
-		// Set up Breadcrumb
-		$this->SetupBreadcrumb();
-
 		// Process form if post back
 		if (@$_POST["a_edit"] <> "") {
 			$this->CurrentAction = $_POST["a_edit"]; // Get action code
@@ -449,6 +446,9 @@ class ctb_detailm_edit extends ctb_detailm {
 					$this->RestoreFormValues(); // Restore form values if update failed
 				}
 		}
+
+		// Set up Breadcrumb
+		$this->SetupBreadcrumb();
 
 		// Render the record
 		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
@@ -626,7 +626,7 @@ class ctb_detailm_edit extends ctb_detailm {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_debet->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_debet->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -660,7 +660,7 @@ class ctb_detailm_edit extends ctb_detailm {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_kredit->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_kredit->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -714,7 +714,7 @@ class ctb_detailm_edit extends ctb_detailm {
 				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_debet->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "";
-			$this->akunm_id_debet->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -746,7 +746,7 @@ class ctb_detailm_edit extends ctb_detailm {
 				$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_kredit->CurrentValue, EW_DATATYPE_NUMBER, "");
 			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "";
-			$this->akunm_id_kredit->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 			$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -990,8 +990,8 @@ class ctb_detailm_edit extends ctb_detailm {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "{filter}";
-			$this->akunm_id_debet->LookupFilters = array("dx1" => "`no_nama_akun`");
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1002,8 +1002,8 @@ class ctb_detailm_edit extends ctb_detailm {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id` AS `LinkFld`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "{filter}";
-			$this->akunm_id_kredit->LookupFilters = array("dx1" => "`no_nama_akun`");
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => "`level4_id` = {filter_value}", "t0" => "3", "fn0" => "");
+			$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`level4_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1022,7 +1022,7 @@ class ctb_detailm_edit extends ctb_detailm {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "`no_nama_akun` LIKE '{query_value}%'";
-			$this->akunm_id_debet->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
@@ -1035,7 +1035,7 @@ class ctb_detailm_edit extends ctb_detailm {
 			$sSqlWrk = "";
 			$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld` FROM `view_akun_jurnal`";
 			$sWhereWrk = "`no_nama_akun` LIKE '{query_value}%'";
-			$this->akunm_id_kredit->LookupFilters = array("dx1" => "`no_nama_akun`");
+			$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
@@ -1299,12 +1299,21 @@ $tb_detailm_edit->ShowMessage();
 		<label id="elh_tb_detailm_akunm_id_debet" class="col-sm-2 control-label ewLabel"><?php echo $tb_detailm->akunm_id_debet->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_detailm->akunm_id_debet->CellAttributes() ?>>
 <span id="el_tb_detailm_akunm_id_debet">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_akunm_id_debet"><?php echo (strval($tb_detailm->akunm_id_debet->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_debet->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_debet->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_debet->EditAttrs["onchange"] = "";
+?>
+<span id="as_x_akunm_id_debet" style="white-space: nowrap; z-index: 8970">
+	<input type="text" name="sv_x_akunm_id_debet" id="sv_x_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akunm_id_debet',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x_akunm_id_debet" id="x_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
-<input type="hidden" name="s_x_akunm_id_debet" id="s_x_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x_akunm_id_debet" id="x_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x_akunm_id_debet" id="q_x_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmedit.CreateAutoSuggest({"id":"x_akunm_id_debet","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akunm_id_debet',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x_akunm_id_debet" id="s_x_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(false) ?>">
 </span>
 <?php echo $tb_detailm->akunm_id_debet->CustomMsg ?></div></div>
 	</div>
@@ -1324,12 +1333,21 @@ $tb_detailm_edit->ShowMessage();
 		<label id="elh_tb_detailm_akunm_id_kredit" class="col-sm-2 control-label ewLabel"><?php echo $tb_detailm->akunm_id_kredit->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $tb_detailm->akunm_id_kredit->CellAttributes() ?>>
 <span id="el_tb_detailm_akunm_id_kredit">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_akunm_id_kredit"><?php echo (strval($tb_detailm->akunm_id_kredit->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_kredit->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_kredit->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_kredit->EditAttrs["onchange"] = "";
+?>
+<span id="as_x_akunm_id_kredit" style="white-space: nowrap; z-index: 8950">
+	<input type="text" name="sv_x_akunm_id_kredit" id="sv_x_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akunm_id_kredit',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x_akunm_id_kredit" id="x_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
-<input type="hidden" name="s_x_akunm_id_kredit" id="s_x_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x_akunm_id_kredit" id="x_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x_akunm_id_kredit" id="q_x_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmedit.CreateAutoSuggest({"id":"x_akunm_id_kredit","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_akunm_id_kredit',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x_akunm_id_kredit" id="s_x_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(false) ?>">
 </span>
 <?php echo $tb_detailm->akunm_id_kredit->CustomMsg ?></div></div>
 	</div>

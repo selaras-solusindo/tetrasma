@@ -318,23 +318,41 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowCnt);
 		<td data-name="akunm_id_debet"<?php echo $tb_detailm->akunm_id_debet->CellAttributes() ?>>
 <?php if ($tb_detailm->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $tb_detailm_grid->RowCnt ?>_tb_detailm_akunm_id_debet" class="form-group tb_detailm_akunm_id_debet">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet"><?php echo (strval($tb_detailm->akunm_id_debet->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_debet->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_debet->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_debet->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detailm_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(false) ?>">
 </span>
 <input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" name="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->OldValue) ?>">
 <?php } ?>
 <?php if ($tb_detailm->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $tb_detailm_grid->RowCnt ?>_tb_detailm_akunm_id_debet" class="form-group tb_detailm_akunm_id_debet">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet"><?php echo (strval($tb_detailm->akunm_id_debet->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_debet->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_debet->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_debet->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detailm_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(false) ?>">
 </span>
 <?php } ?>
 <?php if ($tb_detailm->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -342,8 +360,13 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowCnt);
 <span<?php echo $tb_detailm->akunm_id_debet->ViewAttributes() ?>>
 <?php echo $tb_detailm->akunm_id_debet->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detailm->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->FormValue) ?>">
 <input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" name="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" name="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->FormValue) ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" name="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 <a id="<?php echo $tb_detailm_grid->PageObjName . "_row_" . $tb_detailm_grid->RowCnt ?>"></a></td>
 	<?php } ?>
@@ -372,8 +395,13 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowCnt);
 <span<?php echo $tb_detailm->nilaim_debet->ViewAttributes() ?>>
 <?php echo $tb_detailm->nilaim_debet->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detailm->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detailm" data-field="x_nilaim_debet" name="x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_debet->FormValue) ?>">
 <input type="hidden" data-table="tb_detailm" data-field="x_nilaim_debet" name="o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" id="o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_debet->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detailm" data-field="x_nilaim_debet" name="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" id="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_debet->FormValue) ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_nilaim_debet" name="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" id="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_debet" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_debet->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 </td>
 	<?php } ?>
@@ -381,23 +409,41 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowCnt);
 		<td data-name="akunm_id_kredit"<?php echo $tb_detailm->akunm_id_kredit->CellAttributes() ?>>
 <?php if ($tb_detailm->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $tb_detailm_grid->RowCnt ?>_tb_detailm_akunm_id_kredit" class="form-group tb_detailm_akunm_id_kredit">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit"><?php echo (strval($tb_detailm->akunm_id_kredit->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_kredit->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_kredit->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_kredit->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detailm_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(false) ?>">
 </span>
 <input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" name="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->OldValue) ?>">
 <?php } ?>
 <?php if ($tb_detailm->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $tb_detailm_grid->RowCnt ?>_tb_detailm_akunm_id_kredit" class="form-group tb_detailm_akunm_id_kredit">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit"><?php echo (strval($tb_detailm->akunm_id_kredit->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_kredit->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_kredit->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_kredit->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detailm_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(false) ?>">
 </span>
 <?php } ?>
 <?php if ($tb_detailm->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -405,8 +451,13 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowCnt);
 <span<?php echo $tb_detailm->akunm_id_kredit->ViewAttributes() ?>>
 <?php echo $tb_detailm->akunm_id_kredit->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detailm->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->FormValue) ?>">
 <input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" name="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" name="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->FormValue) ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" name="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 </td>
 	<?php } ?>
@@ -428,8 +479,13 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowCnt);
 <span<?php echo $tb_detailm->nilaim_kredit->ViewAttributes() ?>>
 <?php echo $tb_detailm->nilaim_kredit->ListViewValue() ?></span>
 </span>
+<?php if ($tb_detailm->CurrentAction <> "F") { ?>
 <input type="hidden" data-table="tb_detailm" data-field="x_nilaim_kredit" name="x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_kredit->FormValue) ?>">
 <input type="hidden" data-table="tb_detailm" data-field="x_nilaim_kredit" name="o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" id="o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_kredit->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="tb_detailm" data-field="x_nilaim_kredit" name="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" id="ftb_detailmgrid$x<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_kredit->FormValue) ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_nilaim_kredit" name="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" id="ftb_detailmgrid$o<?php echo $tb_detailm_grid->RowIndex ?>_nilaim_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->nilaim_kredit->OldValue) ?>">
+<?php } ?>
 <?php } ?>
 </td>
 	<?php } ?>
@@ -479,12 +535,21 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowIndex
 		<td data-name="akunm_id_debet">
 <?php if ($tb_detailm->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_tb_detailm_akunm_id_debet" class="form-group tb_detailm_akunm_id_debet">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet"><?php echo (strval($tb_detailm->akunm_id_debet->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_debet->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_debet->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_debet->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detailm_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_debet->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_debet" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_debet->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_debet->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_debet->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_debet" value="<?php echo $tb_detailm->akunm_id_debet->LookupFilterQuery(false) ?>">
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_tb_detailm_akunm_id_debet" class="form-group tb_detailm_akunm_id_debet">
@@ -516,12 +581,21 @@ $tb_detailm_grid->ListOptions->Render("body", "left", $tb_detailm_grid->RowIndex
 		<td data-name="akunm_id_kredit">
 <?php if ($tb_detailm->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_tb_detailm_akunm_id_kredit" class="form-group tb_detailm_akunm_id_kredit">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit"><?php echo (strval($tb_detailm->akunm_id_kredit->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $tb_detailm->akunm_id_kredit->ViewValue); ?></span>
+<?php
+$wrkonchange = trim(" " . @$tb_detailm->akunm_id_kredit->EditAttrs["onchange"]);
+if ($wrkonchange <> "") $wrkonchange = " onchange=\"" . ew_JsEncode2($wrkonchange) . "\"";
+$tb_detailm->akunm_id_kredit->EditAttrs["onchange"] = "";
+?>
+<span id="as_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" style="white-space: nowrap; z-index: <?php echo (9000 - $tb_detailm_grid->RowCnt * 10) ?>">
+	<input type="text" name="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="sv_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->EditValue ?>" size="30" placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>" data-placeholder="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->getPlaceHolder()) ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->CurrentValue ?>"<?php echo $tb_detailm->akunm_id_kredit->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery() ?>">
+<input type="hidden" data-table="tb_detailm" data-field="x_akunm_id_kredit" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $tb_detailm->akunm_id_kredit->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo ew_HtmlEncode($tb_detailm->akunm_id_kredit->CurrentValue) ?>"<?php echo $wrkonchange ?>>
+<input type="hidden" name="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="q_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(true) ?>">
+<script type="text/javascript">
+ftb_detailmgrid.CreateAutoSuggest({"id":"x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit","forceSelect":true});
+</script>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($tb_detailm->akunm_id_kredit->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit',m:0,n:10,srch:false});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" name="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" id="s_x<?php echo $tb_detailm_grid->RowIndex ?>_akunm_id_kredit" value="<?php echo $tb_detailm->akunm_id_kredit->LookupFilterQuery(false) ?>">
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_tb_detailm_akunm_id_kredit" class="form-group tb_detailm_akunm_id_kredit">

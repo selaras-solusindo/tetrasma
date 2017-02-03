@@ -74,7 +74,7 @@ class ctb_jurnal extends cTable {
 		$this->fields['no_bukti'] = &$this->no_bukti;
 
 		// tgl
-		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', 'DATE_FORMAT(`tgl`, \'%Y/%m/%d\')', 133, 7, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('tb_jurnal', 'tb_jurnal', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 7, "DB"), 133, 7, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
 		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['tgl'] = &$this->tgl;
@@ -689,7 +689,7 @@ class ctb_jurnal extends cTable {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		$lookuptblfilter = "`jurnal` = 1";
 		ew_AddFilter($sWhereWrk, $lookuptblfilter);
 		ew_AddFilter($sWhereWrk, $sFilterWrk);

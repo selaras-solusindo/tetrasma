@@ -1250,7 +1250,9 @@ function ew_CssFile($f) {
 
 // Check if HTTPS
 function ew_IsHttps() {
-	return (ew_ServerVar("HTTPS") <> "" && ew_ServerVar("HTTPS") <> "off");
+	return ew_ServerVar("HTTPS") <> "" && ew_ServerVar("HTTPS") <> "off" ||
+		ew_ServerVar("SERVER_PORT") == 443 ||
+		ew_ServerVar("HTTP_X_FORWARDED_PROTO") <> "" && ew_ServerVar("HTTP_X_FORWARDED_PROTO") == "https";
 }
 
 // Get domain URL
@@ -1258,8 +1260,10 @@ function ew_DomainUrl() {
 	$sUrl = "http";
 	$bSSL = ew_IsHttps();
 	$sPort = strval(ew_ServerVar("SERVER_PORT"));
+	if (ew_ServerVar("HTTP_X_FORWARDED_PROTO") <> "" && strval(ew_ServerVar("HTTP_X_FORWARDED_PORT")) <> "")
+		$sPort = strval(ew_ServerVar("HTTP_X_FORWARDED_PORT"));
 	$defPort = ($bSSL) ? "443" : "80";
-	$sPort = ($sPort == $defPort) ? "" : ":$sPort";
+	$sPort = ($sPort == $defPort) ? "" : (":" . $sPort);
 	$sUrl .= ($bSSL) ? "s" : "";
 	$sUrl .= "://";
 	$sUrl .= ew_ServerVar("SERVER_NAME") . $sPort;
@@ -1323,8 +1327,10 @@ function ew_IsResponsiveLayout() {
 if (!function_exists('ew_Execute')) {
 
 	function ew_Execute($SQL, $fn = NULL, $c = NULL) {
-		if (is_null($c) && is_object($fn) && method_exists($fn, "Execute"))
+		if (is_null($c) && (is_string($fn) || is_object($fn) && method_exists($fn, "Execute")))
 			$c = $fn;
+		if (is_string($c))
+			$c = &Conn($c);
 		$conn = ($c) ? $c : $GLOBALS["conn"];
 		$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 		$rs = $conn->Execute($SQL);
@@ -1452,6 +1458,8 @@ if (!function_exists('ew_ExecuteHtml')) {
 if (!function_exists('ew_LoadRecordset')) {
 
 	function &ew_LoadRecordset($SQL, $c = NULL) {
+		if (is_string($c))
+			$c = &Conn($c);
 		$conn = ($c) ? $c : $GLOBALS["conn"];
 		$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 		$rs = $conn->Execute($SQL);

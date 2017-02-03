@@ -1293,7 +1293,7 @@ class ctb_detail_list extends ctb_detail {
 			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akun_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akun_id->LookupFilters = array("dx1" => "`no_nama_akun`");
+		$this->akun_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->akun_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1327,7 +1327,7 @@ class ctb_detail_list extends ctb_detail {
 			$sFilterWrk = "`anggota_id`" . ew_SearchString("=", $this->anggota_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `anggota_id`, `nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tb_anggota`";
 		$sWhereWrk = "";
-		$this->anggota_id->LookupFilters = array("dx1" => "`nama`");
+		$this->anggota_id->LookupFilters = array("dx1" => '`nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->anggota_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -1997,7 +1997,7 @@ $tb_detail_list->ShowMessage();
 <input type="hidden" name="fk_jurnal_id" value="<?php echo $tb_detail->jurnal_id->getSessionValue() ?>">
 <?php } ?>
 <div id="gmp_tb_detail" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($tb_detail_list->TotalRecs > 0) { ?>
+<?php if ($tb_detail_list->TotalRecs > 0 || $tb_detail->CurrentAction == "gridedit") { ?>
 <table id="tbl_tb_detaillist" class="table ewTable">
 <?php echo $tb_detail->TableCustomInnerHtml ?>
 <thead><!-- Table header -->
