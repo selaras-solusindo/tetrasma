@@ -25,7 +25,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME, TRUE); // Config file name
 define("EW_PROJECT_ID", "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", '7ZDiebstS7wCcYb6', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 'xdSokZbnhZaKU9ts', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/tetrasma.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -249,9 +249,9 @@ define("EW_USER_ID_ALLOW", 104, TRUE);
 
 // User table filters
 define("EW_USER_TABLE_DBID", "DB", TRUE);
-define("EW_USER_TABLE", "`tb_user`", TRUE);
+define("EW_USER_TABLE", "`t_user`", TRUE);
 define("EW_USER_NAME_FILTER", "(`username` = '%u')", TRUE);
-define("EW_USER_ID_FILTER", "", TRUE);
+define("EW_USER_ID_FILTER", "(`user_id` = %u)", TRUE);
 define("EW_USER_EMAIL_FILTER", "", TRUE);
 define("EW_USER_ACTIVATE_FILTER", "", TRUE);
 

@@ -287,9 +287,8 @@ class ctb_detailm_delete extends ctb_detailm {
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->akunm_id_debet->SetVisibility();
+		$this->akunm_id->SetVisibility();
 		$this->nilaim_debet->SetVisibility();
-		$this->akunm_id_kredit->SetVisibility();
 		$this->nilaim_kredit->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
@@ -470,19 +469,13 @@ class ctb_detailm_delete extends ctb_detailm {
 		$this->Row_Selected($row);
 		$this->detailm_id->setDbValue($rs->fields('detailm_id'));
 		$this->jurnalm_id->setDbValue($rs->fields('jurnalm_id'));
-		$this->akunm_id_debet->setDbValue($rs->fields('akunm_id_debet'));
-		if (array_key_exists('EV__akunm_id_debet', $rs->fields)) {
-			$this->akunm_id_debet->VirtualValue = $rs->fields('EV__akunm_id_debet'); // Set up virtual field value
+		$this->akunm_id->setDbValue($rs->fields('akunm_id'));
+		if (array_key_exists('EV__akunm_id', $rs->fields)) {
+			$this->akunm_id->VirtualValue = $rs->fields('EV__akunm_id'); // Set up virtual field value
 		} else {
-			$this->akunm_id_debet->VirtualValue = ""; // Clear value
+			$this->akunm_id->VirtualValue = ""; // Clear value
 		}
 		$this->nilaim_debet->setDbValue($rs->fields('nilaim_debet'));
-		$this->akunm_id_kredit->setDbValue($rs->fields('akunm_id_kredit'));
-		if (array_key_exists('EV__akunm_id_kredit', $rs->fields)) {
-			$this->akunm_id_kredit->VirtualValue = $rs->fields('EV__akunm_id_kredit'); // Set up virtual field value
-		} else {
-			$this->akunm_id_kredit->VirtualValue = ""; // Clear value
-		}
 		$this->nilaim_kredit->setDbValue($rs->fields('nilaim_kredit'));
 	}
 
@@ -492,9 +485,8 @@ class ctb_detailm_delete extends ctb_detailm {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->detailm_id->DbValue = $row['detailm_id'];
 		$this->jurnalm_id->DbValue = $row['jurnalm_id'];
-		$this->akunm_id_debet->DbValue = $row['akunm_id_debet'];
+		$this->akunm_id->DbValue = $row['akunm_id'];
 		$this->nilaim_debet->DbValue = $row['nilaim_debet'];
-		$this->akunm_id_kredit->DbValue = $row['akunm_id_kredit'];
 		$this->nilaim_kredit->DbValue = $row['nilaim_kredit'];
 	}
 
@@ -510,9 +502,8 @@ class ctb_detailm_delete extends ctb_detailm {
 		// Common render codes for all row types
 		// detailm_id
 		// jurnalm_id
-		// akunm_id_debet
+		// akunm_id
 		// nilaim_debet
-		// akunm_id_kredit
 		// nilaim_kredit
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
@@ -525,33 +516,33 @@ class ctb_detailm_delete extends ctb_detailm {
 		$this->jurnalm_id->ViewValue = $this->jurnalm_id->CurrentValue;
 		$this->jurnalm_id->ViewCustomAttributes = "";
 
-		// akunm_id_debet
-		if ($this->akunm_id_debet->VirtualValue <> "") {
-			$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->VirtualValue;
+		// akunm_id
+		if ($this->akunm_id->VirtualValue <> "") {
+			$this->akunm_id->ViewValue = $this->akunm_id->VirtualValue;
 		} else {
-			$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->CurrentValue;
-		if (strval($this->akunm_id_debet->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_debet->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$this->akunm_id->ViewValue = $this->akunm_id->CurrentValue;
+		if (strval($this->akunm_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
+		$this->akunm_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
+		$this->Lookup_Selecting($this->akunm_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->DisplayValue($arwrk);
+				$this->akunm_id->ViewValue = $this->akunm_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
-				$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->CurrentValue;
+				$this->akunm_id->ViewValue = $this->akunm_id->CurrentValue;
 			}
 		} else {
-			$this->akunm_id_debet->ViewValue = NULL;
+			$this->akunm_id->ViewValue = NULL;
 		}
 		}
-		$this->akunm_id_debet->ViewCustomAttributes = "";
+		$this->akunm_id->ViewCustomAttributes = "";
 
 		// nilaim_debet
 		$this->nilaim_debet->ViewValue = $this->nilaim_debet->CurrentValue;
@@ -559,54 +550,21 @@ class ctb_detailm_delete extends ctb_detailm {
 		$this->nilaim_debet->CellCssStyle .= "text-align: right;";
 		$this->nilaim_debet->ViewCustomAttributes = "";
 
-		// akunm_id_kredit
-		if ($this->akunm_id_kredit->VirtualValue <> "") {
-			$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->VirtualValue;
-		} else {
-			$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->CurrentValue;
-		if (strval($this->akunm_id_kredit->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_kredit->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-		$sWhereWrk = "";
-		$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->CurrentValue;
-			}
-		} else {
-			$this->akunm_id_kredit->ViewValue = NULL;
-		}
-		}
-		$this->akunm_id_kredit->ViewCustomAttributes = "";
-
 		// nilaim_kredit
 		$this->nilaim_kredit->ViewValue = $this->nilaim_kredit->CurrentValue;
 		$this->nilaim_kredit->ViewValue = ew_FormatNumber($this->nilaim_kredit->ViewValue, 0, -2, -2, -1);
 		$this->nilaim_kredit->CellCssStyle .= "text-align: right;";
 		$this->nilaim_kredit->ViewCustomAttributes = "";
 
-			// akunm_id_debet
-			$this->akunm_id_debet->LinkCustomAttributes = "";
-			$this->akunm_id_debet->HrefValue = "";
-			$this->akunm_id_debet->TooltipValue = "";
+			// akunm_id
+			$this->akunm_id->LinkCustomAttributes = "";
+			$this->akunm_id->HrefValue = "";
+			$this->akunm_id->TooltipValue = "";
 
 			// nilaim_debet
 			$this->nilaim_debet->LinkCustomAttributes = "";
 			$this->nilaim_debet->HrefValue = "";
 			$this->nilaim_debet->TooltipValue = "";
-
-			// akunm_id_kredit
-			$this->akunm_id_kredit->LinkCustomAttributes = "";
-			$this->akunm_id_kredit->HrefValue = "";
-			$this->akunm_id_kredit->TooltipValue = "";
 
 			// nilaim_kredit
 			$this->nilaim_kredit->LinkCustomAttributes = "";
@@ -939,8 +897,7 @@ ftb_detailmdelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-ftb_detailmdelete.Lists["x_akunm_id_debet"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_no_nama_akun","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
-ftb_detailmdelete.Lists["x_akunm_id_kredit"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_no_nama_akun","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
+ftb_detailmdelete.Lists["x_akunm_id"] = {"LinkField":"x_level4_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_no_nama_akun","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"view_akun_jurnal"};
 
 // Form object for search
 </script>
@@ -973,14 +930,11 @@ $tb_detailm_delete->ShowMessage();
 <?php echo $tb_detailm->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($tb_detailm->akunm_id_debet->Visible) { // akunm_id_debet ?>
-		<th><span id="elh_tb_detailm_akunm_id_debet" class="tb_detailm_akunm_id_debet"><?php echo $tb_detailm->akunm_id_debet->FldCaption() ?></span></th>
+<?php if ($tb_detailm->akunm_id->Visible) { // akunm_id ?>
+		<th><span id="elh_tb_detailm_akunm_id" class="tb_detailm_akunm_id"><?php echo $tb_detailm->akunm_id->FldCaption() ?></span></th>
 <?php } ?>
 <?php if ($tb_detailm->nilaim_debet->Visible) { // nilaim_debet ?>
 		<th><span id="elh_tb_detailm_nilaim_debet" class="tb_detailm_nilaim_debet"><?php echo $tb_detailm->nilaim_debet->FldCaption() ?></span></th>
-<?php } ?>
-<?php if ($tb_detailm->akunm_id_kredit->Visible) { // akunm_id_kredit ?>
-		<th><span id="elh_tb_detailm_akunm_id_kredit" class="tb_detailm_akunm_id_kredit"><?php echo $tb_detailm->akunm_id_kredit->FldCaption() ?></span></th>
 <?php } ?>
 <?php if ($tb_detailm->nilaim_kredit->Visible) { // nilaim_kredit ?>
 		<th><span id="elh_tb_detailm_nilaim_kredit" class="tb_detailm_nilaim_kredit"><?php echo $tb_detailm->nilaim_kredit->FldCaption() ?></span></th>
@@ -1006,11 +960,11 @@ while (!$tb_detailm_delete->Recordset->EOF) {
 	$tb_detailm_delete->RenderRow();
 ?>
 	<tr<?php echo $tb_detailm->RowAttributes() ?>>
-<?php if ($tb_detailm->akunm_id_debet->Visible) { // akunm_id_debet ?>
-		<td<?php echo $tb_detailm->akunm_id_debet->CellAttributes() ?>>
-<span id="el<?php echo $tb_detailm_delete->RowCnt ?>_tb_detailm_akunm_id_debet" class="tb_detailm_akunm_id_debet">
-<span<?php echo $tb_detailm->akunm_id_debet->ViewAttributes() ?>>
-<?php echo $tb_detailm->akunm_id_debet->ListViewValue() ?></span>
+<?php if ($tb_detailm->akunm_id->Visible) { // akunm_id ?>
+		<td<?php echo $tb_detailm->akunm_id->CellAttributes() ?>>
+<span id="el<?php echo $tb_detailm_delete->RowCnt ?>_tb_detailm_akunm_id" class="tb_detailm_akunm_id">
+<span<?php echo $tb_detailm->akunm_id->ViewAttributes() ?>>
+<?php echo $tb_detailm->akunm_id->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
@@ -1019,14 +973,6 @@ while (!$tb_detailm_delete->Recordset->EOF) {
 <span id="el<?php echo $tb_detailm_delete->RowCnt ?>_tb_detailm_nilaim_debet" class="tb_detailm_nilaim_debet">
 <span<?php echo $tb_detailm->nilaim_debet->ViewAttributes() ?>>
 <?php echo $tb_detailm->nilaim_debet->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($tb_detailm->akunm_id_kredit->Visible) { // akunm_id_kredit ?>
-		<td<?php echo $tb_detailm->akunm_id_kredit->CellAttributes() ?>>
-<span id="el<?php echo $tb_detailm_delete->RowCnt ?>_tb_detailm_akunm_id_kredit" class="tb_detailm_akunm_id_kredit">
-<span<?php echo $tb_detailm->akunm_id_kredit->ViewAttributes() ?>>
-<?php echo $tb_detailm->akunm_id_kredit->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

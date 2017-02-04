@@ -6,7 +6,7 @@ ob_start(); // Turn on output buffering
 <?php $EW_ROOT_RELATIVE_PATH = ""; ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "tb_userinfo.php" ?>
+<?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -203,9 +203,9 @@ class chome_php {
 		// Open connection
 		if (!isset($conn)) $conn = ew_Connect();
 
-		// User table object (tb_user)
+		// User table object (t_user)
 		if (!isset($UserTable)) {
-			$UserTable = new ctb_user();
+			$UserTable = new ct_user();
 			$UserTableConn = Conn($UserTable->DBID);
 		}
 	}
@@ -226,6 +226,11 @@ class chome_php {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			$this->Page_Terminate(ew_GetUrl("index.php"));
+		}
+		if ($Security->IsLoggedIn()) {
+			$Security->UserID_Loading();
+			$Security->LoadUserID();
+			$Security->UserID_Loaded();
 		}
 
 		// Global Page Loading event (in userfn*.php)

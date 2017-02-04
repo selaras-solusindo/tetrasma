@@ -6,7 +6,7 @@ $akun_id = $_GET['q'];
 //$hasil = $kode.date("Ym")."001";
 $hasil = "";
 if ($akun_id) {
-	$query = mysql_query("select * from view_akun_jurnal where level4_id = ".$akun_id."");
+	$query = mysql_query("select * from v_akun_jurnal where level4_id = ".$akun_id."");
 	while($d = mysql_fetch_array($query)){
 		//echo $d['alamat'];
 		//$sLastKode = intval(substr($d["no_bukti"], 8, 3)); // ambil 3 digit terakhir

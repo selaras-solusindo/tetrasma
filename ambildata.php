@@ -5,7 +5,7 @@ mysql_select_db($database_conn) or die ("Database tidak ditemukan");
 $kode = $_GET['q'];
 $hasil = $kode."001".date("my"); //$hasil = $kode.date("Ym")."001";
 if ($kode) {
-	$query = mysql_query("select no_bukti from tb_jurnal where left(no_bukti, 2) = '".$kode."'");
+	$query = mysql_query("select no_bukti from t_jurnal where left(no_bukti, 2) = '".$kode."'");
 	while($d = mysql_fetch_array($query)){
 		//echo $d['alamat'];
 		$sLastKode = intval(substr($d["no_bukti"], 2, 3)); // ambil 3 digit di tengah

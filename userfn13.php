@@ -39,12 +39,12 @@ function GetNextKodeJenis() {
 function GetNextNo_buktim() {
 	$sNextKode = "";
 	$sLastKode = "";
-	$value = ew_ExecuteScalar("SELECT no_buktim FROM tb_jurnalm ORDER BY no_buktim DESC");
+	$value = ew_ExecuteScalar("SELECT no_buktim FROM t_jurnalm ORDER BY no_buktim DESC");
 	if ($value != "") { // jika sudah ada, langsung ambil dan proses...
 		$sLastKode = intval(substr($value, 2, 3)); // ambil 3 digit terakhir
 		$sLastKode = intval($sLastKode) + 1; // konversi ke integer, lalu tambahkan satu
-		$sNextKode = "JM" . sprintf('%03s', $sLastKode); // format hasilnya dan tambahkan prefix
-		if (strlen($sNextKode) > 6) {
+		$sNextKode = "JM" . sprintf('%03s', $sLastKode).date('my'); // format hasilnya dan tambahkan prefix
+		if (strlen($sNextKode) > 9) {
 			$sNextKode = "JM001".date('my');
 		}
 	} else { // jika belum ada, gunakan kode yang pertama

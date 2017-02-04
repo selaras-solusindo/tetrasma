@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/2/3" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/2/4" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -583,14 +583,14 @@
   <project>
     <phrase id="bodytitle" value="Tetrasma" />
     <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
+    <menu id="43">
+      <phrase id="menutext" value="v akun jurnal" />
+    </menu>
     <menu id="25" />
     <menu id="26">
       <phrase id="menutext" value="Detail Jurnal Memorial" />
     </menu>
     <menu id="23" />
-    <menu id="24">
-      <phrase id="menutext" value="view akun jurnal" />
-    </menu>
     <menu id="22">
       <phrase id="menutext" value="Home" />
     </menu>
@@ -625,15 +625,15 @@
       <phrase id="menutext" value="Jurnal" />
     </menu>
     <menu id="20">
-      <phrase id="menutext" value="Jurnal Kas &amp; Bank" />
+      <phrase id="menutext" value="Kas &amp; Bank" />
     </menu>
     <menu id="27">
-      <phrase id="menutext" value="Jurnal Memorial" />
+      <phrase id="menutext" value="Memorial" />
     </menu>
     <menu id="16">
       <phrase id="menutext" value="Manajemen User" />
     </menu>
-    <table id="tb_anggota">
+    <table id="t_anggota">
       <phrase id="tblcaption" value="Manajemen Anggota" />
       <field id="anggota_id">
         <phrase id="fldcaption" value="Anggota ID" />
@@ -699,7 +699,7 @@
         <phrase id="fldcaption" value="newvalue" />
       </field>
     </table>
-    <table id="tb_level1">
+    <table id="t_level1">
       <phrase id="tblcaption" value="Level 1" />
       <field id="level1_id">
         <phrase id="fldcaption" value="level 1 id" />
@@ -711,7 +711,7 @@
         <phrase id="fldcaption" value="Nama Akun Level 1" />
       </field>
     </table>
-    <table id="tb_level2">
+    <table id="t_level2">
       <phrase id="tblcaption" value="Level 2" />
       <field id="level2_id">
         <phrase id="fldcaption" value="level 2 id" />
@@ -726,7 +726,7 @@
         <phrase id="fldcaption" value="Nama Akun Level 2" />
       </field>
     </table>
-    <table id="tb_level3">
+    <table id="t_level3">
       <phrase id="tblcaption" value="Level 3" />
       <field id="level3_id">
         <phrase id="fldcaption" value="level 3 id" />
@@ -744,7 +744,7 @@
         <phrase id="fldcaption" value="Nama Akun Level 3" />
       </field>
     </table>
-    <table id="tb_level4">
+    <table id="t_level4">
       <phrase id="tblcaption" value="Level 4" />
       <field id="level4_id">
         <phrase id="fldcaption" value="level 4 id" />
@@ -785,7 +785,7 @@
         <phrase id="fldtagcaption2" value="B" />
       </field>
     </table>
-    <table id="tb_user">
+    <table id="t_user">
       <phrase id="tblcaption" value="Manajemen User" />
       <field id="user_id">
         <phrase id="fldcaption" value="user id" />
@@ -809,7 +809,7 @@
     <table id="view_akun_php">
       <phrase id="tblcaption" value="View Akun" />
     </table>
-    <table id="tb_detail">
+    <table id="t_detail">
       <phrase id="tblcaption" value="Detail Jurnal Kas &amp; Bank" />
       <field id="detail_id">
         <phrase id="fldcaption" value="detail id" />
@@ -830,8 +830,8 @@
         <phrase id="fldcaption" value="dk" />
       </field>
     </table>
-    <table id="tb_jurnal">
-      <phrase id="tblcaption" value="Jurnal Kas &amp; Bank" />
+    <table id="t_jurnal">
+      <phrase id="tblcaption" value="Kas &amp; Bank" />
       <field id="jurnal_id">
         <phrase id="fldcaption" value="ID" />
       </field>
@@ -862,23 +862,8 @@
       <phrase id="tblcaption" value="Home" />
     </table>
     <table id="ambildata_php" />
-    <table id="view_akun_jurnal">
-      <phrase id="tblcaption" value="view akun jurnal" />
-      <field id="level4_id">
-        <phrase id="fldcaption" value="level 4 id" />
-      </field>
-      <field id="no_nama_akun">
-        <phrase id="fldcaption" value="Nama Akun Level 4" />
-      </field>
-      <field id="jurnal">
-        <phrase id="fldcaption" value="jurnal" />
-      </field>
-      <field id="jurnal_kode">
-        <phrase id="fldcaption" value="jurnal kode" />
-      </field>
-    </table>
     <table id="ambiljurnalkode_php" />
-    <table id="tb_detailm">
+    <table id="t_detailm">
       <phrase id="tblcaption" value="Detail Jurnal Memorial" />
       <field id="detailm_id">
         <phrase id="fldcaption" value="ID" />
@@ -886,21 +871,18 @@
       <field id="jurnalm_id">
         <phrase id="fldcaption" value="Jurnal ID" />
       </field>
-      <field id="akunm_id_debet">
+      <field id="akunm_id">
         <phrase id="fldcaption" value="Akun" />
       </field>
       <field id="nilaim_debet">
         <phrase id="fldcaption" value="Debet" />
       </field>
-      <field id="akunm_id_kredit">
-        <phrase id="fldcaption" value="Akun" />
-      </field>
       <field id="nilaim_kredit">
         <phrase id="fldcaption" value="Kredit" />
       </field>
     </table>
-    <table id="tb_jurnalm">
-      <phrase id="tblcaption" value="Jurnal Memorial" />
+    <table id="t_jurnalm">
+      <phrase id="tblcaption" value="Memorial" />
       <field id="jurnalm_id">
         <phrase id="fldcaption" value="ID" />
       </field>
@@ -912,6 +894,29 @@
       </field>
       <field id="ketm">
         <phrase id="fldcaption" value="Keterangan" />
+      </field>
+    </table>
+    <table id="v_akun_jurnal">
+      <phrase id="tblcaption" value="v akun jurnal" />
+      <field id="level4_id">
+        <phrase id="fldcaption" value="level 4 id" />
+      </field>
+      <field id="no_nama_akun">
+        <phrase id="fldcaption" value="no nama akun" />
+      </field>
+      <field id="jurnal">
+        <phrase id="fldcaption" value="Input Jurnal" />
+        <phrase id="fldtagvalue1" value="0" />
+        <phrase id="fldtagcaption1" value="Tidak" />
+        <phrase id="fldtagvalue2" value="1" />
+        <phrase id="fldtagcaption2" value="Ya" />
+      </field>
+      <field id="jurnal_kode">
+        <phrase id="fldcaption" value="Kode Jurnal" />
+        <phrase id="fldtagvalue1" value="K" />
+        <phrase id="fldtagcaption1" value="K" />
+        <phrase id="fldtagvalue2" value="B" />
+        <phrase id="fldtagcaption2" value="B" />
       </field>
     </table>
   </project>

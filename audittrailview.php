@@ -6,7 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
 <?php include_once "audittrailinfo.php" ?>
-<?php include_once "tb_userinfo.php" ?>
+<?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -276,8 +276,8 @@ class caudittrail_view extends caudittrail {
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv" . $KeyUrl;
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf" . $KeyUrl;
 
-		// Table object (tb_user)
-		if (!isset($GLOBALS['tb_user'])) $GLOBALS['tb_user'] = new ctb_user();
+		// Table object (t_user)
+		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -293,9 +293,9 @@ class caudittrail_view extends caudittrail {
 		// Open connection
 		if (!isset($conn)) $conn = ew_Connect($this->DBID);
 
-		// User table object (tb_user)
+		// User table object (t_user)
 		if (!isset($UserTable)) {
-			$UserTable = new ctb_user();
+			$UserTable = new ct_user();
 			$UserTableConn = Conn($UserTable->DBID);
 		}
 
@@ -332,6 +332,11 @@ class caudittrail_view extends caudittrail {
 				$this->Page_Terminate(ew_GetUrl("audittraillist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
+		}
+		if ($Security->IsLoggedIn()) {
+			$Security->UserID_Loading();
+			$Security->LoadUserID();
+			$Security->UserID_Loaded();
 		}
 
 		// Get export parameters

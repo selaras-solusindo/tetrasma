@@ -1,0 +1,9 @@
+Select
+	t_level4.level4_id As level4_id,
+	Concat(t_level1.level1_no, '.', t_level2.level2_no, '.', t_level3.level3_no, '.', t_level4.level4_no, ' - ', t_level4.level4_nama) As no_nama_akun,
+	t_level4.jurnal As jurnal,
+	t_level4.jurnal_kode As jurnal_kode
+From (
+	(t_level4 Join t_level1 On t_level4.level1_id = t_level1.level1_id) Join t_level2 On t_level4.level2_id = t_level2.level2_id)
+	Join t_level3 On t_level4.level3_id = t_level3.level3_id
+

@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "tb_userinfo.php" ?>
+<?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -15,7 +15,7 @@ ob_start(); // Turn on output buffering
 
 $changepwd = NULL; // Initialize page object first
 
-class cchangepwd extends ctb_user {
+class cchangepwd extends ct_user {
 
 	// Page ID
 	var $PageID = 'changepwd';
@@ -213,12 +213,12 @@ class cchangepwd extends ctb_user {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (tb_user)
-		if (!isset($GLOBALS["tb_user"]) || get_class($GLOBALS["tb_user"]) == "ctb_user") {
-			$GLOBALS["tb_user"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["tb_user"];
+		// Table object (t_user)
+		if (!isset($GLOBALS["t_user"]) || get_class($GLOBALS["t_user"]) == "ct_user") {
+			$GLOBALS["t_user"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t_user"];
 		}
-		if (!isset($GLOBALS["tb_user"])) $GLOBALS["tb_user"] = &$this;
+		if (!isset($GLOBALS["t_user"])) $GLOBALS["t_user"] = &$this;
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -230,9 +230,9 @@ class cchangepwd extends ctb_user {
 		// Open connection
 		if (!isset($conn)) $conn = ew_Connect($this->DBID);
 
-		// User table object (tb_user)
+		// User table object (t_user)
 		if (!isset($UserTable)) {
-			$UserTable = new ctb_user();
+			$UserTable = new ct_user();
 			$UserTableConn = Conn($UserTable->DBID);
 		}
 	}
@@ -249,7 +249,7 @@ class cchangepwd extends ctb_user {
 		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
 		if (!$Security->IsLoggedIn() || $Security->IsSysAdmin())
 			$this->Page_Terminate(ew_GetUrl("login.php"));
-		$Security->LoadCurrentUserLevel($this->ProjectID . 'tb_user');
+		$Security->LoadCurrentUserLevel($this->ProjectID . 't_user');
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 
@@ -329,7 +329,7 @@ class cchangepwd extends ctb_user {
 			$sFilter = str_replace("%u", ew_AdjustSql($sUsername, EW_USER_TABLE_DBID), EW_USER_NAME_FILTER);
 
 			// Set up filter (Sql Where Clause) and get Return SQL
-			// SQL constructor in tb_user class, tb_userinfo.php
+			// SQL constructor in t_user class, t_userinfo.php
 
 			$this->CurrentFilter = $sFilter;
 			$sSql = $this->SQL();

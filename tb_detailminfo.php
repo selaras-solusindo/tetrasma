@@ -9,9 +9,8 @@ $tb_detailm = NULL;
 class ctb_detailm extends cTable {
 	var $detailm_id;
 	var $jurnalm_id;
-	var $akunm_id_debet;
+	var $akunm_id;
 	var $nilaim_debet;
-	var $akunm_id_kredit;
 	var $nilaim_kredit;
 
 	//
@@ -56,23 +55,17 @@ class ctb_detailm extends cTable {
 		$this->jurnalm_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jurnalm_id'] = &$this->jurnalm_id;
 
-		// akunm_id_debet
-		$this->akunm_id_debet = new cField('tb_detailm', 'tb_detailm', 'x_akunm_id_debet', 'akunm_id_debet', '`akunm_id_debet`', '`akunm_id_debet`', 3, -1, FALSE, '`EV__akunm_id_debet`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
-		$this->akunm_id_debet->Sortable = TRUE; // Allow sort
-		$this->akunm_id_debet->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['akunm_id_debet'] = &$this->akunm_id_debet;
+		// akunm_id
+		$this->akunm_id = new cField('tb_detailm', 'tb_detailm', 'x_akunm_id', 'akunm_id', '`akunm_id`', '`akunm_id`', 3, -1, FALSE, '`EV__akunm_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
+		$this->akunm_id->Sortable = TRUE; // Allow sort
+		$this->akunm_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['akunm_id'] = &$this->akunm_id;
 
 		// nilaim_debet
 		$this->nilaim_debet = new cField('tb_detailm', 'tb_detailm', 'x_nilaim_debet', 'nilaim_debet', '`nilaim_debet`', '`nilaim_debet`', 20, -1, FALSE, '`nilaim_debet`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->nilaim_debet->Sortable = TRUE; // Allow sort
 		$this->nilaim_debet->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['nilaim_debet'] = &$this->nilaim_debet;
-
-		// akunm_id_kredit
-		$this->akunm_id_kredit = new cField('tb_detailm', 'tb_detailm', 'x_akunm_id_kredit', 'akunm_id_kredit', '`akunm_id_kredit`', '`akunm_id_kredit`', 3, -1, FALSE, '`EV__akunm_id_kredit`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
-		$this->akunm_id_kredit->Sortable = TRUE; // Allow sort
-		$this->akunm_id_kredit->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['akunm_id_kredit'] = &$this->akunm_id_kredit;
 
 		// nilaim_kredit
 		$this->nilaim_kredit = new cField('tb_detailm', 'tb_detailm', 'x_nilaim_kredit', 'nilaim_kredit', '`nilaim_kredit`', '`nilaim_kredit`', 20, -1, FALSE, '`nilaim_kredit`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
@@ -194,7 +187,7 @@ class ctb_detailm extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `no_nama_akun` FROM `view_akun_jurnal` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level4_id` = `tb_detailm`.`akunm_id_debet` LIMIT 1) AS `EV__akunm_id_debet`, (SELECT `no_nama_akun` FROM `view_akun_jurnal` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level4_id` = `tb_detailm`.`akunm_id_kredit` LIMIT 1) AS `EV__akunm_id_kredit` FROM `tb_detailm`" .
+			"SELECT *, (SELECT `no_nama_akun` FROM `view_akun_jurnal` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`level4_id` = `tb_detailm`.`akunm_id` LIMIT 1) AS `EV__akunm_id` FROM `tb_detailm`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -342,17 +335,11 @@ class ctb_detailm extends cTable {
 			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
 		if ($sOrderBy <> "")
 			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
-		if ($this->akunm_id_debet->AdvancedSearch->SearchValue <> "" ||
-			$this->akunm_id_debet->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->akunm_id_debet->FldVirtualExpression . " ") !== FALSE)
+		if ($this->akunm_id->AdvancedSearch->SearchValue <> "" ||
+			$this->akunm_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->akunm_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
-		if (strpos($sOrderBy, " " . $this->akunm_id_debet->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if ($this->akunm_id_kredit->AdvancedSearch->SearchValue <> "" ||
-			$this->akunm_id_kredit->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->akunm_id_kredit->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if (strpos($sOrderBy, " " . $this->akunm_id_kredit->FldVirtualExpression . " ") !== FALSE)
+		if (strpos($sOrderBy, " " . $this->akunm_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
 		return FALSE;
 	}
@@ -671,9 +658,8 @@ class ctb_detailm extends cTable {
 	function LoadListRowValues(&$rs) {
 		$this->detailm_id->setDbValue($rs->fields('detailm_id'));
 		$this->jurnalm_id->setDbValue($rs->fields('jurnalm_id'));
-		$this->akunm_id_debet->setDbValue($rs->fields('akunm_id_debet'));
+		$this->akunm_id->setDbValue($rs->fields('akunm_id'));
 		$this->nilaim_debet->setDbValue($rs->fields('nilaim_debet'));
-		$this->akunm_id_kredit->setDbValue($rs->fields('akunm_id_kredit'));
 		$this->nilaim_kredit->setDbValue($rs->fields('nilaim_kredit'));
 	}
 
@@ -687,9 +673,8 @@ class ctb_detailm extends cTable {
    // Common render codes
 		// detailm_id
 		// jurnalm_id
-		// akunm_id_debet
+		// akunm_id
 		// nilaim_debet
-		// akunm_id_kredit
 		// nilaim_kredit
 		// detailm_id
 
@@ -700,67 +685,39 @@ class ctb_detailm extends cTable {
 		$this->jurnalm_id->ViewValue = $this->jurnalm_id->CurrentValue;
 		$this->jurnalm_id->ViewCustomAttributes = "";
 
-		// akunm_id_debet
-		if ($this->akunm_id_debet->VirtualValue <> "") {
-			$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->VirtualValue;
+		// akunm_id
+		if ($this->akunm_id->VirtualValue <> "") {
+			$this->akunm_id->ViewValue = $this->akunm_id->VirtualValue;
 		} else {
-			$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->CurrentValue;
-		if (strval($this->akunm_id_debet->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_debet->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$this->akunm_id->ViewValue = $this->akunm_id->CurrentValue;
+		if (strval($this->akunm_id->CurrentValue) <> "") {
+			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
 		$sWhereWrk = "";
-		$this->akunm_id_debet->LookupFilters = array("dx1" => '`no_nama_akun`');
+		$this->akunm_id->LookupFilters = array("dx1" => '`no_nama_akun`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akunm_id_debet, $sWhereWrk); // Call Lookup selecting
+		$this->Lookup_Selecting($this->akunm_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->DisplayValue($arwrk);
+				$this->akunm_id->ViewValue = $this->akunm_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
-				$this->akunm_id_debet->ViewValue = $this->akunm_id_debet->CurrentValue;
+				$this->akunm_id->ViewValue = $this->akunm_id->CurrentValue;
 			}
 		} else {
-			$this->akunm_id_debet->ViewValue = NULL;
+			$this->akunm_id->ViewValue = NULL;
 		}
 		}
-		$this->akunm_id_debet->ViewCustomAttributes = "";
+		$this->akunm_id->ViewCustomAttributes = "";
 
 		// nilaim_debet
 		$this->nilaim_debet->ViewValue = $this->nilaim_debet->CurrentValue;
 		$this->nilaim_debet->ViewValue = ew_FormatNumber($this->nilaim_debet->ViewValue, 0, -2, -2, -1);
 		$this->nilaim_debet->CellCssStyle .= "text-align: right;";
 		$this->nilaim_debet->ViewCustomAttributes = "";
-
-		// akunm_id_kredit
-		if ($this->akunm_id_kredit->VirtualValue <> "") {
-			$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->VirtualValue;
-		} else {
-			$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->CurrentValue;
-		if (strval($this->akunm_id_kredit->CurrentValue) <> "") {
-			$sFilterWrk = "`level4_id`" . ew_SearchString("=", $this->akunm_id_kredit->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `level4_id`, `no_nama_akun` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_akun_jurnal`";
-		$sWhereWrk = "";
-		$this->akunm_id_kredit->LookupFilters = array("dx1" => '`no_nama_akun`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->akunm_id_kredit, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->akunm_id_kredit->ViewValue = $this->akunm_id_kredit->CurrentValue;
-			}
-		} else {
-			$this->akunm_id_kredit->ViewValue = NULL;
-		}
-		}
-		$this->akunm_id_kredit->ViewCustomAttributes = "";
 
 		// nilaim_kredit
 		$this->nilaim_kredit->ViewValue = $this->nilaim_kredit->CurrentValue;
@@ -778,20 +735,15 @@ class ctb_detailm extends cTable {
 		$this->jurnalm_id->HrefValue = "";
 		$this->jurnalm_id->TooltipValue = "";
 
-		// akunm_id_debet
-		$this->akunm_id_debet->LinkCustomAttributes = "";
-		$this->akunm_id_debet->HrefValue = "";
-		$this->akunm_id_debet->TooltipValue = "";
+		// akunm_id
+		$this->akunm_id->LinkCustomAttributes = "";
+		$this->akunm_id->HrefValue = "";
+		$this->akunm_id->TooltipValue = "";
 
 		// nilaim_debet
 		$this->nilaim_debet->LinkCustomAttributes = "";
 		$this->nilaim_debet->HrefValue = "";
 		$this->nilaim_debet->TooltipValue = "";
-
-		// akunm_id_kredit
-		$this->akunm_id_kredit->LinkCustomAttributes = "";
-		$this->akunm_id_kredit->HrefValue = "";
-		$this->akunm_id_kredit->TooltipValue = "";
 
 		// nilaim_kredit
 		$this->nilaim_kredit->LinkCustomAttributes = "";
@@ -827,23 +779,17 @@ class ctb_detailm extends cTable {
 		$this->jurnalm_id->PlaceHolder = ew_RemoveHtml($this->jurnalm_id->FldCaption());
 		}
 
-		// akunm_id_debet
-		$this->akunm_id_debet->EditAttrs["class"] = "form-control";
-		$this->akunm_id_debet->EditCustomAttributes = "";
-		$this->akunm_id_debet->EditValue = $this->akunm_id_debet->CurrentValue;
-		$this->akunm_id_debet->PlaceHolder = ew_RemoveHtml($this->akunm_id_debet->FldCaption());
+		// akunm_id
+		$this->akunm_id->EditAttrs["class"] = "form-control";
+		$this->akunm_id->EditCustomAttributes = "";
+		$this->akunm_id->EditValue = $this->akunm_id->CurrentValue;
+		$this->akunm_id->PlaceHolder = ew_RemoveHtml($this->akunm_id->FldCaption());
 
 		// nilaim_debet
 		$this->nilaim_debet->EditAttrs["class"] = "form-control";
 		$this->nilaim_debet->EditCustomAttributes = "";
 		$this->nilaim_debet->EditValue = $this->nilaim_debet->CurrentValue;
 		$this->nilaim_debet->PlaceHolder = ew_RemoveHtml($this->nilaim_debet->FldCaption());
-
-		// akunm_id_kredit
-		$this->akunm_id_kredit->EditAttrs["class"] = "form-control";
-		$this->akunm_id_kredit->EditCustomAttributes = "";
-		$this->akunm_id_kredit->EditValue = $this->akunm_id_kredit->CurrentValue;
-		$this->akunm_id_kredit->PlaceHolder = ew_RemoveHtml($this->akunm_id_kredit->FldCaption());
 
 		// nilaim_kredit
 		$this->nilaim_kredit->EditAttrs["class"] = "form-control";
@@ -878,16 +824,14 @@ class ctb_detailm extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->akunm_id_debet->Exportable) $Doc->ExportCaption($this->akunm_id_debet);
+					if ($this->akunm_id->Exportable) $Doc->ExportCaption($this->akunm_id);
 					if ($this->nilaim_debet->Exportable) $Doc->ExportCaption($this->nilaim_debet);
-					if ($this->akunm_id_kredit->Exportable) $Doc->ExportCaption($this->akunm_id_kredit);
 					if ($this->nilaim_kredit->Exportable) $Doc->ExportCaption($this->nilaim_kredit);
 				} else {
 					if ($this->detailm_id->Exportable) $Doc->ExportCaption($this->detailm_id);
 					if ($this->jurnalm_id->Exportable) $Doc->ExportCaption($this->jurnalm_id);
-					if ($this->akunm_id_debet->Exportable) $Doc->ExportCaption($this->akunm_id_debet);
+					if ($this->akunm_id->Exportable) $Doc->ExportCaption($this->akunm_id);
 					if ($this->nilaim_debet->Exportable) $Doc->ExportCaption($this->nilaim_debet);
-					if ($this->akunm_id_kredit->Exportable) $Doc->ExportCaption($this->akunm_id_kredit);
 					if ($this->nilaim_kredit->Exportable) $Doc->ExportCaption($this->nilaim_kredit);
 				}
 				$Doc->EndExportRow();
@@ -920,16 +864,14 @@ class ctb_detailm extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->akunm_id_debet->Exportable) $Doc->ExportField($this->akunm_id_debet);
+						if ($this->akunm_id->Exportable) $Doc->ExportField($this->akunm_id);
 						if ($this->nilaim_debet->Exportable) $Doc->ExportField($this->nilaim_debet);
-						if ($this->akunm_id_kredit->Exportable) $Doc->ExportField($this->akunm_id_kredit);
 						if ($this->nilaim_kredit->Exportable) $Doc->ExportField($this->nilaim_kredit);
 					} else {
 						if ($this->detailm_id->Exportable) $Doc->ExportField($this->detailm_id);
 						if ($this->jurnalm_id->Exportable) $Doc->ExportField($this->jurnalm_id);
-						if ($this->akunm_id_debet->Exportable) $Doc->ExportField($this->akunm_id_debet);
+						if ($this->akunm_id->Exportable) $Doc->ExportField($this->akunm_id);
 						if ($this->nilaim_debet->Exportable) $Doc->ExportField($this->nilaim_debet);
-						if ($this->akunm_id_kredit->Exportable) $Doc->ExportField($this->akunm_id_kredit);
 						if ($this->nilaim_kredit->Exportable) $Doc->ExportField($this->nilaim_kredit);
 					}
 					$Doc->EndExportRow();

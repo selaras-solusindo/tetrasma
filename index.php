@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "tb_userinfo.php" ?>
+<?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -195,9 +195,9 @@ class cdefault {
 		// Open connection
 		if (!isset($conn)) $conn = ew_Connect();
 
-		// User table object (tb_user)
+		// User table object (t_user)
 		if (!isset($UserTable)) {
-			$UserTable = new ctb_user();
+			$UserTable = new ct_user();
 			$UserTableConn = Conn($UserTable->DBID);
 		}
 	}
@@ -268,36 +268,36 @@ class cdefault {
 		$Security->LoadUserLevel(); // Load User Level
 		if ($Security->AllowList(CurrentProjectID() . 'home.php'))
 		$this->Page_Terminate("home.php"); // Exit and go to default page
-		if ($Security->AllowList(CurrentProjectID() . 'tb_anggota'))
-			$this->Page_Terminate("tb_anggotalist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_anggota'))
+			$this->Page_Terminate("t_anggotalist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'audittrail'))
 			$this->Page_Terminate("audittraillist.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_level1'))
-			$this->Page_Terminate("tb_level1list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_level2'))
-			$this->Page_Terminate("tb_level2list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_level3'))
-			$this->Page_Terminate("tb_level3list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_level4'))
-			$this->Page_Terminate("tb_level4list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_user'))
-			$this->Page_Terminate("tb_userlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_level1'))
+			$this->Page_Terminate("t_level1list.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_level2'))
+			$this->Page_Terminate("t_level2list.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_level3'))
+			$this->Page_Terminate("t_level3list.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_level4'))
+			$this->Page_Terminate("t_level4list.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_user'))
+			$this->Page_Terminate("t_userlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'view_akun.php'))
 			$this->Page_Terminate("view_akun.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_detail'))
-			$this->Page_Terminate("tb_detaillist.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_jurnal'))
-			$this->Page_Terminate("tb_jurnallist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_detail'))
+			$this->Page_Terminate("t_detaillist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_jurnal'))
+			$this->Page_Terminate("t_jurnallist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'ambildata.php'))
 			$this->Page_Terminate("ambildata.php");
-		if ($Security->AllowList(CurrentProjectID() . 'view_akun_jurnal'))
-			$this->Page_Terminate("view_akun_jurnallist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'ambiljurnalkode.php'))
 			$this->Page_Terminate("ambiljurnalkode.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_detailm'))
-			$this->Page_Terminate("tb_detailmlist.php");
-		if ($Security->AllowList(CurrentProjectID() . 'tb_jurnalm'))
-			$this->Page_Terminate("tb_jurnalmlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_detailm'))
+			$this->Page_Terminate("t_detailmlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_jurnalm'))
+			$this->Page_Terminate("t_jurnalmlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'v_akun_jurnal'))
+			$this->Page_Terminate("v_akun_jurnallist.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

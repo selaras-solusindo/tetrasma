@@ -3986,6 +3986,7 @@ class cAdvancedSecurity {
 						$_SESSION[EW_SESSION_STATUS] = "login";
 						$_SESSION[EW_SESSION_SYS_ADMIN] = 0; // Non System Administrator
 						$this->setCurrentUserName($rs->fields('username')); // Load user name
+						$this->setSessionUserID($rs->fields('user_id')); // Load User ID
 						if (is_null($rs->fields('userlevel'))) {
 							$this->setSessionUserLevelID(0);
 						} else {
@@ -3999,6 +4000,7 @@ class cAdvancedSecurity {
 					}
 				} else { // User not found in user table
 					if ($customValidateUser) { // Grant default permissions
+						$this->setSessionUserID($usr); // User name as User ID
 						$this->setSessionUserLevelID(-2); // Anonymous User Level
 						$this->SetUpUserLevel();
 					}
@@ -4401,6 +4403,8 @@ class cAdvancedSecurity {
 		$IsAdmin = $this->IsSysAdmin();
 		if (!$IsAdmin)
 			$IsAdmin = $this->CurrentUserLevelID == -1 || in_array(-1, $this->UserLevelID);
+		if (!$IsAdmin)
+    		$IsAdmin = $this->CurrentUserID == -1 || in_array(-1, $this->UserID);
 		return $IsAdmin;
 	}
 
@@ -4430,13 +4434,108 @@ class cAdvancedSecurity {
 	function CurrentUserInfo($fldname) {
 		global $UserTableConn;
 		$info = NULL;
-		if (defined("EW_USER_TABLE") && !$this->IsSysAdmin()) {
-			$user = $this->CurrentUserName();
-			if (strval($user) <> "")
-				return ew_ExecuteScalar("SELECT " . ew_QuotedName($fldname, EW_USER_TABLE_DBID) . " FROM " . EW_USER_TABLE . " WHERE " .
-					str_replace("%u", ew_AdjustSql($user, EW_USER_TABLE_DBID), EW_USER_NAME_FILTER), $UserTableConn);
-		}
+		$info = $this->GetUserInfo($fldname, $this->CurrentUserID);
 		return $info;
+	}
+
+	// Get user info
+	function GetUserInfo($FieldName, $UserID) {
+		global $UserTable, $UserTableConn;
+		if (strval($UserID) <> "") {
+
+			// Get SQL from GetSQL method in <UserTable> class, <UserTable>info.php
+			$sFilter = str_replace("%u", ew_AdjustSql($UserID, EW_USER_TABLE_DBID), EW_USER_ID_FILTER);
+			$sSql = $UserTable->GetSQL($sFilter, '');
+			if (($RsUser = $UserTableConn->Execute($sSql)) && !$RsUser->EOF) {
+				$info = $RsUser->fields($FieldName);
+				$RsUser->Close();
+				return $info;
+			}
+		}
+		return NULL;
+  }
+
+	// Get User ID by user name
+	function GetUserIDByUserName($UserName) {
+		global $UserTable, $UserTableConn;
+		if (strval($UserName) <> "") {
+			$sFilter = str_replace("%u", ew_AdjustSql($UserName, EW_USER_TABLE_DBID), EW_USER_NAME_FILTER);
+			$sSql = $UserTable->GetSQL($sFilter, '');
+			if (($RsUser = $UserTableConn->Execute($sSql)) && !$RsUser->EOF) {
+				$UserID = $RsUser->fields('user_id');
+				$RsUser->Close();
+				return $UserID;
+			}
+		}
+		return "";
+	}
+
+	// Load User ID
+	function LoadUserID() {
+		global $UserTable, $UserTableConn;
+		$this->UserID = array();
+		if (strval($this->CurrentUserID) == "") {
+
+			// Add codes to handle empty user id here
+		} elseif ($this->CurrentUserID <> "-1") {
+
+			// Get first level
+			$this->AddUserID($this->CurrentUserID);
+			$sFilter = $UserTable->UserIDFilter($this->CurrentUserID);
+			$sSql = $UserTable->GetSQL($sFilter, '');
+			if ($RsUser = $UserTableConn->Execute($sSql)) {
+				while (!$RsUser->EOF) {
+					$this->AddUserID($RsUser->fields('user_id'));
+					$RsUser->MoveNext();
+				}
+				$RsUser->Close();
+			}
+		}
+	}
+
+	// Add user name
+	function AddUserName($UserName) {
+		$this->AddUserID($this->GetUserIDByUserName($UserName));
+	}
+
+	// Add User ID
+	function AddUserID($userid) {
+		if (strval($userid) == "") return;
+		if (!is_numeric($userid)) return;
+		if (!in_array(trim(strval($userid)), $this->UserID))
+			$this->UserID[] = trim(strval($userid));
+	}
+
+	// Delete user name
+	function DeleteUserName($UserName) {
+		$this->DeleteUserID($this->GetUserIDByUserName($UserName));
+	}
+
+	// Delete User ID
+	function DeleteUserID($userid) {
+		if (strval($userid) == "") return;
+		if (!is_numeric($userid)) return;
+		$cnt = count($this->UserID);
+		for ($i = 0; $i < $cnt; $i++) {
+			if ($this->UserID[$i] == trim(strval($userid))) {
+				unset($this->UserID[$i]);
+				break;
+			}
+		}
+	}
+
+	// User ID list
+	function UserIDList() {
+		$ar = $this->UserID;
+		$len = count($ar);
+		for ($i = 0; $i < $len; $i++)
+			$ar[$i] =  ew_QuotedValue($ar[$i], EW_DATATYPE_NUMBER, EW_USER_TABLE_DBID);
+		return implode(", ", $ar);
+	}
+
+	// List of allowed User IDs for this user
+	function IsValidUserID($userid) {
+		return in_array(trim(strval($userid)), $this->UserID);
 	}
 
 	// UserID Loading event

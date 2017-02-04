@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<configuration date="2017/02/03" author="e.World Technology Ltd.">
-  <project id="{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}" file="D:\xampp\htdocs\tetrasma\tetrasma.pmp" name="tetrasma" product="PHPMaker" version="13.0" datetime="2017/02/03 21:30:58" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
-    <table id="tb_anggota" name="tb_anggota" caption="Manajemen Anggota" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+<configuration date="2017/02/04" author="e.World Technology Ltd.">
+  <project id="{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}" file="D:\xampp\htdocs\tetrasma\tetrasma.pmp" name="tetrasma" product="PHPMaker" version="13.0" datetime="2017/02/04 22:17:46" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+    <table id="t_anggota" name="t_anggota" caption="Manajemen Anggota" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="audittrail" name="audittrail" caption="audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_level1" name="tb_level1" caption="Level 1" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_level2" name="tb_level2" caption="Level 2" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_level3" name="tb_level3" caption="Level 3" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_level4" name="tb_level4" caption="Level 4" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_user" name="tb_user" caption="Manajemen User" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level1" name="t_level1" caption="Level 1" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level2" name="t_level2" caption="Level 2" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level3" name="t_level3" caption="Level 3" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level4" name="t_level4" caption="Level 4" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_user" name="t_user" caption="Manajemen User" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="view_akun_php" name="view_akun.php" caption="View Akun" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_detail" name="tb_detail" caption="Detail Jurnal Kas &amp; Bank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_jurnal" name="tb_jurnal" caption="Jurnal Kas &amp; Bank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_detail" name="t_detail" caption="Detail Jurnal Kas &amp; Bank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_jurnal" name="t_jurnal" caption="Kas &amp; Bank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="home_php" name="home.php" caption="Home" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="ambildata_php" name="ambildata.php" caption="" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="view_akun_jurnal" name="view_akun_jurnal" caption="view akun jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="ambiljurnalkode_php" name="ambiljurnalkode.php" caption="" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_detailm" name="tb_detailm" caption="Detail Jurnal Memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="tb_jurnalm" name="tb_jurnalm" caption="Jurnal Memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_detailm" name="t_detailm" caption="Detail Jurnal Memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_jurnalm" name="t_jurnalm" caption="Memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_akun_jurnal" name="v_akun_jurnal" caption="v akun jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>

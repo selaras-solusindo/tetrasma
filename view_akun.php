@@ -6,7 +6,7 @@ ob_start(); // Turn on output buffering
 <?php $EW_ROOT_RELATIVE_PATH = ""; ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "tb_userinfo.php" ?>
+<?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -203,9 +203,9 @@ class cview_akun_php {
 		// Open connection
 		if (!isset($conn)) $conn = ew_Connect();
 
-		// User table object (tb_user)
+		// User table object (t_user)
 		if (!isset($UserTable)) {
-			$UserTable = new ctb_user();
+			$UserTable = new ct_user();
 			$UserTableConn = Conn($UserTable->DBID);
 		}
 	}
@@ -226,6 +226,11 @@ class cview_akun_php {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			$this->Page_Terminate(ew_GetUrl("index.php"));
+		}
+		if ($Security->IsLoggedIn()) {
+			$Security->UserID_Loading();
+			$Security->LoadUserID();
+			$Security->UserID_Loaded();
 		}
 
 		// Global Page Loading event (in userfn*.php)
@@ -312,7 +317,7 @@ include("conn.php");
 mysql_connect($hostname_conn, $username_conn, $password_conn) or die ("Tidak bisa terkoneksi ke Database server");
 mysql_select_db($database_conn) or die ("Database tidak ditemukan");
 
-$msql_level1 = "select * from tb_level1 order by level1_no";
+$msql_level1 = "select * from t_level1 order by level1_no";
 $mquery_level1 = mysql_query($msql_level1);
 ?>
 
@@ -341,7 +346,7 @@ $mquery_level1 = mysql_query($msql_level1);
 					<td>&nbsp;</td>
 				</tr>
 				<?php
-				$msql_level2 = "select * from tb_level2 where level1_id = ".$row_level1["level1_id"]." order by level2_no"; //echo $msql_level2;
+				$msql_level2 = "select * from t_level2 where level1_id = ".$row_level1["level1_id"]." order by level2_no"; //echo $msql_level2;
 				$mquery_level2 = mysql_query($msql_level2);
 				while($row_level2 = mysql_fetch_array($mquery_level2)) {
 				?>
@@ -352,7 +357,7 @@ $mquery_level1 = mysql_query($msql_level1);
 						<td>&nbsp;</td>
 					</tr>
 					<?php
-					$msql_level3 = "select * from tb_level3 where level2_id = ".$row_level2["level2_id"]." order by level3_no"; //echo $msql_level3;
+					$msql_level3 = "select * from t_level3 where level2_id = ".$row_level2["level2_id"]." order by level3_no"; //echo $msql_level3;
 					$mquery_level3 = mysql_query($msql_level3);
 					while($row_level3 = mysql_fetch_array($mquery_level3)) {
 					?>
@@ -363,7 +368,7 @@ $mquery_level1 = mysql_query($msql_level1);
 							<td>&nbsp;</td>
 						</tr>
 						<?php
-						$msql_level4 = "select * from tb_level4 where level3_id = ".$row_level3["level3_id"]." order by level4_no"; //echo $msql_level4;
+						$msql_level4 = "select * from t_level4 where level3_id = ".$row_level3["level3_id"]." order by level4_no"; //echo $msql_level4;
 						$mquery_level4 = mysql_query($msql_level4);
 						while($row_level4 = mysql_fetch_array($mquery_level4)) {
 						?>
