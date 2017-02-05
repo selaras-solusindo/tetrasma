@@ -993,13 +993,16 @@ class ct_user_list extends ct_user {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->username); // username
-			$this->UpdateSort($this->password); // password
-			$this->UpdateSort($this->userlevel); // userlevel
+			$this->UpdateSort($this->username, $bCtrl); // username
+			$this->UpdateSort($this->password, $bCtrl); // password
+			$this->UpdateSort($this->userlevel, $bCtrl); // userlevel
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -2212,7 +2215,7 @@ $t_user_list->ListOptions->Render("header", "left");
 	<?php if ($t_user->SortUrl($t_user->username) == "") { ?>
 		<th data-name="username"><div id="elh_t_user_username" class="t_user_username"><div class="ewTableHeaderCaption"><?php echo $t_user->username->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="username"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_user->SortUrl($t_user->username) ?>',1);"><div id="elh_t_user_username" class="t_user_username">
+		<th data-name="username"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_user->SortUrl($t_user->username) ?>',2);"><div id="elh_t_user_username" class="t_user_username">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_user->username->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_user->username->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_user->username->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2221,7 +2224,7 @@ $t_user_list->ListOptions->Render("header", "left");
 	<?php if ($t_user->SortUrl($t_user->password) == "") { ?>
 		<th data-name="password"><div id="elh_t_user_password" class="t_user_password"><div class="ewTableHeaderCaption"><?php echo $t_user->password->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="password"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_user->SortUrl($t_user->password) ?>',1);"><div id="elh_t_user_password" class="t_user_password">
+		<th data-name="password"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_user->SortUrl($t_user->password) ?>',2);"><div id="elh_t_user_password" class="t_user_password">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_user->password->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_user->password->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_user->password->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2230,7 +2233,7 @@ $t_user_list->ListOptions->Render("header", "left");
 	<?php if ($t_user->SortUrl($t_user->userlevel) == "") { ?>
 		<th data-name="userlevel"><div id="elh_t_user_userlevel" class="t_user_userlevel"><div class="ewTableHeaderCaption"><?php echo $t_user->userlevel->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="userlevel"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_user->SortUrl($t_user->userlevel) ?>',1);"><div id="elh_t_user_userlevel" class="t_user_userlevel">
+		<th data-name="userlevel"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_user->SortUrl($t_user->userlevel) ?>',2);"><div id="elh_t_user_userlevel" class="t_user_userlevel">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_user->userlevel->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_user->userlevel->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_user->userlevel->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>

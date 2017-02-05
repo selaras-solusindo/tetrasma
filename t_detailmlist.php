@@ -716,13 +716,16 @@ class ct_detailm_list extends ct_detailm {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->akunm_id); // akunm_id
-			$this->UpdateSort($this->nilaim_debet); // nilaim_debet
-			$this->UpdateSort($this->nilaim_kredit); // nilaim_kredit
+			$this->UpdateSort($this->akunm_id, $bCtrl); // akunm_id
+			$this->UpdateSort($this->nilaim_debet, $bCtrl); // nilaim_debet
+			$this->UpdateSort($this->nilaim_kredit, $bCtrl); // nilaim_kredit
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1991,7 +1994,7 @@ $t_detailm_list->ListOptions->Render("header", "left");
 	<?php if ($t_detailm->SortUrl($t_detailm->akunm_id) == "") { ?>
 		<th data-name="akunm_id"><div id="elh_t_detailm_akunm_id" class="t_detailm_akunm_id"><div class="ewTableHeaderCaption"><?php echo $t_detailm->akunm_id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="akunm_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detailm->SortUrl($t_detailm->akunm_id) ?>',1);"><div id="elh_t_detailm_akunm_id" class="t_detailm_akunm_id">
+		<th data-name="akunm_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detailm->SortUrl($t_detailm->akunm_id) ?>',2);"><div id="elh_t_detailm_akunm_id" class="t_detailm_akunm_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_detailm->akunm_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_detailm->akunm_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_detailm->akunm_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2000,7 +2003,7 @@ $t_detailm_list->ListOptions->Render("header", "left");
 	<?php if ($t_detailm->SortUrl($t_detailm->nilaim_debet) == "") { ?>
 		<th data-name="nilaim_debet"><div id="elh_t_detailm_nilaim_debet" class="t_detailm_nilaim_debet"><div class="ewTableHeaderCaption"><?php echo $t_detailm->nilaim_debet->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="nilaim_debet"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detailm->SortUrl($t_detailm->nilaim_debet) ?>',1);"><div id="elh_t_detailm_nilaim_debet" class="t_detailm_nilaim_debet">
+		<th data-name="nilaim_debet"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detailm->SortUrl($t_detailm->nilaim_debet) ?>',2);"><div id="elh_t_detailm_nilaim_debet" class="t_detailm_nilaim_debet">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_detailm->nilaim_debet->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_detailm->nilaim_debet->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_detailm->nilaim_debet->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2009,7 +2012,7 @@ $t_detailm_list->ListOptions->Render("header", "left");
 	<?php if ($t_detailm->SortUrl($t_detailm->nilaim_kredit) == "") { ?>
 		<th data-name="nilaim_kredit"><div id="elh_t_detailm_nilaim_kredit" class="t_detailm_nilaim_kredit"><div class="ewTableHeaderCaption"><?php echo $t_detailm->nilaim_kredit->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="nilaim_kredit"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detailm->SortUrl($t_detailm->nilaim_kredit) ?>',1);"><div id="elh_t_detailm_nilaim_kredit" class="t_detailm_nilaim_kredit">
+		<th data-name="nilaim_kredit"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detailm->SortUrl($t_detailm->nilaim_kredit) ?>',2);"><div id="elh_t_detailm_nilaim_kredit" class="t_detailm_nilaim_kredit">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_detailm->nilaim_kredit->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_detailm->nilaim_kredit->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_detailm->nilaim_kredit->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>

@@ -1052,17 +1052,20 @@ class caudittrail_list extends caudittrail {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->id); // id
-			$this->UpdateSort($this->datetime); // datetime
-			$this->UpdateSort($this->script); // script
-			$this->UpdateSort($this->user); // user
-			$this->UpdateSort($this->action); // action
-			$this->UpdateSort($this->_table); // table
-			$this->UpdateSort($this->_field); // field
+			$this->UpdateSort($this->id, $bCtrl); // id
+			$this->UpdateSort($this->datetime, $bCtrl); // datetime
+			$this->UpdateSort($this->script, $bCtrl); // script
+			$this->UpdateSort($this->user, $bCtrl); // user
+			$this->UpdateSort($this->action, $bCtrl); // action
+			$this->UpdateSort($this->_table, $bCtrl); // table
+			$this->UpdateSort($this->_field, $bCtrl); // field
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -2278,7 +2281,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->id) == "") { ?>
 		<th data-name="id"><div id="elh_audittrail_id" class="audittrail_id"><div class="ewTableHeaderCaption"><?php echo $audittrail->id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->id) ?>',1);"><div id="elh_audittrail_id" class="audittrail_id">
+		<th data-name="id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->id) ?>',2);"><div id="elh_audittrail_id" class="audittrail_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2287,7 +2290,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->datetime) == "") { ?>
 		<th data-name="datetime"><div id="elh_audittrail_datetime" class="audittrail_datetime"><div class="ewTableHeaderCaption"><?php echo $audittrail->datetime->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="datetime"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->datetime) ?>',1);"><div id="elh_audittrail_datetime" class="audittrail_datetime">
+		<th data-name="datetime"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->datetime) ?>',2);"><div id="elh_audittrail_datetime" class="audittrail_datetime">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->datetime->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->datetime->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->datetime->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2296,7 +2299,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->script) == "") { ?>
 		<th data-name="script"><div id="elh_audittrail_script" class="audittrail_script"><div class="ewTableHeaderCaption"><?php echo $audittrail->script->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="script"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->script) ?>',1);"><div id="elh_audittrail_script" class="audittrail_script">
+		<th data-name="script"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->script) ?>',2);"><div id="elh_audittrail_script" class="audittrail_script">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->script->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->script->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->script->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2305,7 +2308,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->user) == "") { ?>
 		<th data-name="user"><div id="elh_audittrail_user" class="audittrail_user"><div class="ewTableHeaderCaption"><?php echo $audittrail->user->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="user"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->user) ?>',1);"><div id="elh_audittrail_user" class="audittrail_user">
+		<th data-name="user"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->user) ?>',2);"><div id="elh_audittrail_user" class="audittrail_user">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->user->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->user->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->user->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2314,7 +2317,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->action) == "") { ?>
 		<th data-name="action"><div id="elh_audittrail_action" class="audittrail_action"><div class="ewTableHeaderCaption"><?php echo $audittrail->action->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="action"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->action) ?>',1);"><div id="elh_audittrail_action" class="audittrail_action">
+		<th data-name="action"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->action) ?>',2);"><div id="elh_audittrail_action" class="audittrail_action">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->action->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->action->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->action->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2323,7 +2326,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->_table) == "") { ?>
 		<th data-name="_table"><div id="elh_audittrail__table" class="audittrail__table"><div class="ewTableHeaderCaption"><?php echo $audittrail->_table->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="_table"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->_table) ?>',1);"><div id="elh_audittrail__table" class="audittrail__table">
+		<th data-name="_table"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->_table) ?>',2);"><div id="elh_audittrail__table" class="audittrail__table">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->_table->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->_table->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->_table->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2332,7 +2335,7 @@ $audittrail_list->ListOptions->Render("header", "left");
 	<?php if ($audittrail->SortUrl($audittrail->_field) == "") { ?>
 		<th data-name="_field"><div id="elh_audittrail__field" class="audittrail__field"><div class="ewTableHeaderCaption"><?php echo $audittrail->_field->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="_field"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->_field) ?>',1);"><div id="elh_audittrail__field" class="audittrail__field">
+		<th data-name="_field"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $audittrail->SortUrl($audittrail->_field) ?>',2);"><div id="elh_audittrail__field" class="audittrail__field">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $audittrail->_field->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($audittrail->_field->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($audittrail->_field->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>

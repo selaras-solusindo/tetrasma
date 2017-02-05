@@ -993,13 +993,16 @@ class ct_level2_list extends ct_level2 {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->level1_id); // level1_id
-			$this->UpdateSort($this->level2_no); // level2_no
-			$this->UpdateSort($this->level2_nama); // level2_nama
+			$this->UpdateSort($this->level1_id, $bCtrl); // level1_id
+			$this->UpdateSort($this->level2_no, $bCtrl); // level2_no
+			$this->UpdateSort($this->level2_nama, $bCtrl); // level2_nama
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1011,6 +1014,8 @@ class ct_level2_list extends ct_level2 {
 			if ($this->getSqlOrderBy() <> "") {
 				$sOrderBy = $this->getSqlOrderBy();
 				$this->setSessionOrderBy($sOrderBy);
+				$this->level1_id->setSort("ASC");
+				$this->level2_no->setSort("ASC");
 			}
 		}
 	}
@@ -1094,6 +1099,14 @@ class ct_level2_list extends ct_level2 {
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
+		// "sequence"
+		$item = &$this->ListOptions->Add("sequence");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = TRUE;
+		$item->OnLeft = TRUE; // Always on left
+		$item->ShowInDropDown = FALSE;
+		$item->ShowInButtonGroup = FALSE;
+
 		// Drop down button for ListOptions
 		$this->ListOptions->UseImageAndText = TRUE;
 		$this->ListOptions->UseDropDownButton = FALSE;
@@ -1114,6 +1127,10 @@ class ct_level2_list extends ct_level2 {
 	function RenderListOptions() {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
+
+		// "sequence"
+		$oListOpt = &$this->ListOptions->Items["sequence"];
+		$oListOpt->Body = ew_FormatSeqNo($this->RecCnt);
 
 		// "view"
 		$oListOpt = &$this->ListOptions->Items["view"];
@@ -1562,6 +1579,7 @@ class ct_level2_list extends ct_level2 {
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->level1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `level1_no` ASC";
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
@@ -2202,7 +2220,7 @@ $t_level2_list->ListOptions->Render("header", "left");
 	<?php if ($t_level2->SortUrl($t_level2->level1_id) == "") { ?>
 		<th data-name="level1_id"><div id="elh_t_level2_level1_id" class="t_level2_level1_id"><div class="ewTableHeaderCaption"><?php echo $t_level2->level1_id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="level1_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_level2->SortUrl($t_level2->level1_id) ?>',1);"><div id="elh_t_level2_level1_id" class="t_level2_level1_id">
+		<th data-name="level1_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_level2->SortUrl($t_level2->level1_id) ?>',2);"><div id="elh_t_level2_level1_id" class="t_level2_level1_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_level2->level1_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_level2->level1_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_level2->level1_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2211,7 +2229,7 @@ $t_level2_list->ListOptions->Render("header", "left");
 	<?php if ($t_level2->SortUrl($t_level2->level2_no) == "") { ?>
 		<th data-name="level2_no"><div id="elh_t_level2_level2_no" class="t_level2_level2_no"><div class="ewTableHeaderCaption"><?php echo $t_level2->level2_no->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="level2_no"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_level2->SortUrl($t_level2->level2_no) ?>',1);"><div id="elh_t_level2_level2_no" class="t_level2_level2_no">
+		<th data-name="level2_no"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_level2->SortUrl($t_level2->level2_no) ?>',2);"><div id="elh_t_level2_level2_no" class="t_level2_level2_no">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_level2->level2_no->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_level2->level2_no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_level2->level2_no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2220,7 +2238,7 @@ $t_level2_list->ListOptions->Render("header", "left");
 	<?php if ($t_level2->SortUrl($t_level2->level2_nama) == "") { ?>
 		<th data-name="level2_nama"><div id="elh_t_level2_level2_nama" class="t_level2_level2_nama"><div class="ewTableHeaderCaption"><?php echo $t_level2->level2_nama->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="level2_nama"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_level2->SortUrl($t_level2->level2_nama) ?>',1);"><div id="elh_t_level2_level2_nama" class="t_level2_level2_nama">
+		<th data-name="level2_nama"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_level2->SortUrl($t_level2->level2_nama) ?>',2);"><div id="elh_t_level2_level2_nama" class="t_level2_level2_nama">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_level2->level2_nama->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_level2->level2_nama->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_level2->level2_nama->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>

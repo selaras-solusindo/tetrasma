@@ -716,13 +716,16 @@ class ct_detail_list extends ct_detail {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->akun_id); // akun_id
-			$this->UpdateSort($this->nilai); // nilai
-			$this->UpdateSort($this->anggota_id); // anggota_id
+			$this->UpdateSort($this->akun_id, $bCtrl); // akun_id
+			$this->UpdateSort($this->nilai, $bCtrl); // nilai
+			$this->UpdateSort($this->anggota_id, $bCtrl); // anggota_id
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -2022,7 +2025,7 @@ $t_detail_list->ListOptions->Render("header", "left");
 	<?php if ($t_detail->SortUrl($t_detail->akun_id) == "") { ?>
 		<th data-name="akun_id"><div id="elh_t_detail_akun_id" class="t_detail_akun_id"><div class="ewTableHeaderCaption"><?php echo $t_detail->akun_id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="akun_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detail->SortUrl($t_detail->akun_id) ?>',1);"><div id="elh_t_detail_akun_id" class="t_detail_akun_id">
+		<th data-name="akun_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detail->SortUrl($t_detail->akun_id) ?>',2);"><div id="elh_t_detail_akun_id" class="t_detail_akun_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_detail->akun_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_detail->akun_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_detail->akun_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2031,7 +2034,7 @@ $t_detail_list->ListOptions->Render("header", "left");
 	<?php if ($t_detail->SortUrl($t_detail->nilai) == "") { ?>
 		<th data-name="nilai"><div id="elh_t_detail_nilai" class="t_detail_nilai"><div class="ewTableHeaderCaption"><?php echo $t_detail->nilai->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="nilai"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detail->SortUrl($t_detail->nilai) ?>',1);"><div id="elh_t_detail_nilai" class="t_detail_nilai">
+		<th data-name="nilai"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detail->SortUrl($t_detail->nilai) ?>',2);"><div id="elh_t_detail_nilai" class="t_detail_nilai">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_detail->nilai->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_detail->nilai->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_detail->nilai->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2040,7 +2043,7 @@ $t_detail_list->ListOptions->Render("header", "left");
 	<?php if ($t_detail->SortUrl($t_detail->anggota_id) == "") { ?>
 		<th data-name="anggota_id"><div id="elh_t_detail_anggota_id" class="t_detail_anggota_id"><div class="ewTableHeaderCaption"><?php echo $t_detail->anggota_id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="anggota_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detail->SortUrl($t_detail->anggota_id) ?>',1);"><div id="elh_t_detail_anggota_id" class="t_detail_anggota_id">
+		<th data-name="anggota_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_detail->SortUrl($t_detail->anggota_id) ?>',2);"><div id="elh_t_detail_anggota_id" class="t_detail_anggota_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_detail->anggota_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_detail->anggota_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_detail->anggota_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>

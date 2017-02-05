@@ -1004,14 +1004,17 @@ class ct_jurnalm_list extends ct_jurnalm {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->jurnalm_id); // jurnalm_id
-			$this->UpdateSort($this->no_buktim); // no_buktim
-			$this->UpdateSort($this->tglm); // tglm
-			$this->UpdateSort($this->ketm); // ketm
+			$this->UpdateSort($this->jurnalm_id, $bCtrl); // jurnalm_id
+			$this->UpdateSort($this->no_buktim, $bCtrl); // no_buktim
+			$this->UpdateSort($this->tglm, $bCtrl); // tglm
+			$this->UpdateSort($this->ketm, $bCtrl); // ketm
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -2310,7 +2313,7 @@ $t_jurnalm_list->ListOptions->Render("header", "left");
 	<?php if ($t_jurnalm->SortUrl($t_jurnalm->jurnalm_id) == "") { ?>
 		<th data-name="jurnalm_id"><div id="elh_t_jurnalm_jurnalm_id" class="t_jurnalm_jurnalm_id"><div class="ewTableHeaderCaption"><?php echo $t_jurnalm->jurnalm_id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="jurnalm_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->jurnalm_id) ?>',1);"><div id="elh_t_jurnalm_jurnalm_id" class="t_jurnalm_jurnalm_id">
+		<th data-name="jurnalm_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->jurnalm_id) ?>',2);"><div id="elh_t_jurnalm_jurnalm_id" class="t_jurnalm_jurnalm_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_jurnalm->jurnalm_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_jurnalm->jurnalm_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_jurnalm->jurnalm_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2319,7 +2322,7 @@ $t_jurnalm_list->ListOptions->Render("header", "left");
 	<?php if ($t_jurnalm->SortUrl($t_jurnalm->no_buktim) == "") { ?>
 		<th data-name="no_buktim"><div id="elh_t_jurnalm_no_buktim" class="t_jurnalm_no_buktim"><div class="ewTableHeaderCaption"><?php echo $t_jurnalm->no_buktim->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="no_buktim"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->no_buktim) ?>',1);"><div id="elh_t_jurnalm_no_buktim" class="t_jurnalm_no_buktim">
+		<th data-name="no_buktim"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->no_buktim) ?>',2);"><div id="elh_t_jurnalm_no_buktim" class="t_jurnalm_no_buktim">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_jurnalm->no_buktim->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_jurnalm->no_buktim->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_jurnalm->no_buktim->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2328,7 +2331,7 @@ $t_jurnalm_list->ListOptions->Render("header", "left");
 	<?php if ($t_jurnalm->SortUrl($t_jurnalm->tglm) == "") { ?>
 		<th data-name="tglm"><div id="elh_t_jurnalm_tglm" class="t_jurnalm_tglm"><div class="ewTableHeaderCaption"><?php echo $t_jurnalm->tglm->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="tglm"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->tglm) ?>',1);"><div id="elh_t_jurnalm_tglm" class="t_jurnalm_tglm">
+		<th data-name="tglm"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->tglm) ?>',2);"><div id="elh_t_jurnalm_tglm" class="t_jurnalm_tglm">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_jurnalm->tglm->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_jurnalm->tglm->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_jurnalm->tglm->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2337,7 +2340,7 @@ $t_jurnalm_list->ListOptions->Render("header", "left");
 	<?php if ($t_jurnalm->SortUrl($t_jurnalm->ketm) == "") { ?>
 		<th data-name="ketm"><div id="elh_t_jurnalm_ketm" class="t_jurnalm_ketm"><div class="ewTableHeaderCaption"><?php echo $t_jurnalm->ketm->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="ketm"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->ketm) ?>',1);"><div id="elh_t_jurnalm_ketm" class="t_jurnalm_ketm">
+		<th data-name="ketm"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_jurnalm->SortUrl($t_jurnalm->ketm) ?>',2);"><div id="elh_t_jurnalm_ketm" class="t_jurnalm_ketm">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_jurnalm->ketm->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_jurnalm->ketm->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_jurnalm->ketm->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>

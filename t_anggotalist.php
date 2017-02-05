@@ -1059,19 +1059,22 @@ class ct_anggota_list extends ct_anggota {
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
+		// Check for Ctrl pressed
+		$bCtrl = (@$_GET["ctrl"] <> "");
+
 		// Check for "order" parameter
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->no_anggota); // no_anggota
-			$this->UpdateSort($this->nama); // nama
-			$this->UpdateSort($this->tgl_masuk); // tgl_masuk
-			$this->UpdateSort($this->alamat); // alamat
-			$this->UpdateSort($this->kota); // kota
-			$this->UpdateSort($this->no_telp); // no_telp
-			$this->UpdateSort($this->pekerjaan); // pekerjaan
-			$this->UpdateSort($this->jns_pengenal); // jns_pengenal
-			$this->UpdateSort($this->no_pengenal); // no_pengenal
+			$this->UpdateSort($this->no_anggota, $bCtrl); // no_anggota
+			$this->UpdateSort($this->nama, $bCtrl); // nama
+			$this->UpdateSort($this->tgl_masuk, $bCtrl); // tgl_masuk
+			$this->UpdateSort($this->alamat, $bCtrl); // alamat
+			$this->UpdateSort($this->kota, $bCtrl); // kota
+			$this->UpdateSort($this->no_telp, $bCtrl); // no_telp
+			$this->UpdateSort($this->pekerjaan, $bCtrl); // pekerjaan
+			$this->UpdateSort($this->jns_pengenal, $bCtrl); // jns_pengenal
+			$this->UpdateSort($this->no_pengenal, $bCtrl); // no_pengenal
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -2333,7 +2336,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->no_anggota) == "") { ?>
 		<th data-name="no_anggota"><div id="elh_t_anggota_no_anggota" class="t_anggota_no_anggota"><div class="ewTableHeaderCaption"><?php echo $t_anggota->no_anggota->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="no_anggota"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->no_anggota) ?>',1);"><div id="elh_t_anggota_no_anggota" class="t_anggota_no_anggota">
+		<th data-name="no_anggota"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->no_anggota) ?>',2);"><div id="elh_t_anggota_no_anggota" class="t_anggota_no_anggota">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->no_anggota->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->no_anggota->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->no_anggota->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2342,7 +2345,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->nama) == "") { ?>
 		<th data-name="nama"><div id="elh_t_anggota_nama" class="t_anggota_nama"><div class="ewTableHeaderCaption"><?php echo $t_anggota->nama->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="nama"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->nama) ?>',1);"><div id="elh_t_anggota_nama" class="t_anggota_nama">
+		<th data-name="nama"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->nama) ?>',2);"><div id="elh_t_anggota_nama" class="t_anggota_nama">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->nama->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->nama->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->nama->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2351,7 +2354,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->tgl_masuk) == "") { ?>
 		<th data-name="tgl_masuk"><div id="elh_t_anggota_tgl_masuk" class="t_anggota_tgl_masuk"><div class="ewTableHeaderCaption"><?php echo $t_anggota->tgl_masuk->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="tgl_masuk"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->tgl_masuk) ?>',1);"><div id="elh_t_anggota_tgl_masuk" class="t_anggota_tgl_masuk">
+		<th data-name="tgl_masuk"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->tgl_masuk) ?>',2);"><div id="elh_t_anggota_tgl_masuk" class="t_anggota_tgl_masuk">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->tgl_masuk->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->tgl_masuk->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->tgl_masuk->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2360,7 +2363,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->alamat) == "") { ?>
 		<th data-name="alamat"><div id="elh_t_anggota_alamat" class="t_anggota_alamat"><div class="ewTableHeaderCaption"><?php echo $t_anggota->alamat->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="alamat"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->alamat) ?>',1);"><div id="elh_t_anggota_alamat" class="t_anggota_alamat">
+		<th data-name="alamat"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->alamat) ?>',2);"><div id="elh_t_anggota_alamat" class="t_anggota_alamat">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->alamat->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->alamat->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->alamat->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2369,7 +2372,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->kota) == "") { ?>
 		<th data-name="kota"><div id="elh_t_anggota_kota" class="t_anggota_kota"><div class="ewTableHeaderCaption"><?php echo $t_anggota->kota->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="kota"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->kota) ?>',1);"><div id="elh_t_anggota_kota" class="t_anggota_kota">
+		<th data-name="kota"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->kota) ?>',2);"><div id="elh_t_anggota_kota" class="t_anggota_kota">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->kota->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->kota->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->kota->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2378,7 +2381,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->no_telp) == "") { ?>
 		<th data-name="no_telp"><div id="elh_t_anggota_no_telp" class="t_anggota_no_telp"><div class="ewTableHeaderCaption"><?php echo $t_anggota->no_telp->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="no_telp"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->no_telp) ?>',1);"><div id="elh_t_anggota_no_telp" class="t_anggota_no_telp">
+		<th data-name="no_telp"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->no_telp) ?>',2);"><div id="elh_t_anggota_no_telp" class="t_anggota_no_telp">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->no_telp->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->no_telp->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->no_telp->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2387,7 +2390,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->pekerjaan) == "") { ?>
 		<th data-name="pekerjaan"><div id="elh_t_anggota_pekerjaan" class="t_anggota_pekerjaan"><div class="ewTableHeaderCaption"><?php echo $t_anggota->pekerjaan->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="pekerjaan"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->pekerjaan) ?>',1);"><div id="elh_t_anggota_pekerjaan" class="t_anggota_pekerjaan">
+		<th data-name="pekerjaan"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->pekerjaan) ?>',2);"><div id="elh_t_anggota_pekerjaan" class="t_anggota_pekerjaan">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->pekerjaan->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->pekerjaan->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->pekerjaan->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2396,7 +2399,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->jns_pengenal) == "") { ?>
 		<th data-name="jns_pengenal"><div id="elh_t_anggota_jns_pengenal" class="t_anggota_jns_pengenal"><div class="ewTableHeaderCaption"><?php echo $t_anggota->jns_pengenal->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="jns_pengenal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->jns_pengenal) ?>',1);"><div id="elh_t_anggota_jns_pengenal" class="t_anggota_jns_pengenal">
+		<th data-name="jns_pengenal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->jns_pengenal) ?>',2);"><div id="elh_t_anggota_jns_pengenal" class="t_anggota_jns_pengenal">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->jns_pengenal->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->jns_pengenal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->jns_pengenal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
@@ -2405,7 +2408,7 @@ $t_anggota_list->ListOptions->Render("header", "left");
 	<?php if ($t_anggota->SortUrl($t_anggota->no_pengenal) == "") { ?>
 		<th data-name="no_pengenal"><div id="elh_t_anggota_no_pengenal" class="t_anggota_no_pengenal"><div class="ewTableHeaderCaption"><?php echo $t_anggota->no_pengenal->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="no_pengenal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->no_pengenal) ?>',1);"><div id="elh_t_anggota_no_pengenal" class="t_anggota_no_pengenal">
+		<th data-name="no_pengenal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_anggota->SortUrl($t_anggota->no_pengenal) ?>',2);"><div id="elh_t_anggota_no_pengenal" class="t_anggota_no_pengenal">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_anggota->no_pengenal->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($t_anggota->no_pengenal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_anggota->no_pengenal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
