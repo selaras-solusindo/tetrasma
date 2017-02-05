@@ -25,7 +25,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME, TRUE); // Config file name
 define("EW_PROJECT_ID", "{D8E5AA29-C8A1-46A6-8DFF-08A223163C5D}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", 'xdSokZbnhZaKU9ts', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 'xLiY8yUeoqtins6b', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/tetrasma.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -35,7 +35,7 @@ define("EW_HIGHLIGHT_COMPARE", TRUE, TRUE); // Highlight compare mode, TRUE(case
 if (!function_exists('xml_parser_create') && !class_exists("DOMDocument")) die("This script requires PHP XML Parser or DOM.");
 define('EW_USE_DOM_XML', ((!function_exists('xml_parser_create') && class_exists("DOMDocument")) || FALSE), TRUE);
 if (!isset($ADODB_OUTP)) $ADODB_OUTP = 'ew_SetDebugMsg';
-define("EW_FONT_SIZE", 14, TRUE);
+define("EW_FONT_SIZE", 12, TRUE);
 define("EW_TMP_IMAGE_FONT", "DejaVuSans", TRUE); // Font for temp files
 
 // Set up font path
