@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 04, 2017 at 10:20 PM
+-- Generation Time: Feb 12, 2017 at 10:28 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=347 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=350 ;
 
 --
 -- Dumping data for table `audittrail`
@@ -389,7 +389,10 @@ INSERT INTO `audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table`,
 (343, '2017-02-04 14:29:47', '/tetrasma/t_level4edit.php', '1', 'U', 't_level4', 'level3_id', '2', '1', '15'),
 (344, '2017-02-04 14:29:47', '/tetrasma/t_level4edit.php', '1', 'U', 't_level4', 'level4_no', '2', '02', '01'),
 (345, '2017-02-04 14:30:05', '/tetrasma/t_level4edit.php', '1', 'U', 't_level4', 'level3_id', '3', '1', '15'),
-(346, '2017-02-04 14:30:05', '/tetrasma/t_level4edit.php', '1', 'U', 't_level4', 'level4_no', '3', '03', '02');
+(346, '2017-02-04 14:30:05', '/tetrasma/t_level4edit.php', '1', 'U', 't_level4', 'level4_no', '3', '03', '02'),
+(347, '2017-02-06 01:25:41', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(348, '2017-02-06 11:16:39', '/tetrasma/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(349, '2017-02-06 11:16:45', '/tetrasma/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 -- --------------------------------------------------------
 
