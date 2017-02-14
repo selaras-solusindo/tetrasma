@@ -1,3 +1,63 @@
+7:05 AM 2/14/2017
+sampai dengan :
+- akan membuat laporan buku besar
+
+yang ingin dilakukan :
+- buat combo yang isinya daftar akun, ambil dari level4
+- saat memilih nomor akun => maka akan mengambil record dari view yang sudah dibuat, yaitu
+  v_kasbank_memorial
+
+yang masih bingung :
+- gimana cara buat combo di report php maker, sedangkan tampilan awal dari rpm ini adalah
+  tampilan seluruh data
+- masih bingung pengambilan data nya
+
+
+
+6:29 PM 2/13/2017
+CREATE VIEW v_memorial AS SELECT detailm_id, a.jurnalm_id, no_buktim, tglm, ketm, a.akunm_id, nilaim_debet, nilaim_kredit
+FROM t_detailm a
+LEFT JOIN t_jurnalm b ON a.jurnalm_id = b.jurnalm_id
+- create view v_memorial
+
+
+CREATE VIEW v_kasbank AS SELECT * 
+FROM v_kasbank_jurnal
+UNION 
+SELECT * 
+FROM v_kasbank_detail
+- create view v_kasbank
+
+
+CREATE VIEW v_kasbank_jurnal AS SELECT NULL AS detail_id, jurnal_id, no_bukti, tgl, ket, akun_id, 
+CASE WHEN jenis_jurnal =  'M'
+THEN nilai
+ELSE 0 
+END AS debet, 
+CASE WHEN jenis_jurnal <>  'M'
+THEN nilai
+ELSE 0 
+END AS kredit
+FROM t_jurnal
+- create view dari tabel jurnal_kas_bank
+
+
+create view v_kasbank_detail as 
+SELECT detail_id, a.jurnal_id, no_bukti, tgl, ket, a.akun_id, 
+CASE WHEN dk =0
+THEN a.nilai
+ELSE 0 
+END AS debet, 
+CASE WHEN dk =1
+THEN a.nilai
+ELSE 0 
+END AS kredit
+FROM t_detail a
+LEFT JOIN t_jurnal b ON a.jurnal_id = b.jurnal_id
+- create view dari tabel detail_kas_bank
+
+
+
 ------------------
 11:11 AM 1/10/2017
 ------------------
