@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/2/5" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/2/18" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -582,7 +582,7 @@
   </global>
   <project>
     <phrase id="bodytitle" value="Tetrasma" />
-    <phrase id="footertext" value="&amp;copy;2016 e.World Technology Ltd. All rights reserved." />
+    <phrase id="footertext" value="&amp;copy;2017 TETRASMA. All rights reserved." />
     <menu id="43">
       <phrase id="menutext" value="v akun jurnal" />
     </menu>
@@ -629,6 +629,66 @@
     </menu>
     <menu id="27">
       <phrase id="menutext" value="Memorial" />
+    </menu>
+    <menu id="10001">
+      <phrase id="menutext" value="audittrail" />
+    </menu>
+    <menu id="10002">
+      <phrase id="menutext" value="t anggota" />
+    </menu>
+    <menu id="10003">
+      <phrase id="menutext" value="t detail" />
+    </menu>
+    <menu id="10004">
+      <phrase id="menutext" value="t detailm" />
+    </menu>
+    <menu id="10005">
+      <phrase id="menutext" value="t jurnal" />
+    </menu>
+    <menu id="10006">
+      <phrase id="menutext" value="t jurnalm" />
+    </menu>
+    <menu id="10007">
+      <phrase id="menutext" value="t level 1" />
+    </menu>
+    <menu id="10008">
+      <phrase id="menutext" value="t level 2" />
+    </menu>
+    <menu id="10009">
+      <phrase id="menutext" value="t level 3" />
+    </menu>
+    <menu id="10010">
+      <phrase id="menutext" value="t level 4" />
+    </menu>
+    <menu id="10011">
+      <phrase id="menutext" value="t user" />
+    </menu>
+    <menu id="10012">
+      <phrase id="menutext" value="v akun jurnal" />
+    </menu>
+    <menu id="10013">
+      <phrase id="menutext" value="v bukubesar" />
+    </menu>
+    <menu id="10014">
+      <phrase id="menutext" value="v kasbank" />
+    </menu>
+    <menu id="10015">
+      <phrase id="menutext" value="v kasbank detail" />
+    </menu>
+    <menu id="10016">
+      <phrase id="menutext" value="v kasbank jurnal" />
+    </menu>
+    <menu id="10017">
+      <phrase id="menutext" value="v kasbank memorial" />
+    </menu>
+    <menu id="10018">
+      <phrase id="menutext" value="v memorial" />
+    </menu>
+    <menu id="10020">
+      <phrase id="menutext" value="Laporan" />
+    </menu>
+    <menu id="10019">
+      <phrase id="menutext" value="Buku Besar" />
     </menu>
     <menu id="16">
       <phrase id="menutext" value="Manajemen User" />
@@ -917,6 +977,12 @@
         <phrase id="fldtagcaption1" value="K" />
         <phrase id="fldtagvalue2" value="B" />
         <phrase id="fldtagcaption2" value="B" />
+      </field>
+      <field id="no_akun">
+        <phrase id="fldcaption" value="no akun" />
+      </field>
+      <field id="nama_akun">
+        <phrase id="fldcaption" value="nama akun" />
       </field>
     </table>
   </project>

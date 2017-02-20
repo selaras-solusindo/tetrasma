@@ -413,6 +413,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		$this->no_nama_akun->SetVisibility();
 		$this->jurnal->SetVisibility();
 		$this->jurnal_kode->SetVisibility();
+		$this->no_akun->SetVisibility();
+		$this->nama_akun->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -742,6 +744,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		$sFilterList = ew_Concat($sFilterList, $this->no_nama_akun->AdvancedSearch->ToJSON(), ","); // Field no_nama_akun
 		$sFilterList = ew_Concat($sFilterList, $this->jurnal->AdvancedSearch->ToJSON(), ","); // Field jurnal
 		$sFilterList = ew_Concat($sFilterList, $this->jurnal_kode->AdvancedSearch->ToJSON(), ","); // Field jurnal_kode
+		$sFilterList = ew_Concat($sFilterList, $this->no_akun->AdvancedSearch->ToJSON(), ","); // Field no_akun
+		$sFilterList = ew_Concat($sFilterList, $this->nama_akun->AdvancedSearch->ToJSON(), ","); // Field nama_akun
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -817,6 +821,22 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		$this->jurnal_kode->AdvancedSearch->SearchValue2 = @$filter["y_jurnal_kode"];
 		$this->jurnal_kode->AdvancedSearch->SearchOperator2 = @$filter["w_jurnal_kode"];
 		$this->jurnal_kode->AdvancedSearch->Save();
+
+		// Field no_akun
+		$this->no_akun->AdvancedSearch->SearchValue = @$filter["x_no_akun"];
+		$this->no_akun->AdvancedSearch->SearchOperator = @$filter["z_no_akun"];
+		$this->no_akun->AdvancedSearch->SearchCondition = @$filter["v_no_akun"];
+		$this->no_akun->AdvancedSearch->SearchValue2 = @$filter["y_no_akun"];
+		$this->no_akun->AdvancedSearch->SearchOperator2 = @$filter["w_no_akun"];
+		$this->no_akun->AdvancedSearch->Save();
+
+		// Field nama_akun
+		$this->nama_akun->AdvancedSearch->SearchValue = @$filter["x_nama_akun"];
+		$this->nama_akun->AdvancedSearch->SearchOperator = @$filter["z_nama_akun"];
+		$this->nama_akun->AdvancedSearch->SearchCondition = @$filter["v_nama_akun"];
+		$this->nama_akun->AdvancedSearch->SearchValue2 = @$filter["y_nama_akun"];
+		$this->nama_akun->AdvancedSearch->SearchOperator2 = @$filter["w_nama_akun"];
+		$this->nama_akun->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -826,6 +846,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		$sWhere = "";
 		$this->BuildBasicSearchSQL($sWhere, $this->no_nama_akun, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->jurnal_kode, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->no_akun, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->nama_akun, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -997,6 +1019,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 			$this->UpdateSort($this->no_nama_akun, $bCtrl); // no_nama_akun
 			$this->UpdateSort($this->jurnal, $bCtrl); // jurnal
 			$this->UpdateSort($this->jurnal_kode, $bCtrl); // jurnal_kode
+			$this->UpdateSort($this->no_akun, $bCtrl); // no_akun
+			$this->UpdateSort($this->nama_akun, $bCtrl); // nama_akun
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1032,6 +1056,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 				$this->no_nama_akun->setSort("");
 				$this->jurnal->setSort("");
 				$this->jurnal_kode->setSort("");
+				$this->no_akun->setSort("");
+				$this->nama_akun->setSort("");
 			}
 
 			// Reset start position
@@ -1417,6 +1443,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		$this->no_nama_akun->setDbValue($rs->fields('no_nama_akun'));
 		$this->jurnal->setDbValue($rs->fields('jurnal'));
 		$this->jurnal_kode->setDbValue($rs->fields('jurnal_kode'));
+		$this->no_akun->setDbValue($rs->fields('no_akun'));
+		$this->nama_akun->setDbValue($rs->fields('nama_akun'));
 	}
 
 	// Load DbValue from recordset
@@ -1427,6 +1455,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		$this->no_nama_akun->DbValue = $row['no_nama_akun'];
 		$this->jurnal->DbValue = $row['jurnal'];
 		$this->jurnal_kode->DbValue = $row['jurnal_kode'];
+		$this->no_akun->DbValue = $row['no_akun'];
+		$this->nama_akun->DbValue = $row['nama_akun'];
 	}
 
 	// Load old record
@@ -1472,6 +1502,8 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		// no_nama_akun
 		// jurnal
 		// jurnal_kode
+		// no_akun
+		// nama_akun
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1495,6 +1527,14 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 		}
 		$this->jurnal_kode->ViewCustomAttributes = "";
 
+		// no_akun
+		$this->no_akun->ViewValue = $this->no_akun->CurrentValue;
+		$this->no_akun->ViewCustomAttributes = "";
+
+		// nama_akun
+		$this->nama_akun->ViewValue = $this->nama_akun->CurrentValue;
+		$this->nama_akun->ViewCustomAttributes = "";
+
 			// no_nama_akun
 			$this->no_nama_akun->LinkCustomAttributes = "";
 			$this->no_nama_akun->HrefValue = "";
@@ -1509,6 +1549,16 @@ class cv_akun_jurnal_list extends cv_akun_jurnal {
 			$this->jurnal_kode->LinkCustomAttributes = "";
 			$this->jurnal_kode->HrefValue = "";
 			$this->jurnal_kode->TooltipValue = "";
+
+			// no_akun
+			$this->no_akun->LinkCustomAttributes = "";
+			$this->no_akun->HrefValue = "";
+			$this->no_akun->TooltipValue = "";
+
+			// nama_akun
+			$this->nama_akun->LinkCustomAttributes = "";
+			$this->nama_akun->HrefValue = "";
+			$this->nama_akun->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2123,6 +2173,24 @@ $v_akun_jurnal_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($v_akun_jurnal->no_akun->Visible) { // no_akun ?>
+	<?php if ($v_akun_jurnal->SortUrl($v_akun_jurnal->no_akun) == "") { ?>
+		<th data-name="no_akun"><div id="elh_v_akun_jurnal_no_akun" class="v_akun_jurnal_no_akun"><div class="ewTableHeaderCaption"><?php echo $v_akun_jurnal->no_akun->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="no_akun"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_akun_jurnal->SortUrl($v_akun_jurnal->no_akun) ?>',2);"><div id="elh_v_akun_jurnal_no_akun" class="v_akun_jurnal_no_akun">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_akun_jurnal->no_akun->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($v_akun_jurnal->no_akun->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_akun_jurnal->no_akun->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($v_akun_jurnal->nama_akun->Visible) { // nama_akun ?>
+	<?php if ($v_akun_jurnal->SortUrl($v_akun_jurnal->nama_akun) == "") { ?>
+		<th data-name="nama_akun"><div id="elh_v_akun_jurnal_nama_akun" class="v_akun_jurnal_nama_akun"><div class="ewTableHeaderCaption"><?php echo $v_akun_jurnal->nama_akun->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="nama_akun"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_akun_jurnal->SortUrl($v_akun_jurnal->nama_akun) ?>',2);"><div id="elh_v_akun_jurnal_nama_akun" class="v_akun_jurnal_nama_akun">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_akun_jurnal->nama_akun->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($v_akun_jurnal->nama_akun->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_akun_jurnal->nama_akun->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2209,6 +2277,22 @@ $v_akun_jurnal_list->ListOptions->Render("body", "left", $v_akun_jurnal_list->Ro
 <span id="el<?php echo $v_akun_jurnal_list->RowCnt ?>_v_akun_jurnal_jurnal_kode" class="v_akun_jurnal_jurnal_kode">
 <span<?php echo $v_akun_jurnal->jurnal_kode->ViewAttributes() ?>>
 <?php echo $v_akun_jurnal->jurnal_kode->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($v_akun_jurnal->no_akun->Visible) { // no_akun ?>
+		<td data-name="no_akun"<?php echo $v_akun_jurnal->no_akun->CellAttributes() ?>>
+<span id="el<?php echo $v_akun_jurnal_list->RowCnt ?>_v_akun_jurnal_no_akun" class="v_akun_jurnal_no_akun">
+<span<?php echo $v_akun_jurnal->no_akun->ViewAttributes() ?>>
+<?php echo $v_akun_jurnal->no_akun->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($v_akun_jurnal->nama_akun->Visible) { // nama_akun ?>
+		<td data-name="nama_akun"<?php echo $v_akun_jurnal->nama_akun->CellAttributes() ?>>
+<span id="el<?php echo $v_akun_jurnal_list->RowCnt ?>_v_akun_jurnal_nama_akun" class="v_akun_jurnal_nama_akun">
+<span<?php echo $v_akun_jurnal->nama_akun->ViewAttributes() ?>>
+<?php echo $v_akun_jurnal->nama_akun->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

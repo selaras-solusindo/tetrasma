@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<configuration date="2017/02/18" author="e.World Technology Ltd.">
+  <project id="{0947E56A-59DA-4545-A2FF-20A7F7239C7D}" file="D:\xampp\htdocs\tetrasma\tetrasma.prp" name="tetrasma" product="PHPReportMaker" version="10.0" datetime="2017/02/18 17:51:23" languagefolder="phprptlang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+    <table id="audittrail" name="audittrail" caption="audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_anggota" name="t_anggota" caption="t anggota" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_detail" name="t_detail" caption="t detail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_detailm" name="t_detailm" caption="t detailm" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_jurnal" name="t_jurnal" caption="t jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_jurnalm" name="t_jurnalm" caption="t jurnalm" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level1" name="t_level1" caption="t level 1" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level2" name="t_level2" caption="t level 2" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level3" name="t_level3" caption="t level 3" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_level4" name="t_level4" caption="t level 4" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_user" name="t_user" caption="t user" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_akun_jurnal" name="v_akun_jurnal" caption="v akun jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_bukubesar" name="v_bukubesar" caption="v bukubesar" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_kasbank" name="v_kasbank" caption="v kasbank" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_kasbank_detail" name="v_kasbank_detail" caption="v kasbank detail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_kasbank_jurnal" name="v_kasbank_jurnal" caption="v kasbank jurnal" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_kasbank_memorial" name="v_kasbank_memorial" caption="v kasbank memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_memorial" name="v_memorial" caption="v memorial" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="r_bukubesar" name="r_bukubesar" caption="r bukubesar" userlevel="-2,&quot;Anonymous&quot;,8;0,&quot;Default&quot;,0" priv="1" />
+  </project>
+</configuration>

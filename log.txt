@@ -1,6 +1,20 @@
+-----------------
+4:08 PM 2/18/2017
+-----------------
+10. progress;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`v_kasbank_detail` AS select `a`.`detail_id` AS `detail_id`,`a`.`jurnal_id` AS `jurnal_id`,`b`.`no_bukti` AS `no_bukti`,`b`.`tgl` AS `tgl`,`b`.`ket` AS `ket`,`a`.`akun_id` AS `akun_id`,(case when (`a`.`dk` = 0) then `a`.`nilai` else 0 end) AS `debet`,(case when (`a`.`dk` = 1) then `a`.`nilai` else 0 end) AS `kredit` from (`db_tetrasma`.`t_detail` `a` left join `db_tetrasma`.`t_jurnal` `b` on((`a`.`jurnal_id` = `b`.`jurnal_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`v_kasbank_jurnal` AS select NULL AS `detail_id`,`db_tetrasma`.`t_jurnal`.`jurnal_id` AS `jurnal_id`,`db_tetrasma`.`t_jurnal`.`no_bukti` AS `no_bukti`,`db_tetrasma`.`t_jurnal`.`tgl` AS `tgl`,`db_tetrasma`.`t_jurnal`.`ket` AS `ket`,`db_tetrasma`.`t_jurnal`.`akun_id` AS `akun_id`,(case when (`db_tetrasma`.`t_jurnal`.`jenis_jurnal` = 'M') then `db_tetrasma`.`t_jurnal`.`nilai` else 0 end) AS `debet`,(case when (`db_tetrasma`.`t_jurnal`.`jenis_jurnal` <> 'M') then `db_tetrasma`.`t_jurnal`.`nilai` else 0 end) AS `kredit` from `db_tetrasma`.`t_jurnal`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`v_kasbank` AS select `v_kasbank_jurnal`.`detail_id` AS `detail_id`,`v_kasbank_jurnal`.`jurnal_id` AS `jurnal_id`,`v_kasbank_jurnal`.`no_bukti` AS `no_bukti`,`v_kasbank_jurnal`.`tgl` AS `tgl`,`v_kasbank_jurnal`.`ket` AS `ket`,`v_kasbank_jurnal`.`akun_id` AS `akun_id`,`v_kasbank_jurnal`.`debet` AS `debet`,`v_kasbank_jurnal`.`kredit` AS `kredit` from `db_tetrasma`.`v_kasbank_jurnal` union select `v_kasbank_detail`.`detail_id` AS `detail_id`,`v_kasbank_detail`.`jurnal_id` AS `jurnal_id`,`v_kasbank_detail`.`no_bukti` AS `no_bukti`,`v_kasbank_detail`.`tgl` AS `tgl`,`v_kasbank_detail`.`ket` AS `ket`,`v_kasbank_detail`.`akun_id` AS `akun_id`,`v_kasbank_detail`.`debet` AS `debet`,`v_kasbank_detail`.`kredit` AS `kredit` from `db_tetrasma`.`v_kasbank_detail`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`v_memorial` AS select `a`.`detailm_id` AS `detailm_id`,`a`.`jurnalm_id` AS `jurnalm_id`,`b`.`no_buktim` AS `no_buktim`,`b`.`tglm` AS `tglm`,`b`.`ketm` AS `ketm`,`a`.`akunm_id` AS `akunm_id`,`a`.`nilaim_debet` AS `nilaim_debet`,`a`.`nilaim_kredit` AS `nilaim_kredit` from (`db_tetrasma`.`t_detailm` `a` left join `db_tetrasma`.`t_jurnalm` `b` on((`a`.`jurnalm_id` = `b`.`jurnalm_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`v_kasbank_memorial` AS select `v_kasbank`.`detail_id` AS `detail_id`,`v_kasbank`.`jurnal_id` AS `jurnal_id`,`v_kasbank`.`no_bukti` AS `no_bukti`,`v_kasbank`.`tgl` AS `tgl`,`v_kasbank`.`ket` AS `ket`,`v_kasbank`.`akun_id` AS `akun_id`,`v_kasbank`.`debet` AS `debet`,`v_kasbank`.`kredit` AS `kredit` from `db_tetrasma`.`v_kasbank` union select `v_memorial`.`detailm_id` AS `detailm_id`,`v_memorial`.`jurnalm_id` AS `jurnalm_id`,`v_memorial`.`no_buktim` AS `no_buktim`,`v_memorial`.`tglm` AS `tglm`,`v_memorial`.`ketm` AS `ketm`,`v_memorial`.`akunm_id` AS `akunm_id`,`v_memorial`.`nilaim_debet` AS `nilaim_debet`,`v_memorial`.`nilaim_kredit` AS `nilaim_kredit` from `db_tetrasma`.`v_memorial`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `db_tetrasma`.`v_bukubesar` AS select `a`.`detail_id` AS `detail_id`,`a`.`jurnal_id` AS `jurnal_id`,`a`.`no_bukti` AS `no_bukti`,`a`.`tgl` AS `tgl`,`a`.`ket` AS `ket`,`a`.`akun_id` AS `akun_id`,`a`.`debet` AS `debet`,`a`.`kredit` AS `kredit`,`c`.`no_akun` AS `no_akun`,`c`.`nama_akun` AS `nama_akun`,`c`.`no_nama_akun` AS `no_nama_akun`,`b`.`saldo_awal` AS `saldo_awal`,`b`.`saldo` AS `saldo` from ((`db_tetrasma`.`v_kasbank_memorial` `a` left join `db_tetrasma`.`t_level4` `b` on((`a`.`akun_id` = `b`.`level4_id`))) left join `db_tetrasma`.`v_akun_jurnal` `c` on((`a`.`akun_id` = `c`.`level4_id`)));
+
+
+-----------------
 7:05 AM 2/14/2017
+-----------------
 sampai dengan :
-- akan membuat laporan buku besar
+10. akan membuat laporan buku besar
 
 yang ingin dilakukan :
 - buat combo yang isinya daftar akun, ambil dari level4
@@ -13,8 +27,9 @@ yang masih bingung :
 - masih bingung pengambilan data nya
 
 
-
+-----------------
 6:29 PM 2/13/2017
+-----------------
 CREATE VIEW v_memorial AS SELECT detailm_id, a.jurnalm_id, no_buktim, tglm, ketm, a.akunm_id, nilaim_debet, nilaim_kredit
 FROM t_detailm a
 LEFT JOIN t_jurnalm b ON a.jurnalm_id = b.jurnalm_id
@@ -57,7 +72,6 @@ LEFT JOIN t_jurnal b ON a.jurnal_id = b.jurnal_id
 - create view dari tabel detail_kas_bank
 
 
-
 ------------------
 11:11 AM 1/10/2017
 ------------------
@@ -80,7 +94,6 @@ LEFT JOIN t_jurnal b ON a.jurnal_id = b.jurnal_id
 07. re: done
 08. re: done
 09. perlu dibuat onchange di detail :: ostosmastis merubah nilai total di master
-10. 
 
 
 ----------------

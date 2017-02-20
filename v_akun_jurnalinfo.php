@@ -11,6 +11,8 @@ class cv_akun_jurnal extends cTable {
 	var $no_nama_akun;
 	var $jurnal;
 	var $jurnal_kode;
+	var $no_akun;
+	var $nama_akun;
 
 	//
 	// Table class constructor
@@ -65,6 +67,16 @@ class cv_akun_jurnal extends cTable {
 		$this->jurnal_kode->Sortable = TRUE; // Allow sort
 		$this->jurnal_kode->OptionCount = 2;
 		$this->fields['jurnal_kode'] = &$this->jurnal_kode;
+
+		// no_akun
+		$this->no_akun = new cField('v_akun_jurnal', 'v_akun_jurnal', 'x_no_akun', 'no_akun', '`no_akun`', '`no_akun`', 200, -1, FALSE, '`no_akun`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->no_akun->Sortable = TRUE; // Allow sort
+		$this->fields['no_akun'] = &$this->no_akun;
+
+		// nama_akun
+		$this->nama_akun = new cField('v_akun_jurnal', 'v_akun_jurnal', 'x_nama_akun', 'nama_akun', '`nama_akun`', '`nama_akun`', 200, -1, FALSE, '`nama_akun`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->nama_akun->Sortable = TRUE; // Allow sort
+		$this->fields['nama_akun'] = &$this->nama_akun;
 	}
 
 	// Set Field Visibility
@@ -562,6 +574,8 @@ class cv_akun_jurnal extends cTable {
 		$this->no_nama_akun->setDbValue($rs->fields('no_nama_akun'));
 		$this->jurnal->setDbValue($rs->fields('jurnal'));
 		$this->jurnal_kode->setDbValue($rs->fields('jurnal_kode'));
+		$this->no_akun->setDbValue($rs->fields('no_akun'));
+		$this->nama_akun->setDbValue($rs->fields('nama_akun'));
 	}
 
 	// Render list row values
@@ -576,6 +590,8 @@ class cv_akun_jurnal extends cTable {
 		// no_nama_akun
 		// jurnal
 		// jurnal_kode
+		// no_akun
+		// nama_akun
 		// level4_id
 
 		$this->level4_id->ViewValue = $this->level4_id->CurrentValue;
@@ -601,6 +617,14 @@ class cv_akun_jurnal extends cTable {
 		}
 		$this->jurnal_kode->ViewCustomAttributes = "";
 
+		// no_akun
+		$this->no_akun->ViewValue = $this->no_akun->CurrentValue;
+		$this->no_akun->ViewCustomAttributes = "";
+
+		// nama_akun
+		$this->nama_akun->ViewValue = $this->nama_akun->CurrentValue;
+		$this->nama_akun->ViewCustomAttributes = "";
+
 		// level4_id
 		$this->level4_id->LinkCustomAttributes = "";
 		$this->level4_id->HrefValue = "";
@@ -620,6 +644,16 @@ class cv_akun_jurnal extends cTable {
 		$this->jurnal_kode->LinkCustomAttributes = "";
 		$this->jurnal_kode->HrefValue = "";
 		$this->jurnal_kode->TooltipValue = "";
+
+		// no_akun
+		$this->no_akun->LinkCustomAttributes = "";
+		$this->no_akun->HrefValue = "";
+		$this->no_akun->TooltipValue = "";
+
+		// nama_akun
+		$this->nama_akun->LinkCustomAttributes = "";
+		$this->nama_akun->HrefValue = "";
+		$this->nama_akun->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -652,6 +686,18 @@ class cv_akun_jurnal extends cTable {
 		$this->jurnal_kode->EditCustomAttributes = "";
 		$this->jurnal_kode->EditValue = $this->jurnal_kode->Options(FALSE);
 
+		// no_akun
+		$this->no_akun->EditAttrs["class"] = "form-control";
+		$this->no_akun->EditCustomAttributes = "";
+		$this->no_akun->EditValue = $this->no_akun->CurrentValue;
+		$this->no_akun->PlaceHolder = ew_RemoveHtml($this->no_akun->FldCaption());
+
+		// nama_akun
+		$this->nama_akun->EditAttrs["class"] = "form-control";
+		$this->nama_akun->EditCustomAttributes = "";
+		$this->nama_akun->EditValue = $this->nama_akun->CurrentValue;
+		$this->nama_akun->PlaceHolder = ew_RemoveHtml($this->nama_akun->FldCaption());
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -682,10 +728,14 @@ class cv_akun_jurnal extends cTable {
 					if ($this->no_nama_akun->Exportable) $Doc->ExportCaption($this->no_nama_akun);
 					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
 					if ($this->jurnal_kode->Exportable) $Doc->ExportCaption($this->jurnal_kode);
+					if ($this->no_akun->Exportable) $Doc->ExportCaption($this->no_akun);
+					if ($this->nama_akun->Exportable) $Doc->ExportCaption($this->nama_akun);
 				} else {
 					if ($this->no_nama_akun->Exportable) $Doc->ExportCaption($this->no_nama_akun);
 					if ($this->jurnal->Exportable) $Doc->ExportCaption($this->jurnal);
 					if ($this->jurnal_kode->Exportable) $Doc->ExportCaption($this->jurnal_kode);
+					if ($this->no_akun->Exportable) $Doc->ExportCaption($this->no_akun);
+					if ($this->nama_akun->Exportable) $Doc->ExportCaption($this->nama_akun);
 				}
 				$Doc->EndExportRow();
 			}
@@ -720,10 +770,14 @@ class cv_akun_jurnal extends cTable {
 						if ($this->no_nama_akun->Exportable) $Doc->ExportField($this->no_nama_akun);
 						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
 						if ($this->jurnal_kode->Exportable) $Doc->ExportField($this->jurnal_kode);
+						if ($this->no_akun->Exportable) $Doc->ExportField($this->no_akun);
+						if ($this->nama_akun->Exportable) $Doc->ExportField($this->nama_akun);
 					} else {
 						if ($this->no_nama_akun->Exportable) $Doc->ExportField($this->no_nama_akun);
 						if ($this->jurnal->Exportable) $Doc->ExportField($this->jurnal);
 						if ($this->jurnal_kode->Exportable) $Doc->ExportField($this->jurnal_kode);
+						if ($this->no_akun->Exportable) $Doc->ExportField($this->no_akun);
+						if ($this->nama_akun->Exportable) $Doc->ExportField($this->nama_akun);
 					}
 					$Doc->EndExportRow();
 				}
